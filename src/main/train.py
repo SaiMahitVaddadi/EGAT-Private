@@ -1,0 +1,516 @@
+import torch,logging,os,sys,hydra,omegaconf,shutil,importlib
+from torch import nn
+from .setup import Setup
+from ..dataset.Loader import EGATDataLoader
+from .scaler import Scaler
+import numpy as np 
+from tqdm import tqdm
+import pandas as pd 
+from dataclasses import dataclass, field
+from typing import List, Optional, Union
+
+
+@dataclass
+class Params:
+    epoch: int = 100
+    epoch_const: int = 0
+    scheduler: str = 'step'
+    learning_rate: float = 0.001
+    lr_decay: float = 0.1
+    step_size: int = 10
+    warmup: int = 5
+    expdecay: float = 0.1
+    molecular: bool = False
+    target: Union[str, List[str]] = 'target'
+    additionals: Optional[Union[str, List[str]]] = None
+    model_type: str = 'direct'
+    Norm: Optional[str] = None
+    Embed: bool = False
+    AttnMaps: bool = False
+    tweights: Optional[List[float]] = None
+    hasaddons: bool = False
+    test_only: bool = False
+    weightsandbiases: bool = False
+    patience: int = 10
+    loss_threshold: float = 0.01
+
+
+def bn_momentum_adjust(m, momentum):
+    if isinstance(m, torch.nn.BatchNorm2d) or isinstance(m, torch.nn.BatchNorm1d):
+        m.momentum = momentum
+    return m
+
+class Train(Setup):
+    def __init__(self, arguments):
+        super().__init__(arguments)
+        self.params = arguments
+    
+    def LoadData(self):
+        self.data = EGATDataLoader(self.params)
+
+    def LoadScaler(self):
+        self.scaler = Scaler(self.params)
+        self.scaler.normalize(self.data)
+
+    def LoadLearningRate(self,epoch):
+        if epoch < self.params.epoch:
+            if self.params.scheduler == 'step':
+                lr = max(self.params.learning_rate * (self.params.lr_decay ** (epoch // self.params.step_size)), self.LEARNING_RATE_CLIP)
+            elif self.params.scheduler == 'exp':
+                if epoch < self.params.warmup:
+                    lr_factor = (epoch + 1) * 1.0 / self.params.warmup
+                else:
+                    lr_factor = np.exp( - self.params.expdecay * (epoch - self.params.warmup + 1) / self.params.epoch)
+                lr = max(self.params.learning_rate * lr_factor, self.LEARNING_RATE_CLIP)
+            elif self.params.scheduler == 'cos':
+                if epoch < self.params.warmup:
+                    lr = self.params.learning_rate * (epoch + 1) * 1.0 / self.params.warmup
+                else:
+                    lr = self.LEARNING_RATE_CLIP + 0.5 * (self.params.learning_rate - self.LEARNING_RATE_CLIP) * (1 + np.cos(np.pi * (epoch - self.params.warmup + 1) / (self.params.epoch - self.params.warmup + 1)))
+        else:
+            lr = self.LEARNING_RATE_CLIP
+
+    def UpdateLearningRate(self,lr):
+        self.logger.info('Learning rate:%f' % lr)
+        for param_group in self.optimizer.param_groups:
+            param_group['lr'] = lr
+
+    def UpdateMomentum(self,epoch):
+        momentum = self.MOMENTUM_ORIGINAL * (self.MOMENTUM_DECAY ** (epoch //self.MOMENTUM_DECAY_STEP))
+        if momentum < 0.01:
+            momentum = 0.01
+        return momentum
+    
+    def CreateCSV(self):
+        if not self.params.molecular:
+            csv = []
+            columns = ['ID','RTYPE','Rsmiles','Psmiles','Rinchi','Pinchi']
+            if isinstance(self.params.target,list):
+                preds  = [t+'_PRED' for t in self.params.target]
+                columns += preds        
+                columns += self.params.target
+            else:
+                columns += [self.params.target+'_PRED']
+                columns += [self.params.target]
+        else:
+            csv = []
+            columns = ['ID','RTYPE','Rsmiles','Rinchi']
+            if isinstance(self.params.target,list):
+                preds  = [t+'_PRED' for t in self.params.target]
+                columns += preds        
+                columns += self.params.target
+            else:
+                columns += [self.params.target+'_PRED']
+                columns += [self.params.target]
+        return csv,columns
+
+    def ScaleData(self,scaler,additionals):
+        if isinstance(self.params.additionals,list):
+            Hr        = additionals.float().view(self.params.batch_size,len(self.params.additionals)).numpy()
+        else:
+            Hr        = additionals.float().view(self.params.batch_size,1).numpy()
+        Hr        = scaler.transform(Hr).to(self.device)
+        return Hr
+
+    def GrabTargets(self,targets):
+        if self.params.model_type in ['direct','BEP','Hr']:
+            target    = torch.Tensor([float(i[2]) for i in targets]).view(self.params.batch_size,1).to(self.device)
+        elif self.params.model_type in ['multi','Hr_multi']:
+            target = targets.float().view(self.params.batch_size,len(self.params.target)).to(self.device)
+        
+        self.mask = ~torch.isnan(target)
+        return target 
+    
+    def GetHr(self,additionals):
+        if self.params.Norm is not None:
+            Hr = self.ScaleData(self.scaler,additionals)
+        else:
+            if isinstance(self.params.additionals,list):
+                Hr = additionals.float().view(self.params.batch_size,len(self.params.additionals)).to(self.device)
+            else:
+                Hr = torch.Tensor([float(i[0]) for i in additionals]).view(self.params.batch_size,1).to(self.device)
+        return Hr
+
+
+    def GrabAdditionals(self,additionals):
+        if self.params.model_type == 'BEP':    
+            if isinstance(self.params.additionals,list):
+                raise ValueError('Error: BEP-like Prediction can only be done on one additional set of values.')
+            else:
+                Hr = torch.Tensor([float(i[0]) for i in additionals]).view(self.params.batch_size,1).to(self.device)
+        elif self.params.model_type == 'Hr' or self.params.model_type == 'Hr_multi':
+            Hr = self.GetHr(additionals)
+        
+        return Hr
+    
+
+    def LoadGraphstoCUDA(self,Rgs,Pgs,Radd,Padd):
+        ##### TAKE THE GRAPHS AND LOAD THEM INTO CUDA
+        RGgs      = Rgs.to(self.device)
+        RGgs.ndata['x'].to(self.device)
+        RGgs.edata['x'].to(self.device)
+        if self.params.hasaddons: 
+            RAdd = Radd.to(self.device)
+        if not self.params.molecular:
+            PGgs      = Pgs.to(self.device)
+            PGgs.ndata['x'].to(self.device)
+            PGgs.edata['x'].to(self.device)
+            if self.params.hasaddons: 
+                PAdd = Padd.to(self.device)
+        RGgs = RGgs if 'RGgs' in locals() else None
+        PGgs = PGgs if 'PGgs' in locals() else None
+        RAdd = RAdd if 'RAdd' in locals() else None
+        PAdd = PAdd if 'PAdd' in locals() else None
+            
+        return RGgs,PGgs,RAdd,PAdd
+    
+
+    def GetPrediction(self,RGgs,PGgs,RAdd,PAdd,Hr):
+        ###### GET PREDICTION
+        if self.params.model_type in ['direct','BEP','multi']:
+            if not self.params.molecular:
+                if self.params.hasaddons:
+                    pred = self.model(RGgs,PGgs,RAdd,PAdd)
+                else:
+                    pred = self.model(RGgs,PGgs)
+            else:
+                if self.params.hasaddons:
+                    pred = self.model(RGgs,RAdd)
+                else:
+                    pred = self.model(RGgs)
+        elif self.params.model_type in ['Hr','Hr_multi']:
+            if not self.params.molecular:
+                if self.params.hasaddons:
+                    pred = self.model(RGgs,PGgs,Hr,RAdd,PAdd)
+                else:
+                    pred = self.model(RGgs,PGgs,Hr)
+            else:
+                if self.params.hasaddons:
+                    pred = self.model(RGgs,Hr,RAdd)
+                else:
+                    pred = self.model(RGgs,Hr)
+
+
+        if not self.params.Embed:
+            if self.params.AttnMaps:
+                if not self.params.molecular:
+                    pred,Rmap,Pmap = pred
+                else:
+                    pred,Rmap = pred
+        else:
+            if self.params.AttnMaps:
+                if not self.params.molecular:
+                    pred,embeddings,Rmap,Pmap = pred
+                else:
+                    pred,embeddings,Rmap = pred
+            else:
+                pred,embeddings = pred
+                
+
+        if self.params.model_type == 'BEP': pred = pred[:, 0].unsqueeze(1) * Hr + pred[:, 1].unsqueeze(1)
+
+
+        pred = pred if 'RGgs' in locals() else None
+        embeddings = embeddings if 'PGgs' in locals() else None
+        Rmap = Rmap if 'RAdd' in locals() else None
+        Pmap = Pmap if 'PAdd' in locals() else None    
+        return pred,embeddings,Rmap,Pmap
+    
+
+
+    def WeightedLoss(self,pred,target):
+        if len(self.params.tweights) == len(self.params.targets):
+            loss = None
+            for index,weight in enumerate(self.params.tweights):
+                p = pred[:,index].unsqueeze(1)
+                t = target[:,index].unsqueeze(1)
+                if loss is not None:
+                    loss += self.params.tweights[index] * self.GetLoss(p,t)
+                else:
+                    loss = self.params.tweights[index] * self.GetLoss(p,t)
+        else:
+            raise ValueError('Cannot work because the weights are underdetermined.')
+        return loss 
+
+    def WeightedMetric(self,pred,target):
+        if len(self.params.tweights) == len(self.params.targets):
+            loss = None
+            for index,weight in enumerate(self.params.tweights):
+                p = pred[:,index].unsqueeze(1)
+                t = target[:,index].unsqueeze(1)
+                if loss is not None:
+                    loss += self.params.tweights[index] * self.GetMetric(p,t)
+                else:
+                    loss = self.params.tweights[index] * self.GetMetric(p,t)
+        else:
+            raise ValueError('Cannot work because the weights are underdetermined.')
+        return loss 
+    
+    def GetAllMetrics(self,pred,target):
+        loss = None
+        for index,weight in enumerate(self.params.tweights):
+            p = pred[:,index].unsqueeze(1)
+            t = target[:,index].unsqueeze(1)
+            if loss is not None:
+                loss += self.params.tweights[index] * self.GetMetric(p,t)
+            else:
+                loss = self.params.tweights[index] * self.GetMetric(p,t)
+        return loss
+
+
+
+    def AddtoDataset(self,data,pred,target,smiles,id,rtypes,embeddingsdata,embeddings):
+        # Merge the torch Tensors, get them out of cuda, and move them to numpy 
+        batch_result = torch.cat([pred,target]).cpu().data
+        batch_result = torch.cat([smiles,batch_result]).numpy()
+        batch_result = np.hstack((id,rtypes,batch_result)).tolist()
+        if self.params.Embed: embeddingsdata.append(embeddings.cpu().numpy().tolist())
+        data.append(batch_result)
+
+        if self.params.model_type in ['multi','Hr_multi']:
+            loss = self.WeightedLoss(pred,target)
+            if self.params.metric is not None: 
+                comb_metric = self.WeightedMetric(pred,target)
+            else:
+                comb_metric = None
+        else:
+            self.GetLoss(pred,target)
+            if self.params.metric is not None: metric = self.GetMetric(pred,target)
+            else: metric = None 
+        return data,embeddingsdata,loss
+
+
+    def ArithMean(self, pred, target, weights=None):
+        loss = 0
+        if weights is None:
+            weights = [1] * len(self.loss)
+        for i, lossfunc in enumerate(self.loss):
+            try:
+                loss += weights[i] * lossfunc(pred, target)
+            except:
+                loss += weights[i] * lossfunc(pred[self.mask], target[self.mask])
+        return loss / sum(weights)
+    
+    def GeomMean(self, pred, target, weights=None):
+        loss = 1
+        if weights is None:
+            weights = [1] * len(self.loss)
+        for i, lossfunc in enumerate(self.loss):
+            try:
+                loss *= (lossfunc(pred, target) ** weights[i])
+            except:
+                loss *= (lossfunc(pred[self.mask], target[self.mask]) ** weights[i])
+        return loss ** (1 / sum(weights))
+
+    def HarmMean(self, pred, target, weights=None):
+        loss = 0
+        if weights is None:
+            weights = [1] * len(self.loss)
+        for i, lossfunc in enumerate(self.loss):
+            try:
+                loss += weights[i] / lossfunc(pred, target)
+            except:
+                loss += weights[i] / lossfunc(pred[self.mask], target[self.mask])
+        return sum(weights) / loss
+
+    def QuadMean(self, pred, target, weights=None):
+        loss = 0
+        if weights is None:
+            weights = [1] * len(self.loss)
+        for i, lossfunc in enumerate(self.loss):
+            try:
+                loss += weights[i] * (lossfunc(pred, target) ** 2)
+            except:
+                loss += weights[i] * (lossfunc(pred[self.mask], target[self.mask]) ** 2)
+        return (loss / sum(weights)) ** 0.5
+    
+
+
+
+    def GetLoss(self,pred,target):
+        if isinstance(self.loss,nn.Module):
+            try:
+                loss = self.loss(pred, target)
+            except:
+                loss = self.loss(pred[self.mask], target[self.mask])
+        elif isinstance(self.loss,list):
+            loss = getattr(f'{self.params.loss_agg}Mean')
+            loss = loss(pred, target, weights=self.params.loss_weights)
+        return loss
+
+    
+
+    def Iterate(self,loader,mode = 'train'):
+        loss_list = []
+        embeddingsdata = []
+        data = []
+        for item in tqdm(loader, total=len(loader), smoothing=0.9):
+            if self.params.hasaddons:
+                if self.params.additionals is not None:
+                    if self.params.molecular: 
+                        id,rtypes,Rgs,smiles,targets,additionals,Radd= item
+                    else:
+                        #collateall
+                        id,rtypes,Rgs,Pgs,smiles,targets,additionals,Radd,Padd = item
+                else:
+                    if self.params.model_type in ['Hr','BEP','Hr_multi']:
+                        self.logger.info('Error: Predictions Require Additional Values that are not given.')
+                        break 
+                    else:
+                        if self.params.molecular: 
+                            id,rtypes,Rgs,smiles,targets,Radd= item
+                        else:
+                            id,rtypes,Rgs,smiles,targets,Radd = item
+            else:
+                if self.params.additionals is not None:
+                    if self.params.molecular:
+                        id,rtypes,Rgs,smiles,targets,additionals = item
+                    else:
+                        id,rtypes,Rgs,Pgs,smiles,targets,additionals = item
+                else:
+                    if self.params.model_type in ['Hr','BEP','Hr_multi']:
+                        self.logger.info('Error: Predictions Require Additional Values that are not given.')
+                        break 
+                    else:
+                        if self.params.molecular:
+                            id,rtypes,Rgs,Pgs,smiles,targets = item
+                        else:
+                            id,rtypes,Rgs,smiles,targets = item
+            
+            targets = self.GrabTargets(targets)
+            if self.params.model_type in ['BEP','Hr','Hr_multi']: additionals = self.GrabAdditionals(additionals)
+            
+            RGgs = RGgs if 'RGgs' in locals() else None
+            PGgs = PGgs if 'PGgs' in locals() else None
+            RAdd = RAdd if 'RAdd' in locals() else None
+            PAdd = PAdd if 'PAdd' in locals() else None    
+            RGgs,PGgs,RAdd,PAdd = self.LoadGraphstoCUDA(Rgs,Pgs,Radd,Padd)
+
+            if mode == 'train': self.optimizer.zero_grad()
+            pred,embeddings,Rmap,Pmap = self.GetPrediction(RGgs,PGgs,RAdd,PAdd,additionals)
+            datum,embeddingsdataum,loss = self.AddtoDataset(data,pred,targets,smiles,id,rtypes,embeddingsdata,embeddings)
+
+            if mode == 'train': loss.backward()
+            loss_list.append(loss.cpu().data.numpy())
+            data.append(datum)
+            embeddingsdata.append(embeddingsdataum)
+            
+            if mode == 'train': self.optimizer.step()
+        
+        train_instance_acc = np.mean(loss_list)
+        self.logger.info(f'{mode} accuracy is: %.5f' % train_instance_acc)
+
+        return data,embeddingsdata,loss_list
+
+    def Loop(self,epoch):
+        '''Adjust learning rate and BN momentum'''
+        # set up lr
+        lr = self.LoadLearningRate(epoch)
+        self.UpdateLearningRate(lr)        
+
+        # update momentum
+        momentum = self.UpdateMomentum(epoch)
+        
+        self.logger.info('BN momentum updated to: %f' % momentum)
+        self.model = self.model.apply(lambda x: bn_momentum_adjust(x, momentum))
+        self.model = self.model.train()
+
+        '''learning one epoch'''
+        ###### LOAD THE PREDICTION DATAFRAME AND ITS COLUMNS
+        train,columns = self.CreateCSV()
+        val,valcolumns = self.CreateCSV()
+        test,testcolumns = self.CreateCSV()
+        self.logger.info('Training...')
+        train,train_embeddings,train_loss_list = self.Iterate(self.data['train'],mode = 'train')
+        with torch.no_grad():
+            self.model = self.model.eval()
+            val,val_embeddings,val_loss_list = self.Iterate(self.data['val'],mode = 'test')
+            if not self.params.test_only: 
+                test,test_embeddings,test_loss_list = self.Iterate(self.data['test'],mode = 'test')
+            else:
+                test = None
+                test_embeddings = None
+                test_loss_list = None
+        
+        return train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr
+        
+
+    def UpdateWandB(self,train,test,val,epoch,lr):
+        # compute the average
+        if self.params.weightsandbiases:
+            if self.params.test_only:
+                wandb.log({"learning_rate":lr, "train_loss": np.mean(train), 'val_loss': np.mean(val)},step=epoch)
+            else:
+                wandb.log({"learning_rate":lr, "train_loss": np.mean(train), 'val_loss': np.mean(val),'ext_loss': np.mean(test)},step=epoch)
+
+
+    def SaveTorchModel(self,train,val,test,train_embeddings,val_embeddings,test_embeddings,val_loss_list,train_loss_list,epoch,columns):
+        if np.mean(val_loss_list) < self.best_loss:        
+            self.loss_increase_count = 0
+            self.best_loss = np.mean(val_loss_list)
+            self.logger.info('Save model...')
+            savepath = 'best_model.pth'
+            self.logger.info('Saving at %s' % savepath)
+            state = {
+                'epoch': epoch,
+                'train_acc': np.mean(train_loss_list),
+                'test_acc': self.best_loss,
+                'model_state_dict': self.model.state_dict(),
+                'optimizer_state_dict': self.optimizer.state_dict(),
+            }
+            torch.save(state, savepath)
+            self.logger.info('Saving model....')
+            self.SaveData(train,val,test,columns)
+            self.SaveEmbeddings(train_embeddings,val_embeddings,test_embeddings)
+            
+    
+
+    def SaveData(self,train,val,test,columns):
+        ###### SAVE RESULTS AS CSV
+        datasets = {'train': train, 'val': val, 'test': test}
+        filenames = {'train': 'best_train.csv', 'val': 'best_val.csv', 'test': 'best_test.csv'}
+        
+        for key in datasets:
+            if datasets[key] is not None:
+                df = pd.DataFrame(datasets[key], columns=columns)
+                df.to_csv(filenames[key])
+
+    def SaveEmbeddings(self,train,val,test):
+        ###### SAVE RESULTS AS CSV
+        datasets = {'train': train, 'val': val, 'test': test}
+        filenames = {'train': 'best_train_embeddings.csv', 'val': 'best_val_embeddings.csv', 'test': 'best_test_embeddings.csv'}
+        
+        for key in datasets:
+            if datasets[key] is not None:
+                df = pd.DataFrame(datasets[key])
+                df.to_csv(filenames[key])
+
+    def TrainbyEpoch(self):
+        self.LoadData()
+
+        for epoch in range(self.start_epoch, self.params.epoch+self.params.epoch_const):
+            self.loss_increase_count += 1
+            self.logger.info('Epoch %d (%d/%s):' % (self.global_epoch + 1, epoch + 1, self.params.epoch))
+            train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr = self.Loop(epoch)
+            self.UpdateWandB(train_loss_list,val_loss_list,test_loss_list,lr)
+            self.SaveTorchModel(val_loss_list,train_loss_list,epoch)
+            if self.loss_increase_count > self.params.patience:
+                break
+            self.global_epoch += 1
+
+    
+    def TrainUntilConvergence(self):
+        prev_loss = float('inf')
+        epoch = self.start_epoch
+        while abs(prev_loss - current_loss) >= self.params.loss_threshold:
+            self.logger.info('Epoch %d:' % (self.global_epoch + 1))
+            train, val, test, train_embeddings, val_embeddings, test_embeddings, train_loss_list, val_loss_list, test_loss_list, lr = self.Loop(epoch)
+            self.UpdateWandB(train_loss_list, val_loss_list, test_loss_list, lr)
+            self.SaveTorchModel(train, val, test, train_embeddings, val_embeddings, test_embeddings, val_loss_list, train_loss_list, epoch, columns)
+            
+            current_loss = np.mean(val_loss_list)
+            if epoch == self.params.epoch + self.params.epoch_const:
+                break
+            prev_loss = current_loss
+            self.global_epoch += 1
+            epoch += 1

@@ -47,6 +47,21 @@ Add astartes split for use with SQL and MongoDB.
 
 
 
+class Splitter:
+    def __init__(self,arguments):
+        self.params = arguments
+
+    
+
+    def load_input(self):
+        with open(self.params.config, 'r') as file:
+            self.config = omegaconf.OmegaConf.load(file)
+
+
+
+
+
+
 def Split(args):
     omegaconf.OmegaConf.set_struct(args, False)
 
