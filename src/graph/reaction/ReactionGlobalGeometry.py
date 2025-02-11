@@ -472,6 +472,313 @@ class ReactionComponentFeaturizerwithPaddingandGeometry:
         self.pi_pi_edges = self.pi_pi_edges[:2]
 
 
+    def ShortestPathDistance(self, edge):
+        if self.EdgeCheck(edge):
+            return [self.gs[edge[0], edge[1]]]
+        else:
+            mol = Chem.MolFromSmiles(self.smiles)
+            try:
+                path_length = Chem.GetDistanceMatrix(mol)[edge[0], edge[1]]
+                return [path_length]
+            except:
+                return [100]  # Return a large value if the edge does not exist or an error occurs
+
+    def ShortestPathDistanceWithWeights(self, edge, weights):
+        if self.EdgeCheck(edge):
+            return [self.gs[edge[0], edge[1]]]
+        else:
+            mol = Chem.MolFromSmiles(self.smiles)
+            try:
+                distance_matrix = Chem.GetDistanceMatrix(mol)
+                atomic_masses = [atom.GetMass() for atom in mol.GetAtoms()]
+                distance = distance_matrix[edge[0], edge[1]]
+                weighted_distance = distance * (atomic_masses[edge[0]] + atomic_masses[edge[1]]) / 2
+                return [weighted_distance]
+            except:
+                return [100]  # Return a large value if the edge does not exist or an error occurs
+
+    def RandomWalkCommuteTime(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                rwct = nx.algorithms.approximation.rwct(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                return [rwct]
+            except:
+                return []  # Return a large value if an error occurs
+        else:
+            return []  # Return a large value if the edge does not exist
+    
+    def CommuteTimeMetrics(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                # Calculate commute time using different metrics
+                rwct = nx.algorithms.approximation.rwct(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                hitting_time = nx.algorithms.approximation.hitting_time(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                mean_first_passage_time = nx.algorithms.approximation.mean_first_passage_time(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                resistance_distance = nx.algorithms.approximation.resistance_distance(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                return [rwct, hitting_time, mean_first_passage_time, resistance_distance]
+            except:
+                return []  # Return an empty list if an error occurs
+        else:
+            return []  # Return an empty list if the edge does not exist
+
+    def ShortestPathCount(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                paths = list(nx.all_shortest_paths(self.matrixdescriptors.adj_mat, source=edge[0], target=edge[1]))
+                return [len(paths)]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def EffectiveResistance(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                resistance = nx.resistance_distance(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                return [resistance]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def CommonNeighbors(self, edge):
+        if self.EdgeCheck(edge):
+            neighbors1 = set(self.matrixdescriptors.adj_mat[edge[0]].nonzero()[0])
+            neighbors2 = set(self.matrixdescriptors.adj_mat[edge[1]].nonzero()[0])
+            common_neighbors = neighbors1.intersection(neighbors2)
+            return [len(common_neighbors)]
+        else:
+            return [0]
+
+    def PercentCommonNeighbors(self, edge):
+        if self.EdgeCheck(edge):
+            neighbors1 = set(self.matrixdescriptors.adj_mat[edge[0]].nonzero()[0])
+            neighbors2 = set(self.matrixdescriptors.adj_mat[edge[1]].nonzero()[0])
+            common_neighbors = neighbors1.intersection(neighbors2)
+            total_neighbors = neighbors1.union(neighbors2)
+            if len(total_neighbors) > 0:
+                return [len(common_neighbors) / len(total_neighbors)]
+            else:
+                return [0]
+        else:
+            return [0]
+
+    def JaccardIndex(self, edge):
+        if self.EdgeCheck(edge):
+            neighbors1 = set(self.matrixdescriptors.adj_mat[edge[0]].nonzero()[0])
+            neighbors2 = set(self.matrixdescriptors.adj_mat[edge[1]].nonzero()[0])
+            common_neighbors = neighbors1.intersection(neighbors2)
+            total_neighbors = neighbors1.union(neighbors2)
+            if len(total_neighbors) > 0:
+                return [len(common_neighbors) / len(total_neighbors)]
+            else:
+                return [0]
+        else:
+            return [0]
+
+    def AdamicAdarIndex(self, edge):
+        if self.EdgeCheck(edge):
+            neighbors1 = set(self.matrixdescriptors.adj_mat[edge[0]].nonzero()[0])
+            neighbors2 = set(self.matrixdescriptors.adj_mat[edge[1]].nonzero()[0])
+            common_neighbors = neighbors1.intersection(neighbors2)
+            adamic_adar = sum(1 / np.log(len(self.matrixdescriptors.adj_mat[neighbor].nonzero()[0])) for neighbor in common_neighbors)
+            return [adamic_adar]
+        else:
+            return [0]
+
+    def PreferentialAttachmentIndex(self, edge):
+        if self.EdgeCheck(edge):
+            neighbors1 = set(self.matrixdescriptors.adj_mat[edge[0]].nonzero()[0])
+            neighbors2 = set(self.matrixdescriptors.adj_mat[edge[1]].nonzero()[0])
+            return [len(neighbors1) * len(neighbors2)]
+        else:
+            return [0]
+
+    def ShortestPathDistanceWithPBC(self, edge, box_size):
+        if self.EdgeCheck(edge):
+            return [self.gs[edge[0], edge[1]]]
+        else:
+            mol = Chem.MolFromSmiles(self.smiles)
+            try:
+                pos1 = mol.GetConformer().GetAtomPosition(edge[0])
+                pos2 = mol.GetConformer().GetAtomPosition(edge[1])
+                delta = pos2 - pos1
+                delta -= box_size * np.round(delta / box_size)  # Apply periodic boundary conditions
+                distance = np.linalg.norm(delta)
+                return [distance]
+            except:
+                return [100]  # Return a large value if the edge does not exist or an error occurs
+
+    def KatzCentralitySimilarity(self, edge, beta=0.1):
+        if self.EdgeCheck(edge):
+            try:
+                katz_centrality = nx.katz_centrality_numpy(self.matrixdescriptors.adj_mat, beta=beta)
+                return [katz_centrality[edge[0]] * katz_centrality[edge[1]]]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def EigenvectorCentralityDifference(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                eigenvector_centrality = nx.eigenvector_centrality_numpy(self.matrixdescriptors.adj_mat)
+                return [abs(eigenvector_centrality[edge[0]] - eigenvector_centrality[edge[1]])]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def BetweennessCentralityCorrelation(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                betweenness_centrality = nx.betweenness_centrality(self.matrixdescriptors.adj_mat)
+                return [betweenness_centrality[edge[0]] * betweenness_centrality[edge[1]]]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def MinimumCutValue(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                cut_value, partition = nx.minimum_cut(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                return [cut_value]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def MaximumFlow(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                flow_value, flow_dict = nx.maximum_flow(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                return [flow_value]
+            except:
+                return [0]
+        else:
+            return [0]
+    
+    def LaplacianEigenvectorSimilarity(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                laplacian = nx.laplacian_matrix(self.matrixdescriptors.adj_mat).todense()
+                eigenvalues, eigenvectors = np.linalg.eigh(laplacian)
+                similarity = np.dot(eigenvectors[:, 1], eigenvectors[:, 1])
+                return [similarity]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def FiedlerVectorSimilarity(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                laplacian = nx.laplacian_matrix(self.matrixdescriptors.adj_mat).todense()
+                eigenvalues, eigenvectors = np.linalg.eigh(laplacian)
+                fiedler_vector = eigenvectors[:, 1]
+                similarity = np.dot(fiedler_vector[edge[0]], fiedler_vector[edge[1]])
+                return [similarity]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def LaplacianEigenvectorCentrality(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                laplacian = nx.laplacian_matrix(self.matrixdescriptors.adj_mat).todense()
+                eigenvalues, eigenvectors = np.linalg.eigh(laplacian)
+                centrality = np.sum(eigenvectors[:, 1] ** 2)
+                return [centrality]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def GraphDistanceWeightedByBondOrder(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                bond_order = self.matrixdescriptors.bond_mat[edge[0], edge[1]]
+                distance = self.gs[edge[0], edge[1]]
+                weighted_distance = distance / bond_order
+                return [weighted_distance]
+            except:
+                return [100]
+        else:
+            return [100]
+
+    def BetweennessCentralityOfPathways(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                betweenness_centrality = nx.edge_betweenness_centrality(self.matrixdescriptors.adj_mat)
+                return [betweenness_centrality[edge]]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def RingsInSharedPath(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                rings_in_path = 0
+                for ring in self.ring_atoms:
+                    if edge[0] in ring and edge[1] in ring:
+                        rings_in_path += 1
+                return [rings_in_path]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def LocalAtomicEnvironmentSimilarity(self, edge, fingerprint_type='Morgan', similarity_metric='Tanimoto'):
+        if self.EdgeCheck(edge):
+            try:
+                mol = Chem.MolFromSmiles(self.smiles)
+                if fingerprint_type == 'Morgan':
+                    fp1 = Chem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048, fromAtoms=[edge[0]])
+                    fp2 = Chem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048, fromAtoms=[edge[1]])
+                elif fingerprint_type == 'MACCS':
+                    fp1 = Chem.rdMolDescriptors.GetMACCSKeysFingerprint(mol, fromAtoms=[edge[0]])
+                    fp2 = Chem.rdMolDescriptors.GetMACCSKeysFingerprint(mol, fromAtoms=[edge[1]])
+                elif fingerprint_type == 'RDK':
+                    fp1 = Chem.RDKFingerprint(mol, fromAtoms=[edge[0]])
+                    fp2 = Chem.RDKFingerprint(mol, fromAtoms=[edge[1]])
+                elif fingerprint_type == 'AtomPair':
+                    fp1 = Chem.GetAtomPairFingerprint(mol, fromAtoms=[edge[0]])
+                    fp2 = Chem.GetAtomPairFingerprint(mol, fromAtoms=[edge[1]])
+                else:
+                    return [0]
+
+                if similarity_metric == 'Tanimoto':
+                    similarity = DataStructs.TanimotoSimilarity(fp1, fp2)
+                elif similarity_metric == 'Dice':
+                    similarity = DataStructs.DiceSimilarity(fp1, fp2)
+                elif similarity_metric == 'Cosine':
+                    similarity = DataStructs.CosineSimilarity(fp1, fp2)
+                elif similarity_metric == 'Sokal':
+                    similarity = DataStructs.SokalSimilarity(fp1, fp2)
+                elif similarity_metric == 'Russel':
+                    similarity = DataStructs.RusselSimilarity(fp1, fp2)
+                elif similarity_metric == 'Kulczynski':
+                    similarity = DataStructs.KulczynskiSimilarity(fp1, fp2)
+                elif similarity_metric == 'McConnaughey':
+                    similarity = DataStructs.McConnaugheySimilarity(fp1, fp2)
+                elif similarity_metric == 'Asymmetric':
+                    similarity = DataStructs.AsymmetricSimilarity(fp1, fp2)
+                elif similarity_metric == 'BraunBlanquet':
+                    similarity = DataStructs.BraunBlanquetSimilarity(fp1, fp2)
+                else:
+                    return [0]
+
+                return [similarity]
+            except:
+                return [0]
+        else:
+            return [0]
+
+
+
     def ElectronegativityDifference(self, edge):
         en_atom1 = self.pauling_dict.get(self.matrixdescriptors.element[edge[0]], 0)
         en_atom2 = self.pauling_dict.get(self.matrixdescriptors.element[edge[1]], 0)

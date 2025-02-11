@@ -9,7 +9,7 @@ from ..utils.descriptors.geometry.geometry import ConformerGenerator
 
 from rdkit import Chem
 
-class MoleculeFeaturizerwithPaddingandGeometry:
+class ReactionComponentFeaturizerwithPadding:
     def __init__(self, smiles, arguments):
         self.smiles = smiles
         self.params = arguments
@@ -341,62 +341,7 @@ class MoleculeFeaturizerwithPaddingandGeometry:
                 return [0,0]
             else:
                 return []
-    
-    def AcidBaseSitesBO(self):
-        self.acid_sites = []
-        self.base_sites = []
-
-        for atom in self.new_mol.GetAtoms():
-            atomic_num = atom.GetAtomicNum()
-            idx = atom.GetIdx()
-
-            # Check for acidic hydrogens (O, S, N with hydrogen attached)
-            if atomic_num in [8, 16, 7]:  # Oxygen, Sulfur, Nitrogen
-                for neighbor in atom.GetNeighbors():
-                    if neighbor.GetAtomicNum() == 1:  # Hydrogen
-                        self.acid_sites.append(idx)
-
-            # Check for basic lone pairs (N, O, S that can accept H+)
-            if atomic_num in [7, 8, 16]:  # Nitrogen, Oxygen, Sulfur
-                if atom.GetTotalDegree() < atom.GetExplicitValence():
-                    self.base_sites.append(idx)
-
-
-    def AcidBaseSitesLewis(self):
-        self.acid_sites = []
-        self.base_sites = []
-
-        for atom in self.new_mol.GetAtoms():
-            atomic_num = atom.GetAtomicNum()
-            idx = atom.GetIdx()
-
-            # Lewis Acid (electron pair acceptor)
-            if atom.GetFormalCharge() > 0:  # Positively charged atoms
-                self.acid_sites.append(idx)
-            elif atomic_num == 6 and atom.GetDegree() == 3:  # Carbocations
-                self.acid_sites.append(idx)
-            elif atomic_num == 5 and atom.GetDegree() == 3:  # Boron (BF3-type acids)
-                self.acid_sites.append(idx)
-            elif atomic_num == 6 and any(bond.GetBondType() == rdchem.BondType.DOUBLE for bond in atom.GetBonds()):
-                # Carbonyl carbon (C=O) can act as a Lewis acid
-                self.acid_sites.append(idx)
-
-            # Lewis Base (electron pair donor)
-            if atomic_num in [7, 8, 16, 17]:  # N, O, S, Halides
-                if atom.GetTotalDegree() < atom.GetExplicitValence():  # Available lone pairs
-                    self.base_sites.append(idx)
-
-    def AcidBaseCheck(self, ind):
-        if self.params.getacidbaseinfo:
-            if ind in self.acid_sites:
-                return [1, 0]
-            elif ind in self.base_sites:
-                return [0, 1]
-            else:
-                return [0, 0]
-        else:
-            return []
-
+        
 
     def GenerateConformers(self):
         # Fix for each 3D Geometry Tools That's There
@@ -525,6 +470,312 @@ class MoleculeFeaturizerwithPaddingandGeometry:
         # Sort by distance and take the two most vertical and nearest ones
         self.pi_pi_edges.sort(key=lambda x: x[2])
         self.pi_pi_edges = self.pi_pi_edges[:2]
+
+    def ShortestPathDistance(self, edge):
+        if self.EdgeCheck(edge):
+            return [self.gs[edge[0], edge[1]]]
+        else:
+            mol = Chem.MolFromSmiles(self.smiles)
+            try:
+                path_length = Chem.GetDistanceMatrix(mol)[edge[0], edge[1]]
+                return [path_length]
+            except:
+                return [100]  # Return a large value if the edge does not exist or an error occurs
+
+    def ShortestPathDistanceWithWeights(self, edge, weights):
+        if self.EdgeCheck(edge):
+            return [self.gs[edge[0], edge[1]]]
+        else:
+            mol = Chem.MolFromSmiles(self.smiles)
+            try:
+                distance_matrix = Chem.GetDistanceMatrix(mol)
+                atomic_masses = [atom.GetMass() for atom in mol.GetAtoms()]
+                distance = distance_matrix[edge[0], edge[1]]
+                weighted_distance = distance * (atomic_masses[edge[0]] + atomic_masses[edge[1]]) / 2
+                return [weighted_distance]
+            except:
+                return [100]  # Return a large value if the edge does not exist or an error occurs
+
+    def RandomWalkCommuteTime(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                rwct = nx.algorithms.approximation.rwct(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                return [rwct]
+            except:
+                return []  # Return a large value if an error occurs
+        else:
+            return []  # Return a large value if the edge does not exist
+    
+    def CommuteTimeMetrics(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                # Calculate commute time using different metrics
+                rwct = nx.algorithms.approximation.rwct(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                hitting_time = nx.algorithms.approximation.hitting_time(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                mean_first_passage_time = nx.algorithms.approximation.mean_first_passage_time(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                resistance_distance = nx.algorithms.approximation.resistance_distance(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                return [rwct, hitting_time, mean_first_passage_time, resistance_distance]
+            except:
+                return []  # Return an empty list if an error occurs
+        else:
+            return []  # Return an empty list if the edge does not exist
+
+    def ShortestPathCount(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                paths = list(nx.all_shortest_paths(self.matrixdescriptors.adj_mat, source=edge[0], target=edge[1]))
+                return [len(paths)]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def EffectiveResistance(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                resistance = nx.resistance_distance(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                return [resistance]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def CommonNeighbors(self, edge):
+        if self.EdgeCheck(edge):
+            neighbors1 = set(self.matrixdescriptors.adj_mat[edge[0]].nonzero()[0])
+            neighbors2 = set(self.matrixdescriptors.adj_mat[edge[1]].nonzero()[0])
+            common_neighbors = neighbors1.intersection(neighbors2)
+            return [len(common_neighbors)]
+        else:
+            return [0]
+
+    def PercentCommonNeighbors(self, edge):
+        if self.EdgeCheck(edge):
+            neighbors1 = set(self.matrixdescriptors.adj_mat[edge[0]].nonzero()[0])
+            neighbors2 = set(self.matrixdescriptors.adj_mat[edge[1]].nonzero()[0])
+            common_neighbors = neighbors1.intersection(neighbors2)
+            total_neighbors = neighbors1.union(neighbors2)
+            if len(total_neighbors) > 0:
+                return [len(common_neighbors) / len(total_neighbors)]
+            else:
+                return [0]
+        else:
+            return [0]
+
+    def JaccardIndex(self, edge):
+        if self.EdgeCheck(edge):
+            neighbors1 = set(self.matrixdescriptors.adj_mat[edge[0]].nonzero()[0])
+            neighbors2 = set(self.matrixdescriptors.adj_mat[edge[1]].nonzero()[0])
+            common_neighbors = neighbors1.intersection(neighbors2)
+            total_neighbors = neighbors1.union(neighbors2)
+            if len(total_neighbors) > 0:
+                return [len(common_neighbors) / len(total_neighbors)]
+            else:
+                return [0]
+        else:
+            return [0]
+
+    def AdamicAdarIndex(self, edge):
+        if self.EdgeCheck(edge):
+            neighbors1 = set(self.matrixdescriptors.adj_mat[edge[0]].nonzero()[0])
+            neighbors2 = set(self.matrixdescriptors.adj_mat[edge[1]].nonzero()[0])
+            common_neighbors = neighbors1.intersection(neighbors2)
+            adamic_adar = sum(1 / np.log(len(self.matrixdescriptors.adj_mat[neighbor].nonzero()[0])) for neighbor in common_neighbors)
+            return [adamic_adar]
+        else:
+            return [0]
+
+    def PreferentialAttachmentIndex(self, edge):
+        if self.EdgeCheck(edge):
+            neighbors1 = set(self.matrixdescriptors.adj_mat[edge[0]].nonzero()[0])
+            neighbors2 = set(self.matrixdescriptors.adj_mat[edge[1]].nonzero()[0])
+            return [len(neighbors1) * len(neighbors2)]
+        else:
+            return [0]
+
+    def ShortestPathDistanceWithPBC(self, edge, box_size):
+        if self.EdgeCheck(edge):
+            return [self.gs[edge[0], edge[1]]]
+        else:
+            mol = Chem.MolFromSmiles(self.smiles)
+            try:
+                pos1 = mol.GetConformer().GetAtomPosition(edge[0])
+                pos2 = mol.GetConformer().GetAtomPosition(edge[1])
+                delta = pos2 - pos1
+                delta -= box_size * np.round(delta / box_size)  # Apply periodic boundary conditions
+                distance = np.linalg.norm(delta)
+                return [distance]
+            except:
+                return [100]  # Return a large value if the edge does not exist or an error occurs
+
+    def KatzCentralitySimilarity(self, edge, beta=0.1):
+        if self.EdgeCheck(edge):
+            try:
+                katz_centrality = nx.katz_centrality_numpy(self.matrixdescriptors.adj_mat, beta=beta)
+                return [katz_centrality[edge[0]] * katz_centrality[edge[1]]]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def EigenvectorCentralityDifference(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                eigenvector_centrality = nx.eigenvector_centrality_numpy(self.matrixdescriptors.adj_mat)
+                return [abs(eigenvector_centrality[edge[0]] - eigenvector_centrality[edge[1]])]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def BetweennessCentralityCorrelation(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                betweenness_centrality = nx.betweenness_centrality(self.matrixdescriptors.adj_mat)
+                return [betweenness_centrality[edge[0]] * betweenness_centrality[edge[1]]]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def MinimumCutValue(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                cut_value, partition = nx.minimum_cut(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                return [cut_value]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def MaximumFlow(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                flow_value, flow_dict = nx.maximum_flow(self.matrixdescriptors.adj_mat, edge[0], edge[1])
+                return [flow_value]
+            except:
+                return [0]
+        else:
+            return [0]
+    
+    def LaplacianEigenvectorSimilarity(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                laplacian = nx.laplacian_matrix(self.matrixdescriptors.adj_mat).todense()
+                eigenvalues, eigenvectors = np.linalg.eigh(laplacian)
+                similarity = np.dot(eigenvectors[:, 1], eigenvectors[:, 1])
+                return [similarity]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def FiedlerVectorSimilarity(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                laplacian = nx.laplacian_matrix(self.matrixdescriptors.adj_mat).todense()
+                eigenvalues, eigenvectors = np.linalg.eigh(laplacian)
+                fiedler_vector = eigenvectors[:, 1]
+                similarity = np.dot(fiedler_vector[edge[0]], fiedler_vector[edge[1]])
+                return [similarity]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def LaplacianEigenvectorCentrality(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                laplacian = nx.laplacian_matrix(self.matrixdescriptors.adj_mat).todense()
+                eigenvalues, eigenvectors = np.linalg.eigh(laplacian)
+                centrality = np.sum(eigenvectors[:, 1] ** 2)
+                return [centrality]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def GraphDistanceWeightedByBondOrder(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                bond_order = self.matrixdescriptors.bond_mat[edge[0], edge[1]]
+                distance = self.gs[edge[0], edge[1]]
+                weighted_distance = distance / bond_order
+                return [weighted_distance]
+            except:
+                return [100]
+        else:
+            return [100]
+
+    def BetweennessCentralityOfPathways(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                betweenness_centrality = nx.edge_betweenness_centrality(self.matrixdescriptors.adj_mat)
+                return [betweenness_centrality[edge]]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def RingsInSharedPath(self, edge):
+        if self.EdgeCheck(edge):
+            try:
+                rings_in_path = 0
+                for ring in self.ring_atoms:
+                    if edge[0] in ring and edge[1] in ring:
+                        rings_in_path += 1
+                return [rings_in_path]
+            except:
+                return [0]
+        else:
+            return [0]
+
+    def LocalAtomicEnvironmentSimilarity(self, edge, fingerprint_type='Morgan', similarity_metric='Tanimoto'):
+        if self.EdgeCheck(edge):
+            try:
+                mol = Chem.MolFromSmiles(self.smiles)
+                if fingerprint_type == 'Morgan':
+                    fp1 = Chem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048, fromAtoms=[edge[0]])
+                    fp2 = Chem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048, fromAtoms=[edge[1]])
+                elif fingerprint_type == 'MACCS':
+                    fp1 = Chem.rdMolDescriptors.GetMACCSKeysFingerprint(mol, fromAtoms=[edge[0]])
+                    fp2 = Chem.rdMolDescriptors.GetMACCSKeysFingerprint(mol, fromAtoms=[edge[1]])
+                elif fingerprint_type == 'RDK':
+                    fp1 = Chem.RDKFingerprint(mol, fromAtoms=[edge[0]])
+                    fp2 = Chem.RDKFingerprint(mol, fromAtoms=[edge[1]])
+                elif fingerprint_type == 'AtomPair':
+                    fp1 = Chem.GetAtomPairFingerprint(mol, fromAtoms=[edge[0]])
+                    fp2 = Chem.GetAtomPairFingerprint(mol, fromAtoms=[edge[1]])
+                else:
+                    return [0]
+
+                if similarity_metric == 'Tanimoto':
+                    similarity = DataStructs.TanimotoSimilarity(fp1, fp2)
+                elif similarity_metric == 'Dice':
+                    similarity = DataStructs.DiceSimilarity(fp1, fp2)
+                elif similarity_metric == 'Cosine':
+                    similarity = DataStructs.CosineSimilarity(fp1, fp2)
+                elif similarity_metric == 'Sokal':
+                    similarity = DataStructs.SokalSimilarity(fp1, fp2)
+                elif similarity_metric == 'Russel':
+                    similarity = DataStructs.RusselSimilarity(fp1, fp2)
+                elif similarity_metric == 'Kulczynski':
+                    similarity = DataStructs.KulczynskiSimilarity(fp1, fp2)
+                elif similarity_metric == 'McConnaughey':
+                    similarity = DataStructs.McConnaugheySimilarity(fp1, fp2)
+                elif similarity_metric == 'Asymmetric':
+                    similarity = DataStructs.AsymmetricSimilarity(fp1, fp2)
+                elif similarity_metric == 'BraunBlanquet':
+                    similarity = DataStructs.BraunBlanquetSimilarity(fp1, fp2)
+                else:
+                    return [0]
+
+                return [similarity]
+            except:
+                return [0]
+        else:
+            return [0]
+
 
 
     def ElectronegativityDifference(self, edge):
@@ -676,3 +927,210 @@ class MoleculeFeaturizerwithPaddingandGeometry:
         self.GenerateAtomFeatureVector()
         self.GenerateBondFeatureVector()
 
+
+
+class ReactionFeaturizerwithPadding:
+    def __init__(self,reaction_smiles,arguments,denotation='>>'):
+        self.reaction = reaction_smiles
+        self.SplitandCheckForMapping(denotation)
+        self.reactant = ReactionComponentFeaturizerwithPadding(self.reactant,arguments)
+        self.product = ReactionComponentFeaturizerwithPadding(self.product,arguments)
+        self.reactant.run()
+        self.product.run()
+        self.params = arguments
+
+
+    def SplitandCheckForMapping(self,denotation):
+        self.reactant = self.reaction.split(denotation)[0]
+        self.product = self.reaction.split(denotation)[1]
+
+        if not self.IsAtomMapped(self.reactant) or not self.IsAtomMapped(self.product):
+            r = self.StripAtomMapping(self.reactant)
+            p = self.StripAtomMapping(self.product)
+
+            mapfunction = getattr(self,f'Mapvia{self.params.mappingfunction}',None)
+            self.reactant,self.product = mapfunction(r,p)
+            
+
+    def MapviaRXNMapper(self,r,p):
+        rxn_mapper = RXNMapper()
+        rxn = [r + '>>'+p]
+        results = rxn_mapper.get_attention_guided_atom_maps(rxn)
+        # Get Mapped Reaction
+        results = results[0]['mapped_rxn'].split('>>')
+        rsmi = results[0]
+        psmi = results[1]
+
+        #Add Hydrogens and Map Them
+        self.mapper_condfidence = results[0]['confidence'] 
+        if self.params.rxnmapper.totalmapping:
+            rmol = self.AddHMapping(rsmi)
+            pmol = self.AddHMapping(psmi)
+            rsmi = Chem.MolToSmiles(rmol)
+            psmi = Chem.MolToSmiles(pmol)
+        return rsmi,psmi
+    
+    def MapviaRDKit(self):
+        pass
+
+    def MapviaOB3D(self):
+        pass
+
+    def MapviaOB2D(self):
+        pass
+
+
+    def AddHMapping(smi):
+        mol = Chem.MolFromSmiles(smi)
+        mol = Chem.AddHs(mol)
+        for atom in mol.GetAtoms():
+            if atom.GetSymbol() in ['H','Cl','F','I','Br']:
+                atom.SetAtomMapNum(atom.GetIdx() + 1)  # Increment the atom mapping label for H atoms
+        return Chem.MolToSmiles(mol)
+
+    def StripAtomMapping(self, smi):
+        molecule = Chem.MolFromSmiles(smi)
+        for atom in molecule.GetAtoms():
+            atom.SetAtomMapNum(0)
+        return Chem.MolToSmiles(molecule)
+
+    def IsAtomMapped(self,smi):
+        molecule = Chem.MolFromSmiles(smi)
+        for atom in molecule.GetAtoms():
+            if atom.GetAtomMapNum() != 0:
+                return True
+        return False
+
+    def SetFeaturesToNone(self):
+        self.reactant.atom_features = None
+        self.product.atom_features = None
+        self.reactant.bond_features = None
+        self.product.bond_features = None
+            
+    def CheckElementConsistency(self):
+        if self.reactant.matrixdescriptors.element != self.product.matrixdescriptors.element and len(self.reactant.matrixdescriptors.element) == len(self.product.matrixdescriptors.element):
+            warnings.warn("Element inconsistency between reactant and product, but the same # of atoms are there.")
+            self.SetFeaturesToNone()
+            return False
+        elif self.reactant.matrixdescriptors.element != self.product.matrixdescriptors.element and len(self.reactant.matrixdescriptors.element) != len(self.product.matrixdescriptors.element):
+            warnings.warn("Element inconsistency between reactant and product.")
+            self.SetFeaturesToNone()
+            return False
+        else:
+            return False
+        
+    def ReactiveBondInformation(self):
+        self.reactionpropeties = Reactive(self.reactant.matrixdescriptors.element,self.reactant.matrixdescriptors.bond_mat,self.product.matrixdescriptors.bond_mat)
+    
+    def DistanceFromReactingAtom(self,ind,gs):
+        if not self.params.removereactiveinfo:
+            if len(self.reactionpropeties.atom.reactive) > 0:
+                dis = min([gs[ind][indr] for indr in self.reactive_atoms])
+            else:
+                dis = 0 
+            return [dis]
+        else:
+            return []
+        
+    def BondChangeInfo(self,edge):
+        BO_R = self.reactant.matrixdescriptors.bond_mat[edge[0],edge[1]]
+        BO_P = self.product.matrixdescriptors.bond_mat[edge[0],edge[1]]
+        if BO_R == BO_P:
+            RBtype = self.reactant.properties.bond_encode['T1']
+            PBtype = self.reactant.properties.bond_encode['T1']
+        elif BO_R == 0.0:
+            RBtype = self.reactant.properties.bond_encode['T4']
+            PBtype = self.reactant.properties.bond_encode['T3']
+        elif BO_P == 0.0:
+            RBtype = self.reactant.properties.bond_encode['T3']
+            PBtype = self.reactant.properties.bond_encode['T4']
+        elif BO_R < BO_P and BO_R > 0:
+            RBtype = self.reactant.properties.bond_encode['T2']
+            PBtype = self.reactant.properties.bond_encode['T2']
+        elif BO_R > BO_P and BO_R > 0:
+            RBtype = self.reactant.properties.bond_encode['T5']
+            PBtype = self.reactant.properties.bond_encode['T5']
+        return RBtype,PBtype
+
+    def OldBondChangeInfo(self,edge):
+        BO_R = self.reactant.matrixdescriptors.bond_mat[edge[0],edge[1]]
+        BO_P = self.product.matrixdescriptors.bond_mat[edge[0],edge[1]]
+        if BO_R == BO_P:
+            RBtype = self.reactant.properties.old_bond_encode['T1']
+            PBtype = self.reactant.properties.old_bond_encode['T1']
+        elif BO_R == 0.0:
+            RBtype = self.reactant.properties.old_bond_encode['T4']
+            PBtype = self.reactant.properties.old_bond_encode['T3']
+        elif BO_P == 0.0:
+            RBtype = self.reactant.properties.old_bond_encode['T3']
+            PBtype = self.reactant.properties.old_bond_encode['T4']
+        elif BO_R != BO_P and BO_R > 0:
+            RBtype = self.reactant.properties.old_bond_encode['T2']
+            PBtype = self.reactant.properties.old_bond_encode['T2']
+        return RBtype,PBtype
+    
+    def DistanceFromReactingBond(self,edge):
+        if self.params.adddisttoreactingbonds:
+            if len(self.reactionpropeties.bond.reactive) > 0:
+                dis = min([self.reactant.gs[edge[0]][rb[0]] + self.reactant.gs[edge[1]][rb[1]] for rb in self.reactionpropeties.bond.reactive])
+            else:
+                dis = 0
+            return [dis]
+        else:
+            return []
+                    
+    def NeighboringReactives(self,adj_mat,ind):
+        if self.params.addneighboringreactives: 
+            reactive_neighbors = 0
+            for neighbor in adj_mat[ind]:
+                if neighbor in self.reactionpropeties.atom.reactive:
+                    reactive_neighbors += 1
+            return [reactive_neighbors]
+        else:
+            return []
+    
+    def BondDistanceFromReactingBond(self, edge):
+        if self.params.adddisttoreactingbonds:
+            if len(self.reactionpropeties.bond.reactive) > 0:
+                dis = min([self.reactant.gs[edge[0]][rb[0]] + self.reactant.gs[edge[1]][rb[1]] for rb in self.reactionpropeties.bond.reactive])
+            else:
+                dis = 0
+            return [dis]
+        else:
+            return []
+    
+    def BondDistanceChange(self, edge):
+        if self.params.adddisttoreactingbonds:
+            reactant_conf = self.reactant.new_mol.GetConformer()
+            product_conf = self.product.new_mol.GetConformer()
+            reactant_distance = reactant_conf.GetAtomPosition(edge[0]).Distance(reactant_conf.GetAtomPosition(edge[1]))
+            product_distance = product_conf.GetAtomPosition(edge[0]).Distance(product_conf.GetAtomPosition(edge[1]))
+            distance_change = product_distance - reactant_distance
+            return [distance_change]
+        else:
+            return []
+
+    def GenerateBondFeatureVector(self):
+        for ind in range(len(self.reactant.edges_u)):
+            edge = sorted([self.reactant.edges_u[ind],self.reactant.edges_v[ind]])
+            if self.params.oldbondencode: RBtype,PBtype = self.OldBondChangeInfo(edge)
+            else: RBtype,PBtype = self.BondChangeInfo(edge)    
+            self.reactant.bond_features[ind] += RBtype
+            self.product.bond_features[ind] += PBtype
+            if self.params.addbonddistance: 
+                self.reactant.bond_features[ind] += self.BondDistanceFromReactingBond(edge)
+                self.product.bond_features[ind] += self.BondDistanceFromReactingBond(edge)
+            if self.params.addbonddistancechange:
+                self.reactant.bond_features[ind] += self.BondDistanceChange(edge)
+                self.product.bond_features[ind] += self.BondDistanceChange(edge)
+            
+    def GenerateAtomFeatureVector(self):
+        for ind,atom_feature in enumerate(self.reactant.atom_features):
+            atom_feature += self.DistanceFromReactingAtom(ind,self.reactant.gs)
+            if self.params.addneighboringreactives: atom_feature += self.NeighboringReactives(self.reactant.matrixdescriptors.adj_mat,ind)
+        
+        
+        for ind,atom_feature in enumerate(self.product.atom_features):
+            atom_feature += self.DistanceFromReactingAtom(ind,self.product.gs)
+            atom_feature += self.NeighboringReactives(self.product.matrixdescriptors.adj_mat,ind)
+            if self.params.addneighboringreactives: atom_feature += self.NeighboringReactives(self.product.matrixdescriptors.adj_mat,ind)
