@@ -24,9 +24,8 @@ class ReactionFingerprint:
         """
         fps = []
         for smi in smiles:
-            mol = MolFromSmiles(smi)
             if mol is not None:
-                fps.append(self.fpfunc(mol, fpname=fpname, n_folded_length=n_folded_length, min_radius=min_radius, radius=radius, rings=rings, mapping=mapping, atom_index_mapping=atom_index_mapping, root_central_atom=root_central_atom, include_hydrogens=include_hydrogens, show_progress_bar=show_progress_bar))
+                fps.append(self.fpfunc(smi, fpname=fpname, n_folded_length=n_folded_length, min_radius=min_radius, radius=radius, rings=rings, mapping=mapping, atom_index_mapping=atom_index_mapping, root_central_atom=root_central_atom, include_hydrogens=include_hydrogens, show_progress_bar=show_progress_bar))
         return fps
 
 

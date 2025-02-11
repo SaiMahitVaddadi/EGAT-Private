@@ -121,6 +121,28 @@ class Normalizer:
         else:
             scaler,scaled_res = self.LoadScaler(TrainHr)
         return scaler,scaled_res
+    
+    def normalize_with_loader(self,loader):
+        if self.params.model_type in ['Hr','Hr_multi']:
+            if self.params.normtarget: 
+                TrainHr = self.LoadItems(loader,istarget=False)
+            else:
+                TrainHr = self.LoadItems(loader,istarget=True)
+        else:
+            TrainHr = self.LoadItems(loader,istarget=True)
+        
+        if self.params.scaler_model is None:
+            scaler,scaled_res = self.CreateScaler(TrainHr)
+        else:
+            scaler,scaled_res = self.LoadScaler(TrainHr)
+        return scaled_res
+    
+    def normalize_data(self,TrainHr):
+        if self.params.scaler_model is None:
+            scaler,scaled_res = self.CreateScaler(TrainHr)
+        else:
+            scaler,scaled_res = self.LoadScaler(TrainHr)
+        return scaled_res
 
     def inverse(self,scaled_res):
         if self.params.scaler_model is None:

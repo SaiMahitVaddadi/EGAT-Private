@@ -44,13 +44,45 @@ class Train(Setup):
     def __init__(self, arguments):
         super().__init__(arguments)
         self.params = arguments
+        self.LoadData()
+        if self.params.norm is not None: self.LoadScaler()
     
     def LoadData(self):
         self.data = EGATDataLoader(self.params)
 
+
+    def CombinedLoader(self):
+        if self.params.scale_region == 'all':
+            if self.params.test_only: dataset = [self.data['train'].dataset, self.data['val'].dataset]
+            else: dataset = [self.data['train'].dataset, self.data['val'].dataset,self.data['test'].dataset]
+        elif self.params.scale_region == 'trainval' or self.params.scale_region == 'valtrain':
+            dataset = [self.data['train'].dataset, self.data['val'].dataset]
+        elif self.params.scale_region == 'valtest' or self.params.scale_region == 'testval':
+            dataset = [self.data['val'].dataset, self.data['test'].dataset]
+        elif self.params.scale_region == 'traintest' or self.params.scale_region == 'testtrain':
+            dataset = [self.data['train'].dataset, self.data['test'].dataset]
+        combined_loader = torch.utils.data.DataLoader(
+            torch.utils.data.ConcatDataset(dataset),
+            batch_size=self.params.batch_size,
+            shuffle=self.params.randomize,
+            num_workers=self.params.num_workers
+        )
+        return combined_loader
+
     def LoadScaler(self):
         self.scaler = Scaler(self.params)
-        self.scaler.normalize(self.data)
+        combinedargs = ['all','trainval','traintest','testtrain','valtrain','valtest','testval']        
+        noncombinedargs = ['train','val','test']
+        
+        if self.params.scale_region in combinedargs:
+            loader = self.CombinedLoader()
+        elif self.params.scale_region in noncombinedargs:
+            loader = self.data[self.params.scale_region]
+        self.normalizer = dict()
+        self.normalizer['model'],self.normalizer['result'] = self.scaler.normalize
+
+
+
 
     def LoadLearningRate(self,epoch):
         if epoch < self.params.epoch:
@@ -179,6 +211,7 @@ class Train(Setup):
                 else:
                     pred = self.model(RGgs)
         elif self.params.model_type in ['Hr','Hr_multi']:
+            if self.params.norm: Hr = self.ScaleData(Hr)
             if not self.params.molecular:
                 if self.params.hasaddons:
                     pred = self.model(RGgs,PGgs,Hr,RAdd,PAdd)
@@ -190,7 +223,7 @@ class Train(Setup):
                 else:
                     pred = self.model(RGgs,Hr)
 
-
+        
         if not self.params.Embed:
             if self.params.AttnMaps:
                 if not self.params.molecular:
@@ -208,7 +241,6 @@ class Train(Setup):
                 
 
         if self.params.model_type == 'BEP': pred = pred[:, 0].unsqueeze(1) * Hr + pred[:, 1].unsqueeze(1)
-
 
         pred = pred if 'RGgs' in locals() else None
         embeddings = embeddings if 'PGgs' in locals() else None
@@ -247,17 +279,19 @@ class Train(Setup):
         return loss 
     
     def GetAllMetrics(self,pred,target):
-        loss = None
-        for index,weight in enumerate(self.params.tweights):
-            p = pred[:,index].unsqueeze(1)
-            t = target[:,index].unsqueeze(1)
-            if loss is not None:
-                loss += self.params.tweights[index] * self.GetMetric(p,t)
-            else:
-                loss = self.params.tweights[index] * self.GetMetric(p,t)
-        return loss
+        metrics = []
+        for index, weight in enumerate(self.params.tweights):
+            p = pred[:, index].unsqueeze(1)
+            t = target[:, index].unsqueeze(1)
+            metric = self.GetMetric(p, t)
+            metrics.append(metric)
+        return metrics
 
+    def ScaleData(self,data):
+        return self.normalizer['model'].normalize_data(data)  
 
+    def InverseData(self,data):
+        return self.normalizer['model'].inverse(data)        
 
     def AddtoDataset(self,data,pred,target,smiles,id,rtypes,embeddingsdata,embeddings):
         # Merge the torch Tensors, get them out of cuda, and move them to numpy 
@@ -267,17 +301,28 @@ class Train(Setup):
         if self.params.Embed: embeddingsdata.append(embeddings.cpu().numpy().tolist())
         data.append(batch_result)
 
+
+        if self.params.normtarget:
+            if not self.params.trainedonnorm:
+                pred = self.ScaleData(pred)
+                target = self.ScaleData(target)
+            else:
+                pred = self.InverseData(pred)
+                target = self.InverseData(target)
+
         if self.params.model_type in ['multi','Hr_multi']:
             loss = self.WeightedLoss(pred,target)
             if self.params.metric is not None: 
                 comb_metric = self.WeightedMetric(pred,target)
+                metric = self.GetAllMetrics(pred,target)
             else:
                 comb_metric = None
         else:
             self.GetLoss(pred,target)
+            comb_metric = None
             if self.params.metric is not None: metric = self.GetMetric(pred,target)
             else: metric = None 
-        return data,embeddingsdata,loss
+        return data,embeddingsdata,loss,comb_metric,metric
 
 
     def ArithMean(self, pred, target, weights=None):
@@ -325,8 +370,6 @@ class Train(Setup):
         return (loss / sum(weights)) ** 0.5
     
 
-
-
     def GetLoss(self,pred,target):
         if isinstance(self.loss,nn.Module):
             try:
@@ -344,6 +387,8 @@ class Train(Setup):
         loss_list = []
         embeddingsdata = []
         data = []
+        metrics_list = []
+        comb_metrics = []
         for item in tqdm(loader, total=len(loader), smoothing=0.9):
             if self.params.hasaddons:
                 if self.params.additionals is not None:
@@ -388,10 +433,14 @@ class Train(Setup):
 
             if mode == 'train': self.optimizer.zero_grad()
             pred,embeddings,Rmap,Pmap = self.GetPrediction(RGgs,PGgs,RAdd,PAdd,additionals)
-            datum,embeddingsdataum,loss = self.AddtoDataset(data,pred,targets,smiles,id,rtypes,embeddingsdata,embeddings)
+            datum,embeddingsdataum,loss,comb_metrics,metrics = self.AddtoDataset(data,pred,targets,smiles,id,rtypes,embeddingsdata,embeddings)
 
             if mode == 'train': loss.backward()
             loss_list.append(loss.cpu().data.numpy())
+            if self.params.metric is not None: 
+                metrics_list.append(metrics.cpu().data.numpy())
+                if comb_metrics is not None:
+                    comb_metrics.append(comb_metrics.cpu().data.numpy())
             data.append(datum)
             embeddingsdata.append(embeddingsdataum)
             
@@ -417,7 +466,7 @@ class Train(Setup):
 
         '''learning one epoch'''
         ###### LOAD THE PREDICTION DATAFRAME AND ITS COLUMNS
-        train,columns = self.CreateCSV()
+        train,self.columns = self.CreateCSV()
         val,valcolumns = self.CreateCSV()
         test,testcolumns = self.CreateCSV()
         self.logger.info('Training...')
@@ -460,11 +509,29 @@ class Train(Setup):
             }
             torch.save(state, savepath)
             self.logger.info('Saving model....')
-            self.SaveData(train,val,test,columns)
-            self.SaveEmbeddings(train_embeddings,val_embeddings,test_embeddings)
-            
-    
+            if self.params.save_style == 'best':
+                self.SaveData(train,val,test,columns)
+                self.SaveEmbeddings(train_embeddings,val_embeddings,test_embeddings)
+        else:
+            if 'every-' in self.params.save_style:
+                interval = int(self.params.save_style.split('-')[1])
+                if epoch % interval == 0:
+                    self.logger.info('Save model...')
+                    savepath = f'epoch_{epoch}.pth'
+                    self.logger.info('Saving at %s' % savepath)
+                    state = {
+                        'epoch': epoch,
+                        'train_acc': np.mean(train_loss_list),
+                        'test_acc': np.mean(val_loss_list),
+                        'model_state_dict': self.model.state_dict(),
+                        'optimizer_state_dict': self.optimizer.state_dict(),
+                    }
+                    torch.save(state, savepath)
+                    self.logger.info('Saving model....')
+                    self.SaveDataAtEpoch(train,val,test,columns,epoch)
+                    self.SaveEmbeddingsAtEpoch(train_embeddings,val_embeddings,test_embeddings)
 
+    
     def SaveData(self,train,val,test,columns):
         ###### SAVE RESULTS AS CSV
         datasets = {'train': train, 'val': val, 'test': test}
@@ -474,6 +541,48 @@ class Train(Setup):
             if datasets[key] is not None:
                 df = pd.DataFrame(datasets[key], columns=columns)
                 df.to_csv(filenames[key])
+
+    def SaveDataAtEpoch(self,train,val,test,columns,epoch=1):
+        ###### SAVE RESULTS AS CSV
+        datasets = {'train': train, 'val': val, 'test': test}
+        filenames = {'train': f'epoch_{epoch}_train.csv', 'val': f'epoch_{epoch}_val.csv', 'test': f'epoch_{epoch}_test.csv'}
+        
+        for key in datasets:
+            if datasets[key] is not None:
+                df = pd.DataFrame(datasets[key], columns=columns)
+                df.to_csv(filenames[key])
+
+    def SaveEmbeddingsAtEpoch(self,train,val,test,epoch=1):
+        ###### SAVE RESULTS AS CSV
+        datasets = {'train': train, 'val': val, 'test': test}
+        filenames = {'train': f'epoch_{epoch}_train_embeddings.csv', 'val': f'epoch_{epoch}_val_embeddings.csv', 'test': f'epoch_{epoch}_test_embeddings.csv'}
+        
+        for key in datasets:
+            if datasets[key] is not None:
+                df = pd.DataFrame(datasets[key])
+                df.to_csv(filenames[key])
+
+    def SaveLossesToCSV(self, train_loss_list, val_loss_list, test_loss_list, lr, epoch):
+        # Create a dictionary with the data
+        data = {
+            'epoch': [epoch],
+            'learning_rate': [lr],
+            'train_loss': [np.mean(train_loss_list)],
+            'val_loss': [np.mean(val_loss_list)],
+            'test_loss': [np.mean(test_loss_list) if test_loss_list is not None else None]
+        }
+        
+        # Convert the dictionary to a DataFrame
+        df = pd.DataFrame(data)
+        
+        # Define the filename
+        filename = 'losses.csv'
+        
+        # Save the DataFrame to a CSV file
+        if not os.path.isfile(filename):
+            df.to_csv(filename, index=False)
+        else:
+            df.to_csv(filename, mode='a', header=False, index=False)
 
     def SaveEmbeddings(self,train,val,test):
         ###### SAVE RESULTS AS CSV
@@ -486,14 +595,13 @@ class Train(Setup):
                 df.to_csv(filenames[key])
 
     def TrainbyEpoch(self):
-        self.LoadData()
-
         for epoch in range(self.start_epoch, self.params.epoch+self.params.epoch_const):
             self.loss_increase_count += 1
             self.logger.info('Epoch %d (%d/%s):' % (self.global_epoch + 1, epoch + 1, self.params.epoch))
             train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr = self.Loop(epoch)
-            self.UpdateWandB(train_loss_list,val_loss_list,test_loss_list,lr)
-            self.SaveTorchModel(val_loss_list,train_loss_list,epoch)
+            self.UpdateWandB(train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr)
+            self.SaveTorchModel(train,val,test,train_embeddings,val_embeddings,test_embeddings,val_loss_list,train_loss_list,epoch,self.columns)
+            self.SaveLossesToCSV(train_loss_list, val_loss_list, test_loss_list, lr, epoch)
             if self.loss_increase_count > self.params.patience:
                 break
             self.global_epoch += 1
@@ -506,7 +614,7 @@ class Train(Setup):
             self.logger.info('Epoch %d:' % (self.global_epoch + 1))
             train, val, test, train_embeddings, val_embeddings, test_embeddings, train_loss_list, val_loss_list, test_loss_list, lr = self.Loop(epoch)
             self.UpdateWandB(train_loss_list, val_loss_list, test_loss_list, lr)
-            self.SaveTorchModel(train, val, test, train_embeddings, val_embeddings, test_embeddings, val_loss_list, train_loss_list, epoch, columns)
+            self.SaveTorchModel(train, val, test, train_embeddings, val_embeddings, test_embeddings, val_loss_list, train_loss_list, epoch, self.columns)
             
             current_loss = np.mean(val_loss_list)
             if epoch == self.params.epoch + self.params.epoch_const:
