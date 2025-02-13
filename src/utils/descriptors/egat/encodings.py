@@ -118,20 +118,11 @@ class Encodings(Properties):
         """
         self.global_bond_encode = {'TRUE':[1,0],'FALSE':[0,1]}
     
-    def globalencoding(self):
+    def functionalgroup(self):
         """
-        Sets up global encoding.
-        self.globals: dict
-            Contains default encoding values for various properties.
+        Sets up functional group encoding.
+        self.functional_group_encode: dict
+            Key: str (functional group presence)
+            Value: list [int, int]
         """
-        self.globals = dict()
-        self.globals['atom'] = self.element_encode
-        self.globals['chirality'] = [0,0,0]
-        self.globals['hybridization'] = [0,0,0,0]
-        self.globals['hybridization_full'] = [0,0,0,0,0,0]
-        self.globals['bond'] = [0,0,0,0,0]
-        self.globals['bondorder'] = [0,0,0,0,0]
-        self.globals['bondstereo'] = [0,0,0]
-        self.globals['bondrotation'] = [0,0]
-        self.globals['old_bond'] = [0,0,0,0]
-        self.globals['h_bond'] = [0,0]
+        self.functional_group_encode = {'TRUE':[1,0],'FALSE':[0,1]}

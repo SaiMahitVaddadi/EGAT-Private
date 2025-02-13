@@ -1,4 +1,9 @@
 # TO-DO:
+
+- Dataset 
+    - Fix it for the new graphs
+
+
 - Training Loop: 
     - Be able to normalize add ons. calculate all add-ons first and then use that. 
     - Setup ways to save the additional loss functions. 
@@ -25,6 +30,15 @@
     - Setup multiple trainings in parallel
     - Setup cv in parallel. 
 
+- Featurizers: 
+
+    - Reaction Geometry Features for Atoms:
+        - Change in Gasteiger Charge:
+        - Change in Dipole Moment
+
+    - Write out delta functions for the rest
+
+
 
 - Additional Models:
     - add in the EGT and TGT
@@ -38,9 +52,7 @@
     - Add Quantum Mechanical Features 
     - Add Molskill, QEPPI, syba, molecular_complexity
 
-- Featurizers: 
-    - Reorganize Featurizers
-    
+
 
 - Conformer Generation:
     - write out the params for it

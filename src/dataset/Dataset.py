@@ -18,14 +18,14 @@ from ..utils.descriptors.egat.encodings import Encodings
 from ..utils.database.csvfunctions import DenoteInputData
 from ..utils.descriptors.fingerprint.threedimensional import GeometricFingerprint
 from ..utils.descriptors.fingerprint.twodimensional import Fingerprint
-from ..graph.Molecule import MoleculeFeaturizer
-from ..graph.Reaction import ReactionFeaturizer
-from ..graph.MoleculeGeometry import MoleculeFeaturizerwithGeometry
-from ..graph.ReactionGeometry import ReactionFeaturizerwithGeometry
-from ..graph.MoleculeGlobalGeometry import MoleculeFeaturizerwithPaddingandGeometry
-from ..graph.ReactionGlobalGeometry import ReactionFeaturizerwithPaddingandGeometry
-from ..graph.MoleculeGlobal import MoleculeFeaturizerwithPadding
-from ..graph.ReactionGlobal import ReactionFeaturizerwithPadding
+from ..graph.molecule.Molecule import MoleculeFeaturizer
+from ..graph.reaction import ReactionFeaturizer
+from ..graph.molecule.MoleculeGeometry import MoleculeFeaturizerwithGeometry
+from ..graph.reaction_geometry import ReactionFeaturizerwithGeometry
+from ..graph.molecule_global_geometry import MoleculeFeaturizerwithPaddingandGeometry
+from ..graph.reaction_global_geometry import ReactionFeaturizerwithPaddingandGeometry
+from ..graph.molecule_global import MoleculeFeaturizerwithPadding
+from ..graph.reaction_global import ReactionFeaturizerwithPadding
 from ..tools.jepa.tools import mask_uv_vectors,mask_node_features,mask_node_features_v2
 from torch_geometric.data import Data
 
