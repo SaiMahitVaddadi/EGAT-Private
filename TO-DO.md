@@ -1,11 +1,9 @@
 # TO-DO:
-
 - Dataset 
-    - Fix it for the new graphs
-
+    - Fix it for the new graphs.
+    - Set up ways to normalize the data with any scaler and add it inside. 
 
 - Training Loop: 
-    - Be able to normalize add ons. calculate all add-ons first and then use that. 
     - Setup ways to save the additional loss functions. 
 
 - EGAT:
@@ -31,27 +29,18 @@
     - Setup cv in parallel. 
 
 - Featurizers: 
-
     - Reaction Geometry Features for Atoms:
         - Change in Gasteiger Charge:
         - Change in Dipole Moment
+    
+    - Reaction Geometry Features For Bonds: 
 
     - Write out delta functions for the rest
-
-
 
 - Additional Models:
     - add in the EGT and TGT
     - add in the HiMol and MFGNN
     
-- Addons:
-    - Add Cheminformatic Features
-    - Add FSSscore
-    - Add Mordred Library
-    - Add Descriptasourus 
-    - Add Quantum Mechanical Features 
-    - Add Molskill, QEPPI, syba, molecular_complexity
-
 
 
 - Conformer Generation:
