@@ -64,7 +64,7 @@ class BaseFeaturizer:
         self.matrixdescriptors.BondDipoleMoments()
 
     def Stereochem(self):
-        self.stereo = StereoChemistry(self.matrixdescriptors)
+        self.stereo = StereoChemistry(self.matrixdescriptors,v2=self.params.stereo_full)
         self.stereo.run()
 
 

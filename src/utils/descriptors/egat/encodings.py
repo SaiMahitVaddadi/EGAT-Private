@@ -1,5 +1,5 @@
 from .properties import Properties
-
+from rdkit import Chem
 class Encodings(Properties):
     def __init__(self):
         """
@@ -15,6 +15,11 @@ class Encodings(Properties):
         self.bondrotation()
         self.hybridization_full()
         self.old_bond_encoding()
+        self.bondordernew()
+        self.bondstereonew()
+        self.atomchirality()
+        self.atomstereo()
+        self.stereodescriptor()
 
     def element(self):
         """
@@ -81,6 +86,15 @@ class Encodings(Properties):
             Value: list [int, int, int, int, int]
         """
         self.bond_order_encode = {'B0': [0,0,0,0,1],'B1':[0,0,0,1,0],'B2':[0,0,1,0,0],'B3':[0,1,0,0,0],'BA':[1,0,0,0,0]}
+        
+    def bondordernew(self):
+        """
+        Sets up bond order encoding.
+        self.bond_order_encode: dict
+            Key: str (bond order type)
+            Value: list [int, int, int, int, int]
+        """
+        self.bond_order_encode = {'B0': [0,0,0,0,1],'B1':[0,0,0,1,0],'B2':[0,0,1,0,0],'B3':[0,1,0,0,0],'BA':[1,0,0,0,0]}
     
     def bondstereo(self):
         """
@@ -91,6 +105,16 @@ class Encodings(Properties):
         """
         self.bond_stereo_encode = {'ANY': [0,0,1], 'E': [0,1,0], 'Z': [1,0,0]}
     
+    def bondstereonew(self):
+        """
+        Sets up bond stereo encoding.
+        self.bond_stereo_encode: dict
+            Key: str (stereo type)
+            Value: list [int, int, int]
+        """
+        self.bond_stereo_encode_new = {'ANY': [0,0,1,0,0,0,0,0], 'E': [0,1,0,0,0,0,0,0], 'Z': [1,0,0,0,0,0,0,0],'ATROPCCW':[0,0,0,1,0,0,0,0],'ATROPCW':[0,0,0,0,1,0,0,0],'CIS':[0,0,0,0,0,1,0,0],'TRANS':[0,0,0,0,0,0,1,0],'NONE':[0,0,0,0,0,0,0,1]}
+
+
     def bondrotation(self):
         """
         Sets up bond rotation encoding.
@@ -126,3 +150,38 @@ class Encodings(Properties):
             Value: list [int, int]
         """
         self.functional_group_encode = {'TRUE':[1,0],'FALSE':[0,1]}
+    
+
+    def atomchirality(self):
+        self.atom_chiral_encode = {
+            Chem.rdchem.ChiralType.CHI_ALLENE: [1,0,0,0,0,0,0,0,0],
+            Chem.rdchem.ChiralType.CHI_OCTAHEDRAL: [0,1,0,0,0,0,0,0,0],
+            Chem.rdchem.ChiralType.CHI_OTHER: [0,0,1,0,0,0,0,0,0],
+            Chem.rdchem.ChiralType.CHI_SQUAREPLANAR: [0,0,0,1,0,0,0,0,0],
+            Chem.rdchem.ChiralType.CHI_TETRAHEDRAL: [0,0,0,0,1,0,0,0,0],
+            Chem.rdchem.ChiralType.CHI_TETRAHEDRAL_CCW: [0,0,0,0,0,1,0,0,0],
+            Chem.rdchem.ChiralType.CHI_TETRAHEDRAL_CW: [0,0,0,0,0,0,1,0,0],
+            Chem.rdchem.ChiralType.CHI_TRIGONALBIPYRAMIDAL: [0,0,0,0,0,0,0,1,0],
+            Chem.rdchem.ChiralType.CHI_UNSPECIFIED: [0,0,0,0,0,0,0,0,1]
+        }
+    
+    def atomstereo(self):
+        self.atom_stereo_encode = {
+            Chem.rdchem.StereoType.Atom_Octahedral: [1,0,0,0,0,0,0,0],
+            Chem.rdchem.StereoType.Atom_SquarePlanar: [0,1,0,0,0,0,0,0],
+            Chem.rdchem.StereoType.Atom_Tetrahedral: [0,0,1,0,0,0,0,0],
+            Chem.rdchem.StereoType.Atom_TrigonalBipyramidal: [0,0,0,1,0,0,0,0],
+            Chem.rdchem.StereoType.Bond_Atropisomer: [0,0,0,0,1,0,0,0],
+            Chem.rdchem.StereoType.Bond_Cumulene_Even: [0,0,0,0,0,1,0,0],
+            Chem.rdchem.StereoType.Bond_Double: [0,0,0,0,0,0,1,0],
+            Chem.rdchem.StereoType.Unspecified: [0,0,0,0,0,0,0,1]
+        }
+    
+    def stereodescriptor(self):
+        self.stereo_descriptor_encode = {
+            Chem.rdchem.StereoDescriptor.Bond_Cis: [1, 0, 0, 0, 0],
+            Chem.rdchem.StereoDescriptor.Bond_Trans: [0, 1, 0, 0, 0],
+            Chem.rdchem.StereoDescriptor.NoValue: [0, 0, 1, 0, 0],
+            Chem.rdchem.StereoDescriptor.Tet_CCW: [0, 0, 0, 1, 0],
+            Chem.rdchem.StereoDescriptor.Tet_CW: [0, 0, 0, 0, 1]
+        }
