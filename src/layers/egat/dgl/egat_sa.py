@@ -5,7 +5,7 @@ from torch import nn
 from torch.nn import init
 
 # pylint: enable=W0235
-class EGATConvSA(nn.Module):
+class EGATConvSADGL(nn.Module):
     r"""
     
     Description

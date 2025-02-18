@@ -10,6 +10,9 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
 
+from ..models.model import EGATModel
+from ..models.fpmodel import FPModel
+
 @dataclass
 class Params:
     epoch: int = 100

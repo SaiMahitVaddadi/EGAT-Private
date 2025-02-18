@@ -1,18 +1,17 @@
 # TO-DO:
-- Dataset 
-    - Fix it for the new graphs.
-    - Set up ways to normalize the data with any scaler and add it inside. 
-
+    
 - Training Loop: 
     - Setup ways to save the additional loss functions. 
 
-- EGAT:
-    - molecular/model.py will have both the 1MLP and 3MLP model
-    - reaction/model.py will have both the 1MLP and 3MLP model
-    - Write in a Fingerprint Based NN model in Pytorch 
-    - Set up Pytorch Lightning support.    
-    - make them usable in both DGL and PyG
+- EGAT Models:
+    - Set up Pytorch Lightning support for FP Model
+    - Fully custom activation functions
+    - Fully custom end convolution layers
+    - Fully custom softmax layers   
+    - Set up the ablation models. 
+    - make them usable in both DGL and PyG.
     - make them malleable to both any layer in PyG and DGL.  
+    - Create an EGAT version usable for atom/bond property prediction. 
 
 - Slurm or QSUB or other types of automation:
     - Write the job writer script for those
@@ -24,19 +23,14 @@
     - Set up a grid search protocol
 
 - Parallelization
-    - Setup ensemble models in parallel
-    - Setup multiple trainings in parallel
-    - Setup cv in parallel. 
+    - Setup ensemble models in parallel or series
+    - Setup CV in parallel or series. 
 
 - Featurizers: 
     - Reaction Geometry Features for Atoms:
-        - Change in Gasteiger Charge:
-        - Change in Dipole Moment
+        - Change in Atom properties
+        - Change in Bond Properties
     
-    - Reaction Geometry Features For Bonds: 
-
-    - Write out delta functions for the rest
-
 - Additional Models:
     - add in the EGT and TGT
     - add in the HiMol and MFGNN

@@ -18,15 +18,14 @@ from ..utils.descriptors.egat.encodings import Encodings
 from ..utils.database.csvfunctions import DenoteInputData
 from ..utils.descriptors.fingerprint.threedimensional import GeometricFingerprint
 from ..utils.descriptors.fingerprint.twodimensional import Fingerprint
-from ..graph.molecule.Molecule import MoleculeFeaturizer
-from ..graph.reaction import ReactionFeaturizer
-from ..graph.molecule.MoleculeGeometry import MoleculeFeaturizerwithGeometry
-from ..graph.reaction_geometry import ReactionFeaturizerwithGeometry
-from ..graph.molecule_global_geometry import MoleculeFeaturizerwithPaddingandGeometry
-from ..graph.reaction_global_geometry import ReactionFeaturizerwithPaddingandGeometry
-from ..graph.molecule_global import MoleculeFeaturizerwithPadding
-from ..graph.reaction_global import ReactionFeaturizerwithPadding
-from ..tools.jepa.tools import mask_uv_vectors,mask_node_features,mask_node_features_v2
+from ..graph.molecular.Molecule import MoleculeFeaturizer
+from ..graph.molecular.MoleculeGeometry import MoleculeFeaturizerwithGeometry
+from ..graph.reaction.ReactionGeometry import ReactionFeaturizerwithGeometry
+from ..graph.molecular.MoleculeGlobalGeometry import MoleculeFeaturizerwithPaddingandGeometry
+from ..graph.reaction.ReactionGlobalGeometry import ReactionFeaturizerwithPaddingandGeometry
+from ..graph.molecular.MoleculeGlobal import MoleculeFeaturizerwithPadding
+from ..graph.reaction.ReactionGlobal import ReactionFeaturizerwithPadding
+from ..tools.jepa.tools import mask_uv_vectors,mask_node_features,mask_node_features_v2,mask_edge_features,mask_edge_features_v2,mask_node_and_edges,mask_node_and_edges_v2,mask_node_and_edges_v3,mask_node_and_neighbors
 from torch_geometric.data import Data
 
 class EGATDataset(Dataset):
@@ -199,6 +198,26 @@ class EGATDataset(Dataset):
             return None
         
 
+    def RunJEPA(self,graph):
+        if self.params.jepa:
+            if self.params.jepa_masking == 'node':
+                mask_node_features(graph)
+            elif self.params.jepa_masking == 'edge':
+                mask_edge_features(graph)
+            elif self.params.jepa_masking == 'node+edge':
+                mask_node_and_edges(graph)
+            elif self.params.jepa_masking == 'node+edge_v2':
+                mask_node_and_edges_v2(graph,self.params.jepa_num_nodes)
+            elif self.params.jepa_masking == 'node+edge_v3':
+                mask_node_and_edges_v3(graph,self.params.jepa_num_nodes,self.params.jepa_num_edges)
+            elif self.params.jepa_masking == 'node+neighbors':
+                mask_node_and_neighbors(graph,self.params.jepa_neighbors)
+            elif self.params.jepa_masking == 'node_v2':
+                mask_node_features_v2(graph, self.params.jepa_num_nodes)
+            elif self.params.jepa_masking == 'edge_v2':
+                mask_edge_features_v2(graph, self.params.jepa_num_edges)
+
+
     def CreateGraphDGL(self,index):
         u, v = torch.Tensor(self.info['u']).int(),torch.Tensor(self.info['v']).int()
         if self.params.jepa: u,v = mask_uv_vectors(u,v)
@@ -210,14 +229,14 @@ class EGATDataset(Dataset):
             gR.edata['x'] = torch.Tensor(self.info['bond_F_R'])
             gP.ndata['x'] = torch.Tensor(self.info['atom_F_P'])
             gP.edata['x'] = torch.Tensor(self.info['bond_F_P'])
-            chosen_index = mask_node_features(gR)
-            chosen_indexP= mask_node_features(gP)
+            if self.params.jepa: chosen_index = self.RunJEPA(gR)
+            if self.params.jepa: chosen_index = self.RunJEPA(gP)
                 
 
         elif 'molecular' in self.params.modes.graph:
             gR.ndata['x'] = torch.Tensor(self.info['atom_F_R'])
             gR.edata['x'] = torch.Tensor(self.info['bond_F_R'])
-            chosen_index = mask_node_features(gR)
+            if self.params.jepa: chosen_index = self.RunJEPA(gR)
                 
         
                 
@@ -246,9 +265,11 @@ class EGATDataset(Dataset):
             gR = Data(x=x_R, edge_index=edge_index, edge_attr=edge_attr_R)
             gP = Data(x=x_P, edge_index=edge_index, edge_attr=edge_attr_P)
             
-            chosen_index_R = mask_node_features(gR)
-            chosen_index_P = mask_node_features(gP)
-            
+            if self.params.jepa: chosen_index = self.RunJEPA(gR)
+            if self.params.jepa: chosen_index = self.RunJEPA(gP)
+
+
+
             return gR, gP
         
         elif 'molecular' in self.params.modes.graph:
@@ -257,7 +278,7 @@ class EGATDataset(Dataset):
             
             gR = Data(x=x_R, edge_index=edge_index, edge_attr=edge_attr_R)
             
-            chosen_index_R = mask_node_features(gR)
+            if self.params.jepa: chosen_index = self.RunJEPA(gR)
             
             return gR
 

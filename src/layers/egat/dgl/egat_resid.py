@@ -6,7 +6,7 @@ from torch import nn
 from torch.nn import init
 
 # pylint: enable=W0235
-class EGATConvResid(nn.Module):
+class EGATConvResidDGL(nn.Module):
     r"""
     
     Description
