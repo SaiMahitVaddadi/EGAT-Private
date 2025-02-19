@@ -1,7 +1,7 @@
 import torch,logging,os,sys,hydra,omegaconf,shutil,importlib
 from torch import nn
 from .setup import Setup
-from ..dataset.Loader import EGATDataLoader
+from ..loader.Loader import EGATDataLoader
 from .scaler import Scaler
 import numpy as np 
 from tqdm import tqdm
@@ -12,6 +12,9 @@ from typing import List, Optional, Union
 
 from ..models.model import EGATModel
 from ..models.fpmodel import FPModel
+
+
+
 
 @dataclass
 class Params:

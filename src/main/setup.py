@@ -3,34 +3,6 @@ from torch import nn
 from dataclasses import dataclass
 from typing import Optional
 
-@dataclass
-class Params:
-    weightsandbiases: bool = False
-    wandbproject: str = ''
-    wandbname: str = ''
-    setup: str = 'cpu'
-    parallel: bool = False
-    gpu: int = 0
-    save_path: str = ''
-    startpoint: str = 'Retrain'
-    base_model: Optional[str] = None
-    ablation_EGAT_model: Optional[str] = None
-    ablation_NN_model: Optional[str] = None
-    loss: str = 'CrossEntropy'
-    data_path: str = ''
-    hasaddons: bool = False
-    molecular: bool = False
-    defaults: Optional[dict] = None
-    learning_rate_min: float = 0.0
-    momentum_orig: float = 0.9
-    lr_decay: float = 0.1
-    step_size: int = 10
-    epochs: int = 100
-    scheduler: str = 'cosine'
-    gamma: float = 0.1
-    optimizer: str = 'adam'
-    lr: float = 0.001
-    weight_decay: float = 0.0
 
 
 def bn_momentum_adjust(m, momentum):

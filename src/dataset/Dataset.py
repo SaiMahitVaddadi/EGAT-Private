@@ -27,6 +27,11 @@ from ..graph.molecular.MoleculeGlobal import MoleculeFeaturizerwithPadding
 from ..graph.reaction.ReactionGlobal import ReactionFeaturizerwithPadding
 from ..tools.jepa.tools import mask_uv_vectors,mask_node_features,mask_node_features_v2,mask_edge_features,mask_edge_features_v2,mask_node_and_edges,mask_node_and_edges_v2,mask_node_and_edges_v3,mask_node_and_neighbors
 from torch_geometric.data import Data
+from dataclasses import dataclass
+from typing import List, Optional, Union
+
+
+
 
 class EGATDataset(Dataset):
     def __init__(self,arguments):
@@ -122,7 +127,7 @@ class EGATDataset(Dataset):
             self.info[self.params.additional] = rxn[self.params.additional]
             
     def AddINCHI(self,rxn):
-        if 'reaction' in self.params.modes.graph:
+        if 'reaction' in self.params.graph:
             RPsmiles = rxn[self.smiles].split('>>')
             Rsmiles = RPsmiles[0]
             Psmiles = RPsmiles[1]        
@@ -132,7 +137,7 @@ class EGATDataset(Dataset):
             NPsmiles = RemoveMapping(Psmiles)
             self.info["Rsmiles"] = Chem.MolToSmiles(NRsmiles)
             self.info["Psmiles"] = Chem.MolToSmiles(NPsmiles)
-        elif 'molecular' in self.params.modes.graph:
+        elif 'molecular' in self.params.graph:
             Rsmiles = rxn[self.smiles]
             self.info['Rinchi'] = getInchifromSMILES(Rsmiles)
             NRsmiles = RemoveMapping(Rsmiles)
@@ -140,7 +145,7 @@ class EGATDataset(Dataset):
 
 
     def AddFeatures(self,rxn,info):
-        if 'molecular' in self.params.modes.graph:
+        if 'molecular' in self.params.graph:
             if self.params.dimension == '2d':
                 if self.params.addmissingbonds in ['global','hbonds','global+hbonds']:
                     self.featurizer = MoleculeFeaturizerwithPadding(rxn[self.smiles],self.params)
@@ -151,7 +156,7 @@ class EGATDataset(Dataset):
                     self.featurizer = MoleculeFeaturizerwithPaddingandGeometry(rxn[self.smiles],self.params)
                 else:
                     self.featurizer = MoleculeFeaturizerwithGeometry(rxn[self.smiles],self.params)
-        if 'reaction' in self.params.modes.graph:
+        if 'reaction' in self.params.graph:
             if self.params.dimension == '2d':
                 if self.params.addmissingbonds in ['global','hbonds','global+hbonds']:
                     self.featurizer = ReactionFeaturizerwithPadding(rxn[self.smiles],self.params)
@@ -164,14 +169,14 @@ class EGATDataset(Dataset):
                     self.featurizer = ReactionFeaturizerwithGeometry(rxn[self.smiles],self.params)
 
         
-        if 'reaction' in self.params.modes.graph:
+        if 'reaction' in self.params.graph:
             self.info['u'] = self.featurizer.reactant.edges_u
             self.info['v'] = self.featurizer.reactant.edges_v
             self.info['atom_F_R'] = self.featurizer.reactant.atom_features
             self.info['bond_F_R'] = self.featurizer.reactant.bond_features
             self.info['atom_F_P'] = self.featurizer.product.atom_features
             self.info['bond_F_P'] = self.featurizer.product.bond_features
-        elif 'molecular' in self.params.modes.graph:
+        elif 'molecular' in self.params.graph:
             self.info['u'] = self.featurizer.edges_u
             self.info['v'] = self.featurizer.edges_v
             self.info['atom_F_R'] = self.featurizer.atom_features
@@ -224,7 +229,7 @@ class EGATDataset(Dataset):
         gR   = dgl.graph((u,v))
         gP   = dgl.graph((u,v))
 
-        if 'reaction' in self.params.modes.graph:
+        if 'reaction' in self.params.graph:
             gR.ndata['x'] = torch.Tensor(self.info['atom_F_R'])
             gR.edata['x'] = torch.Tensor(self.info['bond_F_R'])
             gP.ndata['x'] = torch.Tensor(self.info['atom_F_P'])
@@ -233,7 +238,7 @@ class EGATDataset(Dataset):
             if self.params.jepa: chosen_index = self.RunJEPA(gP)
                 
 
-        elif 'molecular' in self.params.modes.graph:
+        elif 'molecular' in self.params.graph:
             gR.ndata['x'] = torch.Tensor(self.info['atom_F_R'])
             gR.edata['x'] = torch.Tensor(self.info['bond_F_R'])
             if self.params.jepa: chosen_index = self.RunJEPA(gR)
@@ -243,9 +248,9 @@ class EGATDataset(Dataset):
         if gR.ndata['x'].max() > 50: 
             with open('check.txt','a') as ff:
                 ff.write('{}\n'.format(self.params.root + '--'+index))
-        if 'reaction' in self.params.modes.graph:
+        if 'reaction' in self.params.graph:
             return gR,gP
-        elif 'molecular' in self.params.modes.graph:
+        elif 'molecular' in self.params.graph:
             return gR
         
     def CreateGraphPyG(self, index):
@@ -256,7 +261,7 @@ class EGATDataset(Dataset):
         
         edge_index = torch.stack([u, v], dim=0)
         
-        if 'reaction' in self.params.modes.graph:
+        if 'reaction' in self.params.graph:
             x_R = torch.tensor(self.info['atom_F_R'], dtype=torch.float)
             edge_attr_R = torch.tensor(self.info['bond_F_R'], dtype=torch.float)
             x_P = torch.tensor(self.info['atom_F_P'], dtype=torch.float)
@@ -272,7 +277,7 @@ class EGATDataset(Dataset):
 
             return gR, gP
         
-        elif 'molecular' in self.params.modes.graph:
+        elif 'molecular' in self.params.graph:
             x_R = torch.tensor(self.info['atom_F_R'], dtype=torch.float)
             edge_attr_R = torch.tensor(self.info['bond_F_R'], dtype=torch.float)
             
@@ -285,17 +290,17 @@ class EGATDataset(Dataset):
 
     def CreateGraph(self, index):
         if self.params.mode == 'dgl':
-            if 'reaction' in self.params.modes.graph:
+            if 'reaction' in self.params.graph:
                 gR, gP = self.CreateGraphDGL(index)
                 return gR, gP
-            elif 'molecular' in self.params.modes.graph:
+            elif 'molecular' in self.params.graph:
                 gR = self.CreateGraphDGL(index)
                 return gR
         elif self.params.mode == 'pyg':
-            if 'reaction' in self.params.modes.graph:
+            if 'reaction' in self.params.graph:
                 gR, gP = self.CreateGraphPyG(index)
                 return gR, gP
-            elif 'molecular' in self.params.modes.graph:
+            elif 'molecular' in self.params.graph:
                 gR = self.CreateGraphPyG(index)
                 return gR
 
@@ -305,10 +310,10 @@ class EGATDataset(Dataset):
         samples = [self.info['Indices'],self.info['rxntype']]
 
         # Add the graph
-        if 'reaction' in self.params.modes.graph:
+        if 'reaction' in self.params.graph:
             samples += [gR,gP]
             samples += [[self.info['Rsmiles'],self.info['Psmiles'],self.info['Rinchi'],self.info['Pinchi']]]
-        elif 'molecular' in self.params.modes.graph:
+        elif 'molecular' in self.params.graph:
             samples += [gR]
             samples += [[self.info['Rsmiles'],self.info['Rinchi']]]
         
@@ -361,30 +366,30 @@ class EGATDataset(Dataset):
         
     def CreateAddons(self):
         if isinstance(self.params.addons, list):
-            if 'reaction' in self.params.modes.graph:
+            if 'reaction' in self.params.graph:
                     self.info['R_Addon'] = []
                     self.info['P_Addon'] = []
                     for addon in self.params.addons:
                         self.info['R_Addon'].append(self.AddonFunction(addon,self.info['Rsmiles']))
                         self.info['P_Addon'].append(self.AddonFunction(addon,self.info['Psmiles']))
-            elif 'molecular' in self.params.modes.graph:
+            elif 'molecular' in self.params.graph:
                 self.info['R_Addon'] = []
                 for addon in self.params.addons:
                     self.info['R_Addon'].append(self.AddonFunction(addon,self.info['Rsmiles']))
         elif isinstance(self.params.addons, str):
-            if 'reaction' in self.params.modes.graph:
+            if 'reaction' in self.params.graph:
                 self.info['R_Addon'] = self.AddonFunction(self.params.addons,self.info['Rsmiles'])
                 self.info['P_Addon'] = self.AddonFunction(self.params.addons,self.info['Psmiles'])
-            elif 'molecular' in self.params.modes.graph:
+            elif 'molecular' in self.params.graph:
                 self.info['R_Addon'] = self.AddonFunction(self.params.addons,self.info['Rsmiles'])
 
     def Addons(self):
         # Add what the Add-Ons are
         if self.params.addons is not None: 
             self.CreateAddons()
-            if 'reaction' in self.params.modes.graph:
+            if 'reaction' in self.params.graph:
                 return [torch.Tensor(self.info['R_Addon']),torch.Tensor(self.info['P_Addon'])]
-            elif 'molecular' in self.params.modes.graph:
+            elif 'molecular' in self.params.graph:
                 return [torch.Tensor(self.info['R_Addon'])]
                 # save in cache
     
@@ -396,10 +401,10 @@ class EGATDataset(Dataset):
         else:
             try:
                 self.Convert(index)            
-                if 'reaction' in self.params.modes.graph:
+                if 'reaction' in self.params.graph:
                     gR,gP = self.CreateGraph(index)
                     samples = self.CreateSampler(gR,gP)
-                elif 'molecular' in self.params.modes.graph:
+                elif 'molecular' in self.params.graph:
                     gR = self.CreateGraph(index)
                     samples = self.CreateSampler(gR)
                 if len(self.cache) < self.cache_size:

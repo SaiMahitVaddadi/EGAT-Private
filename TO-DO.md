@@ -1,7 +1,21 @@
 # TO-DO:
-    
 - Training Loop: 
     - Setup ways to save the additional loss functions. 
+
+
+- Params:
+    - Cleanup the params class. 
+    - write a function that uses a cli to write a config file 
+    - write a function that uses a cli to input the parameters
+
+- CLI execution
+    - write a cli for training 
+    - write a cli for testing 
+    - write a cli for fingerprinting
+    - write a cli for few shot learning 
+    - write a cli for hyperparameter tuning via grid search
+    - write a cli for active learning 
+    
 
 - EGAT Models:
     - Set up Pytorch Lightning support for FP Model
@@ -13,9 +27,6 @@
     - make them malleable to both any layer in PyG and DGL.  
     - Create an EGAT version usable for atom/bond property prediction. 
 
-- Slurm or QSUB or other types of automation:
-    - Write the job writer script for those
-    - Write the grid search script for those
 
 - Tuning:
     - Set up a hyperopt protocol
@@ -79,7 +90,6 @@
     - set up other codes for this. 
 
 - JEPA:
-    - set up method
     - set up way to modify embeddings using LHS or MC sampling see if doing that can affect the decoding ability. 
 
 - Autoencoder:

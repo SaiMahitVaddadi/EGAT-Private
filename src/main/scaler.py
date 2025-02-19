@@ -9,18 +9,6 @@ from typing import List, Optional, Union, Type
 from sklearn.base import BaseEstimator
 
 
-@dataclass
-class Params:
-    batch_size: int = 32
-    additionals: Optional[Union[List[str], omegaconf.listconfig.ListConfig]] = None
-    targets: Optional[Union[List[str], omegaconf.listconfig.ListConfig]] = None
-    hasaddons: bool = False
-    molecular: bool = False
-    scaler: Type[BaseEstimator] = StandardScaler
-    scaler_model: Optional[str] = None
-    root: str = './'
-    normtarget: bool = False
-    model_type: str = 'Hr'
 
 class Normalizer:
     def __init__(self,arguments,loader):

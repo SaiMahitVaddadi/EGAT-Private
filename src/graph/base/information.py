@@ -6,6 +6,13 @@ import networkx as nx
 import numpy as np
 from rdkit.Chem import BRICS
 from ...utils.descriptors.egat.functional import FunctionalGroups
+from dataclasses import dataclass
+from typing import List, Dict, Optional
+
+
+
+
+
 class NeighborInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)

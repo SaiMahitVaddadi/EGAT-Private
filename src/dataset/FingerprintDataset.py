@@ -91,7 +91,7 @@ class FPDataset(Dataset):
 
     def AddTargets(self,rxn):
         ###### SAVE THE TARGET AND ADDTIONAL DATA TO THE DICTIONARY
-        if isinstance(self.params.target,list) or isinstance(self.params.target,omegaconf.listconfig.ListConfig):
+        if isinstance(self.params.target,list):
             for outputs in self.params.target:
                 self.info[outputs] = rxn[outputs]
         else:
@@ -99,7 +99,7 @@ class FPDataset(Dataset):
     
     def AddAdditionals(self,rxn):
         adddict = dict()
-        if isinstance(self.params.additional,list)or isinstance(self.params.additional,omegaconf.listconfig.ListConfig):
+        if isinstance(self.params.additional,list):
             for outputs in self.params.additional:
                 self.info[outputs] = rxn[outputs]
         elif self.params.additional is not None:
@@ -169,7 +169,7 @@ class FPDataset(Dataset):
         #targettensor = [gR.number_of_nodes(),gR.number_of_edges()]
         targettensor = []
         
-        if isinstance(self.params.target,list) or isinstance(self.params.target,omegaconf.listconfig.ListConfig):
+        if isinstance(self.params.target,list) :
             targettensor += [float(self.info[output]) for output in self.params.target]
         else:
             targettensor += [float(self.info[self.params.target])]
