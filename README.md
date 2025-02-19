@@ -44,8 +44,17 @@ python Predict.py --config
 - NVIDIA GPU
 - Python 3.8
 
+# Installing conda environment 
+You can use the yaml file and create the conda environment. 
+
+conda env create -f ENV_Gilbreth_Purdue.yaml
+
+
 # How to Download EGAT to your Home Computer/Cluster
 
+1. Clone the repository:
+
+git clone https://github.com/SaiMahitVaddadi/EGAT-Private.git --branch v2
 
 
 
