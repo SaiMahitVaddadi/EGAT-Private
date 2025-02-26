@@ -25,6 +25,8 @@ from ase import Atoms
 from ase.optimize import BFGS
 from ase.calculators.emt import EMT
 from rdkit.Chem import rdmolfiles
+from dataclasses import dataclass
+from typing import Optional
 
 def print_failure_causes(counts):
     for i,k in enumerate(rdDistGeom.EmbedFailureCauses.names):
@@ -32,6 +34,17 @@ def print_failure_causes(counts):
     # in v2022.03.1 two names are missing from `rdDistGeom.EmbedFailureCauses`:
     print('LINEAR_DOUBLE_BOND',counts[i+1])
     print('BAD_DOUBLE_BOND_STEREO',counts[i+2])    
+
+
+
+@dataclass
+class ConformerGeneratorParams:
+    nconfs: int = 1
+    method: Optional[str] = None
+    seed: int = 1
+    verbose: bool = False
+    theory: str = 'UFF'
+
 
 
 class ConformerGenerator:

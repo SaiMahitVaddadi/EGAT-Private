@@ -10,35 +10,45 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
 
-from ..models.model import EGATModel
-from ..models.fpmodel import FPModel
-
-
-
 
 @dataclass
 class Params:
-    epoch: int = 100
-    epoch_const: int = 0
-    scheduler: str = 'step'
-    learning_rate: float = 0.001
-    lr_decay: float = 0.1
-    step_size: int = 10
-    warmup: int = 5
-    expdecay: float = 0.1
+    epoch: int
+    epoch_const: int
+    learning_rate: float
+    lr_decay: float
+    step_size: int
+    expdecay: float
+    warmup: int
+    scheduler: str
+    batch_size: int
+    num_workers: int
+    randomize: bool
+    norm: Optional[str] = None
+    scale_region: Optional[str] = None
+    test_only: bool = False
     molecular: bool = False
     target: Union[str, List[str]] = 'target'
-    additionals: Optional[Union[str, List[str]]] = None
+    tweights: List[float] = field(default_factory=list)
     model_type: str = 'direct'
-    Norm: Optional[str] = None
+    additionals: Optional[Union[str, List[str]]] = None
+    hasaddons: bool = False
     Embed: bool = False
     AttnMaps: bool = False
-    tweights: Optional[List[float]] = None
-    hasaddons: bool = False
-    test_only: bool = False
-    weightsandbiases: bool = False
+    normtarget: bool = False
+    trainedonnorm: bool = False
+    metric: Optional[str] = None
+    loss: Union[str, List[str]] = 'MAE'
+    loss_agg: str = 'Arith'
+    loss_weights: Optional[List[float]] = None
     patience: int = 10
-    loss_threshold: float = 0.01
+    loss_threshold: float = 1e-4
+    weightsandbiases: bool = False
+    save_style: str = 'best'
+
+    
+
+
 
 
 def bn_momentum_adjust(m, momentum):
@@ -455,7 +465,7 @@ class Train(Setup):
         train_instance_acc = np.mean(loss_list)
         self.logger.info(f'{mode} accuracy is: %.5f' % train_instance_acc)
 
-        return data,embeddingsdata,loss_list
+        return data,embeddingsdata,loss_list,metrics_list,comb_metrics
 
     def Loop(self,epoch):
         '''Adjust learning rate and BN momentum'''
@@ -476,18 +486,18 @@ class Train(Setup):
         val,valcolumns = self.CreateCSV()
         test,testcolumns = self.CreateCSV()
         self.logger.info('Training...')
-        train,train_embeddings,train_loss_list = self.Iterate(self.data['train'],mode = 'train')
+        train,train_embeddings,train_loss_list,train_metrics_list,train_comb_metrics_list = self.Iterate(self.data['train'],mode = 'train')
         with torch.no_grad():
             self.model = self.model.eval()
-            val,val_embeddings,val_loss_list = self.Iterate(self.data['val'],mode = 'test')
+            val,val_embeddings,val_loss_list,val_metrics_list,val_comb_metrics_list = self.Iterate(self.data['val'],mode = 'test')
             if not self.params.test_only: 
-                test,test_embeddings,test_loss_list = self.Iterate(self.data['test'],mode = 'test')
+                test,test_embeddings,test_loss_list,test_metrics_list,test_comb_metrics_list = self.Iterate(self.data['test'],mode = 'test')
             else:
                 test = None
                 test_embeddings = None
                 test_loss_list = None
         
-        return train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr
+        return train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,val_comb_metrics_list,test_comb_metrics_list
         
 
     def UpdateWandB(self,train,test,val,epoch,lr):
@@ -499,76 +509,121 @@ class Train(Setup):
                 wandb.log({"learning_rate":lr, "train_loss": np.mean(train), 'val_loss': np.mean(val),'ext_loss': np.mean(test)},step=epoch)
 
 
-    def SaveTorchModel(self,train,val,test,train_embeddings,val_embeddings,test_embeddings,val_loss_list,train_loss_list,epoch,columns):
-        if np.mean(val_loss_list) < self.best_loss:        
-            self.loss_increase_count = 0
-            self.best_loss = np.mean(val_loss_list)
-            self.logger.info('Save model...')
-            savepath = 'best_model.pth'
-            self.logger.info('Saving at %s' % savepath)
-            state = {
-                'epoch': epoch,
-                'train_acc': np.mean(train_loss_list),
-                'test_acc': self.best_loss,
-                'model_state_dict': self.model.state_dict(),
-                'optimizer_state_dict': self.optimizer.state_dict(),
-            }
-            torch.save(state, savepath)
-            self.logger.info('Saving model....')
-            if self.params.save_style == 'best':
-                self.SaveData(train,val,test,columns)
-                self.SaveEmbeddings(train_embeddings,val_embeddings,test_embeddings)
+    def SaveTorchModel(self,train,val,test,train_embeddings,val_embeddings,test_embeddings,val_loss_list,train_loss_list,epoch,columns,ensemble=None):
+        if np.mean(val_loss_list) < self.best_loss:   
+            if ensemble is not None:     
+                self.loss_increase_count = 0
+                self.best_loss = np.mean(val_loss_list)
+                self.logger.info('Save model...')
+                savepath = 'best_model.pth'
+                self.logger.info('Saving at %s' % savepath)
+                state = {
+                    'epoch': epoch,
+                    'train_acc': np.mean(train_loss_list),
+                    'test_acc': self.best_loss,
+                    'model_state_dict': self.model.state_dict(),
+                    'optimizer_state_dict': self.optimizer.state_dict(),
+                }
+                torch.save(state, savepath)
+                self.logger.info('Saving model....')
+                if self.params.save_style == 'best':
+                    self.SaveData(train,val,test,columns)
+                    self.SaveEmbeddings(train_embeddings,val_embeddings,test_embeddings)
+            else:
+                self.logger.info('Save model...')
+                savepath = f'best_model_{ensemble}.pth'
+                self.logger.info('Saving at %s' % savepath)
+                state = {
+                    'epoch': epoch,
+                    'train_acc': np.mean(train_loss_list),
+                    'test_acc': np.mean(val_loss_list),
+                    'model_state_dict': self.model.state_dict(),
+                    'optimizer_state_dict': self.optimizer.state_dict(),
+                }
+                torch.save(state, savepath)
+                self.logger.info('Saving model....')
+                if self.params.save_style == 'best':
+                    self.SaveData(train,val,test,columns,ensemble)
+                    self.SaveEmbeddings(train_embeddings,val_embeddings,test_embeddings,ensemble)
         else:
             if 'every-' in self.params.save_style:
-                interval = int(self.params.save_style.split('-')[1])
-                if epoch % interval == 0:
-                    self.logger.info('Save model...')
-                    savepath = f'epoch_{epoch}.pth'
-                    self.logger.info('Saving at %s' % savepath)
-                    state = {
-                        'epoch': epoch,
-                        'train_acc': np.mean(train_loss_list),
-                        'test_acc': np.mean(val_loss_list),
-                        'model_state_dict': self.model.state_dict(),
-                        'optimizer_state_dict': self.optimizer.state_dict(),
-                    }
-                    torch.save(state, savepath)
-                    self.logger.info('Saving model....')
-                    self.SaveDataAtEpoch(train,val,test,columns,epoch)
-                    self.SaveEmbeddingsAtEpoch(train_embeddings,val_embeddings,test_embeddings)
-
+                if ensemble is None:
+                    
+                    interval = int(self.params.save_style.split('-')[1])
+                    if epoch % interval == 0:
+                        self.logger.info('Save model...')
+                        savepath = f'epoch_{epoch}.pth'
+                        self.logger.info('Saving at %s' % savepath)
+                        state = {
+                            'epoch': epoch,
+                            'train_acc': np.mean(train_loss_list),
+                            'test_acc': np.mean(val_loss_list),
+                            'model_state_dict': self.model.state_dict(),
+                            'optimizer_state_dict': self.optimizer.state_dict(),
+                        }
+                        torch.save(state, savepath)
+                        self.logger.info('Saving model....')
+                        self.SaveDataAtEpoch(train,val,test,columns,epoch)
+                        self.SaveEmbeddingsAtEpoch(train_embeddings,val_embeddings,test_embeddings)
+                else:
+                    interval = int(self.params.save_style.split('-')[1])
+                    if epoch % interval == 0:
+                        self.logger.info('Save model...')
+                        savepath = f'epoch_{epoch}_{ensemble}.pth'
+                        self.logger.info('Saving at %s' % savepath)
+                        state = {
+                            'epoch': epoch,
+                            'train_acc': np.mean(train_loss_list),
+                            'test_acc': np.mean(val_loss_list),
+                            'model_state_dict': self.model.state_dict(),
+                            'optimizer_state_dict': self.optimizer.state_dict(),
+                        }
+                        torch.save(state, savepath)
+                        self.logger.info('Saving model....')
+                        self.SaveDataAtEpoch(train,val,test,columns,epoch,ensemble)
+                        self.SaveEmbeddingsAtEpoch(train_embeddings,val_embeddings,test_embeddings,ensemble)
     
-    def SaveData(self,train,val,test,columns):
+    def SaveData(self,train,val,test,columns,ensemble=None):
         ###### SAVE RESULTS AS CSV
         datasets = {'train': train, 'val': val, 'test': test}
-        filenames = {'train': 'best_train.csv', 'val': 'best_val.csv', 'test': 'best_test.csv'}
+        if ensemble is None:
+            filenames = {'train': 'best_train.csv', 'val': 'best_val.csv', 'test': 'best_test.csv'}
+        else:
+            filenames = {'train': f'best_train_{ensemble}.csv', 'val': f'best_val_{ensemble}.csv', 'test': f'best_test_{ensemble}.csv'}
+             
+        for key in datasets:
+            if datasets[key] is not None:
+                df = pd.DataFrame(datasets[key], columns=columns)
+                df.to_csv(filenames[key])
+        
+
+    def SaveDataAtEpoch(self,train,val,test,columns,epoch=1,ensemble=None):
+        ###### SAVE RESULTS AS CSV
+        datasets = {'train': train, 'val': val, 'test': test}
+        if ensemble is None:
+            filenames = {'train': f'epoch_{epoch}_train.csv', 'val': f'epoch_{epoch}_val.csv', 'test': f'epoch_{epoch}_test.csv'}
+        else:
+            filenames = {'train': f'epoch_{epoch}_train_{ensemble}.csv', 'val': f'epoch_{epoch}_val_{ensemble}.csv', 'test': f'epoch_{epoch}_test_{ensemble}.csv'}
         
         for key in datasets:
             if datasets[key] is not None:
                 df = pd.DataFrame(datasets[key], columns=columns)
                 df.to_csv(filenames[key])
 
-    def SaveDataAtEpoch(self,train,val,test,columns,epoch=1):
+    def SaveEmbeddingsAtEpoch(self,train,val,test,epoch=1,ensemble=None):
         ###### SAVE RESULTS AS CSV
         datasets = {'train': train, 'val': val, 'test': test}
-        filenames = {'train': f'epoch_{epoch}_train.csv', 'val': f'epoch_{epoch}_val.csv', 'test': f'epoch_{epoch}_test.csv'}
-        
-        for key in datasets:
-            if datasets[key] is not None:
-                df = pd.DataFrame(datasets[key], columns=columns)
-                df.to_csv(filenames[key])
+        if ensemble is None:
+            filenames = {'train': f'epoch_{epoch}_train_embeddings.csv', 'val': f'epoch_{epoch}_val_embeddings.csv', 'test': f'epoch_{epoch}_test_embeddings.csv'}
+        else:
+            filenames = {'train': f'epoch_{epoch}_train_embeddings_{ensemble}.csv', 'val': f'epoch_{epoch}_val_embeddings_{ensemble}.csv', 'test': f'epoch_{epoch}_test_embeddings_{ensemble}.csv'}
 
-    def SaveEmbeddingsAtEpoch(self,train,val,test,epoch=1):
-        ###### SAVE RESULTS AS CSV
-        datasets = {'train': train, 'val': val, 'test': test}
-        filenames = {'train': f'epoch_{epoch}_train_embeddings.csv', 'val': f'epoch_{epoch}_val_embeddings.csv', 'test': f'epoch_{epoch}_test_embeddings.csv'}
-        
         for key in datasets:
             if datasets[key] is not None:
                 df = pd.DataFrame(datasets[key])
                 df.to_csv(filenames[key])
 
-    def SaveLossesToCSV(self, train_loss_list, val_loss_list, test_loss_list, lr, epoch):
+    def SaveLossesToCSV(self, train_loss_list, val_loss_list, test_loss_list, lr, epoch,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,val_comb_metrics_list,test_comb_metrics_list,ensemble=None):
         # Create a dictionary with the data
         data = {
             'epoch': [epoch],
@@ -578,11 +633,32 @@ class Train(Setup):
             'test_loss': [np.mean(test_loss_list) if test_loss_list is not None else None]
         }
         
+
+        # Check if metrics lists are either None or a list of Nones
+        def check_metrics_list(metrics_list):
+            return metrics_list is None or all(metric is None for metric in metrics_list)
+
+        if not check_metrics_list(train_metrics_list):
+            data['train_metrics'] = [np.mean(train_metrics_list)]
+        if not check_metrics_list(val_metrics_list):
+            data['val_metrics'] = [np.mean(val_metrics_list)]
+        if not check_metrics_list(test_metrics_list):
+            data['test_metrics'] = [np.mean(test_metrics_list) if test_metrics_list is not None else None]
+        if not check_metrics_list(train_comb_metrics_list):
+            data['train_comb_metrics'] = [np.mean(train_comb_metrics_list)]
+        if not check_metrics_list(val_comb_metrics_list):
+            data['val_comb_metrics'] = [np.mean(val_comb_metrics_list)]
+        if not check_metrics_list(test_comb_metrics_list):
+            data['test_comb_metrics'] = [np.mean(test_comb_metrics_list) if test_comb_metrics_list is not None else None]
+
         # Convert the dictionary to a DataFrame
         df = pd.DataFrame(data)
         
         # Define the filename
-        filename = 'losses.csv'
+        if ensemble is not None:
+            filename = f'losses_{ensemble}.csv'
+        else:
+            filename = 'losses.csv'
         
         # Save the DataFrame to a CSV file
         if not os.path.isfile(filename):
@@ -590,30 +666,34 @@ class Train(Setup):
         else:
             df.to_csv(filename, mode='a', header=False, index=False)
 
-    def SaveEmbeddings(self,train,val,test):
+    def SaveEmbeddings(self,train,val,test,ensemble=None):
         ###### SAVE RESULTS AS CSV
         datasets = {'train': train, 'val': val, 'test': test}
-        filenames = {'train': 'best_train_embeddings.csv', 'val': 'best_val_embeddings.csv', 'test': 'best_test_embeddings.csv'}
-        
+        if ensemble is None:
+            filenames = {'train': 'best_train_embeddings.csv', 'val': 'best_val_embeddings.csv', 'test': 'best_test_embeddings.csv'}
+        else:
+            filenames = {'train': f'best_train_embeddings_{ensemble}.csv', 'val': f'best_val_embeddings_{ensemble}.csv', 'test': f'best_test_embeddings_{ensemble}.csv'}
+            
+
         for key in datasets:
             if datasets[key] is not None:
                 df = pd.DataFrame(datasets[key])
                 df.to_csv(filenames[key])
 
-    def TrainbyEpoch(self):
+    def TrainbyEpoch(self,ensemble=None):
         for epoch in range(self.start_epoch, self.params.epoch+self.params.epoch_const):
             self.loss_increase_count += 1
             self.logger.info('Epoch %d (%d/%s):' % (self.global_epoch + 1, epoch + 1, self.params.epoch))
-            train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr = self.Loop(epoch)
+            train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,val_comb_metrics_list,test_comb_metrics_list = self.Loop(epoch)
             self.UpdateWandB(train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr)
             self.SaveTorchModel(train,val,test,train_embeddings,val_embeddings,test_embeddings,val_loss_list,train_loss_list,epoch,self.columns)
-            self.SaveLossesToCSV(train_loss_list, val_loss_list, test_loss_list, lr, epoch)
+            self.SaveLossesToCSV(train_loss_list, val_loss_list, test_loss_list, lr, epoch,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,val_comb_metrics_list,test_comb_metrics_list)
             if self.loss_increase_count > self.params.patience:
                 break
             self.global_epoch += 1
 
     
-    def TrainUntilConvergence(self):
+    def TrainUntilConvergence(self,ensemble=None):
         prev_loss = float('inf')
         epoch = self.start_epoch
         while abs(prev_loss - current_loss) >= self.params.loss_threshold:
@@ -628,3 +708,17 @@ class Train(Setup):
             prev_loss = current_loss
             self.global_epoch += 1
             epoch += 1
+    
+
+    def Train(self,ensemble=None):
+        if self.params.loss_threshold is not None:
+            self.TrainUntilConvergence(ensemble)
+        else:
+            self.TrainbyEpoch(ensemble)
+
+    def TrainEnsemble(self):
+        for model_idx in range(self.params.ensemble):
+            self.logger.info(f'Training model {model_idx + 1}/{self.params.ensemble}')
+            self.Train(model_idx) # Train the model
+            
+        

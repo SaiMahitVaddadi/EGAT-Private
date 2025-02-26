@@ -8,7 +8,19 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Union, Type
 from sklearn.base import BaseEstimator
 
-
+@dataclass
+class NormalizerParams:
+    batch_size: int
+    additionals: Optional[Union[List[str], omegaconf.listconfig.ListConfig]] = None
+    targets: Optional[Union[List[str], omegaconf.listconfig.ListConfig]] = None
+    hasaddons: bool = False
+    molecular: bool = False
+    normtarget: bool = False
+    scaler: Type[str] = 'StandardScaler'
+    scaler_model: Optional[str] = None
+    root: str = ""
+    model_type: str = "Hr"
+    scaler_name: str = "scaler"
 
 class Normalizer:
     def __init__(self,arguments,loader):
@@ -80,10 +92,10 @@ class Normalizer:
         return TrainHr
 
     def CreateScaler(self,TrainHr):
-        scaler = getattr(self.params.scaler)()
+        scaler = getattr(BaseEstimator,self.params.scaler)()
         scaler.fit(TrainHr)
         scaled_res = scaler.transform(TrainHr)
-        joblib.dump(scaler,f'{self.params.root}/scaler.pkl')
+        joblib.dump(scaler,f'{self.params.root}/{self.params.scaler_name}.pkl')
         return scaler,scaled_res
     
     def LoadScaler(self,TrainHr):

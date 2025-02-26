@@ -11,6 +11,147 @@ from typing import List, Dict, Optional
 
 
 
+@dataclass
+class NeighborParams:
+    neighbor: str = 'all'
+
+@dataclass
+class RingParams:
+    removeringinfo: bool = False
+    removearomaticity: bool = False
+
+@dataclass
+class ElectronParams:
+    getradical: bool = False
+    removehybridinfo: bool = False
+    useFullHyb: bool = False
+
+@dataclass
+class ChargeParams:
+    getelectronegativity: bool = False
+    removeformalchargeinfo: bool = False
+    charge: str = 'Gasteiger'
+
+@dataclass
+class AcidBaseParams:
+    getacidbaseinfo: bool = False
+
+@dataclass
+class RDParams:
+    getspiro: bool = False
+    getbridgehead: bool = False
+    getrotatablebonds: bool = False
+
+@dataclass
+class StereoParams:
+    removechiralinfo: bool = False
+    removeconjinfo: bool = False
+    removestereoinfo: bool = False
+
+@dataclass
+class BondParams:
+    removebondorderinfo: bool = False
+
+@dataclass
+class BondGeometryParams:
+    getbondlength: bool = False
+    getatomdistance: bool = False
+    getbondangle: str = 'none'
+    getdihedral: str = 'none'
+    getbondmidpoint: bool = False
+
+@dataclass
+class BRICSParams:
+    getbrics: bool = False
+    checkbricsbond: bool = False
+
+@dataclass
+class AtomGeometryParams:
+    removecoordinationinfo: bool = False
+    getdistancetocenterofmass: bool = False
+    getsterichindrance: bool = False
+    getasa: bool = False
+    getgaussiancurvature: bool = False
+    getmolecularshapeindex: bool = False
+    getdistancetoconvexhull: bool = False
+
+@dataclass
+class ReactiveAtomParams:
+    removereactiveinfo: bool = False
+    addneighboringreactives: bool = False
+
+@dataclass
+class ReactiveAtomChangeParams:
+    gethybridizationchange: bool = False
+    getdegreecentrality: bool = False
+    getvalencychange: bool = False
+    getoxidationreduction: bool = False
+    getbondordersumchange: bool = False
+    getneighborhoodchangeratio: bool = False
+    getLocalAtomicEnvironmentSimilarity: bool = False
+    global_fingerprint_type: str = 'Morgan'
+    global_similarity_metric: str = 'Tanimoto'
+
+@dataclass
+class ReactiveBondParams:
+    adddisttoreactingbonds: bool = False
+    getbrics: bool = False
+
+@dataclass
+class NonBondedParams:
+    addmissingbonds: str = 'hbonds'
+    addcho: bool = False
+    adddihydrogenbonds: bool = False
+    addcationpi: bool = False
+    addpipistack: bool = False
+    addhalogenbonds: bool = False
+    addmetallophilic: bool = False
+    addelectrostatic: bool = False
+    addeneg: bool = False
+
+@dataclass
+class GlobalBondParams:
+    getglobal: bool = False
+    getshortestpath: bool = False
+    getshortestpathweighted: bool = False
+    getrandomwalk: bool = False
+    getcommutetimes: bool = False
+    getshortestpathcount: bool = False
+    geteffectiveresistance: bool = False
+    getcommonneighbors: bool = False
+    getpctcommonneighbors: bool = False
+    getglobaljaccard: bool = False
+    getglobaladamicadar: bool = False
+    getprefattachment: bool = False
+    getshortestpathpbc: bool = False
+    getkatz: bool = False
+    getEigenvectorCentrality: bool = False
+    getBetweennessCentralityCorrelation: bool = False
+    getMinCutValue: bool = False
+    getMaximumFlow: bool = False
+    getLaplacianEigenvectorSimilarity: bool = False
+    getFiedlerVectorSimilarity: bool = False
+    getGraphDistanceWeightedByBondOrder: bool = False
+    getBetweennessCentralityOfPathways: bool = False
+    getRingsInSharedPath: bool = False
+    getLocalAtomicEnvironmentSimilarity: bool = False
+    sp_box_size: float = 10.0
+
+@dataclass
+class HydrogenBondParams:
+    check_hbond: bool = False
+
+@dataclass
+class GlobalReactionBondParams:
+    getshortestpathchange: bool = False
+    getcommonneighborcountchange: bool = False
+    getrandomwalkchange: bool = False
+    getbondpathorderchange: bool = False
+    getsharedfunctionalgroupchange: bool = False
+    getconnectivitypathdifference: bool = False
+    getreactivitydistance: bool = False
+    getelectronflowcorrelation: bool = False
+
 
 
 class NeighborInformation(BaseFeaturizer):
@@ -214,6 +355,7 @@ class StereoInformation(BaseFeaturizer):
         else:
             return []
 
+
 class BondInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
@@ -405,8 +547,7 @@ class BondGeometryInformation(BaseFeaturizer):
             return [midpoint.x, midpoint.y, midpoint.z]
         else:
             return []
-        
-
+ 
 
 class BRICSInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
@@ -434,6 +575,7 @@ class BRICSInformation(BaseFeaturizer):
         else:
             return []
     
+
 
 
 class AtomGeometryInformation(BaseFeaturizer):
@@ -1422,17 +1564,20 @@ class HydrogenBondInformation(BaseFeaturizer):
         super().__init__(smiles, arguments)
     
     def HydrogenBondCheck(self,ind):
-        hbond_info = []
-        if self.matrixdescriptors.element[ind] in ['O', 'N', 'F', 'Cl', 'Br', 'I']:
-            hbond_info.append([1, 0])  # Donor
-        elif self.matrixdescriptors.element[ind] == 'H':
-            for neighbor in range(len(self.matrixdescriptors.element)):
-                if self.matrixdescriptors.adj_mat[ind][neighbor] > 0 and self.matrixdescriptors.element[neighbor] in ['O', 'N', 'F', 'Cl', 'Br', 'I']:
-                    hbond_info.append([0, 1])  # Acceptor
-                break
+        if self.params.check_hbond:
+            hbond_info = []
+            if self.matrixdescriptors.element[ind] in ['O', 'N', 'F', 'Cl', 'Br', 'I']:
+                hbond_info.append([1, 0])  # Donor
+            elif self.matrixdescriptors.element[ind] == 'H':
+                for neighbor in range(len(self.matrixdescriptors.element)):
+                    if self.matrixdescriptors.adj_mat[ind][neighbor] > 0 and self.matrixdescriptors.element[neighbor] in ['O', 'N', 'F', 'Cl', 'Br', 'I']:
+                        hbond_info.append([0, 1])  # Acceptor
+                    break
+            else:
+                hbond_info.append([0, 0])  # Neither
+            return hbond_info
         else:
-            hbond_info.append([0, 0])  # Neither
-        return hbond_info
+            return []
 
 
 class GlobalReactionBondInformation(BaseReactionFeaturizer):
@@ -1440,61 +1585,85 @@ class GlobalReactionBondInformation(BaseReactionFeaturizer):
         super().__init__(smiles, arguments)
     
     def ShortestPathChange(self, edge):
-        reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
-        product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
-        sp_R = nx.shortest_path_length(reactant_graph, source=edge[0], target=edge[1])
-        sp_P = nx.shortest_path_length(product_graph, source=edge[0], target=edge[1])
-        return [sp_P - sp_R]
+        if self.params.getshortestpathchange:
+            reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
+            product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
+            sp_R = nx.shortest_path_length(reactant_graph, source=edge[0], target=edge[1])
+            sp_P = nx.shortest_path_length(product_graph, source=edge[0], target=edge[1])
+            return [sp_P - sp_R]
+        else:
+            return []
 
     def CommonNeighborCountChange(self, edge):
-        neighbors_R = set(self.reactant.matrixdescriptors.adj_mat[edge[0]].nonzero()[0]).union(
-            set(self.reactant.matrixdescriptors.adj_mat[edge[1]].nonzero()[0]))
-        neighbors_P = set(self.product.matrixdescriptors.adj_mat[edge[0]].nonzero()[0]).union(
-            set(self.product.matrixdescriptors.adj_mat[edge[1]].nonzero()[0]))
-        common_neighbors_R = neighbors_R.intersection(neighbors_P)
-        common_neighbors_P = neighbors_P.intersection(neighbors_R)
-        return [len(common_neighbors_P) - len(common_neighbors_R)]
+        if self.params.getcommonneighborcountchange:
+            neighbors_R = set(self.reactant.matrixdescriptors.adj_mat[edge[0]].nonzero()[0]).union(
+                set(self.reactant.matrixdescriptors.adj_mat[edge[1]].nonzero()[0]))
+            neighbors_P = set(self.product.matrixdescriptors.adj_mat[edge[0]].nonzero()[0]).union(
+                set(self.product.matrixdescriptors.adj_mat[edge[1]].nonzero()[0]))
+            common_neighbors_R = neighbors_R.intersection(neighbors_P)
+            common_neighbors_P = neighbors_P.intersection(neighbors_R)
+            return [len(common_neighbors_P) - len(common_neighbors_R)]
+        else:
+            return []
 
     def RandomWalkChange(self, edge):
-        rwct_R = nx.algorithms.approximation.rwct(self.reactant.matrixdescriptors.adj_mat, edge[0], edge[1])
-        rwct_P = nx.algorithms.approximation.rwct(self.product.matrixdescriptors.adj_mat, edge[0], edge[1])
-        return [rwct_P - rwct_R]
+        if self.params.getrandomwalkchange:
+            rwct_R = nx.algorithms.approximation.rwct(self.reactant.matrixdescriptors.adj_mat, edge[0], edge[1])
+            rwct_P = nx.algorithms.approximation.rwct(self.product.matrixdescriptors.adj_mat, edge[0], edge[1])
+            return [rwct_P - rwct_R]
+        else:
+            return []
 
     def BondPathOrderChange(self, edge):
-        bo_R = self.reactant.matrixdescriptors.bond_mat[edge[0], edge[1]]
-        bo_P = self.product.matrixdescriptors.bond_mat[edge[0], edge[1]]
-        return [bo_P - bo_R]
+        if self.params.getbondpathorderchange:
+            bo_R = self.reactant.matrixdescriptors.bond_mat[edge[0], edge[1]]
+            bo_P = self.product.matrixdescriptors.bond_mat[edge[0], edge[1]]
+            return [bo_P - bo_R]
+        else:
+            return []
 
     def SharedFunctionalGroupChange(self, edge):
-        fg = FunctionalGroups()
-        res_R = fg.are_atoms_in_same_functional_group(self.reactant.new_mol, edge[0], edge[1])
-        res_P = fg.are_atoms_in_same_functional_group(self.product.new_mol, edge[0], edge[1])
-        return [int(res_P) - int(res_R)]
+        if self.params.getsharedfunctionalgroupchange:
+            fg = FunctionalGroups()
+            res_R = fg.are_atoms_in_same_functional_group(self.reactant.new_mol, edge[0], edge[1])
+            res_P = fg.are_atoms_in_same_functional_group(self.product.new_mol, edge[0], edge[1])
+            return [int(res_P) - int(res_R)]
+        else:
+            return []
 
     def ConnectivityPathDifference(self, edge):
-        reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
-        product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
-        connectivity_R = nx.all_pairs_shortest_path_length(reactant_graph)
-        connectivity_P = nx.all_pairs_shortest_path_length(product_graph)
-        diff = 0
-        for node in connectivity_R:
-            for target, length in connectivity_R[node].items():
-                if target in connectivity_P[node]:
-                    diff += abs(length - connectivity_P[node][target])
-                else:
-                    diff += length
-        return [diff]
+        if self.params.getconnectivitypathdifference:
+            reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
+            product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
+            connectivity_R = nx.all_pairs_shortest_path_length(reactant_graph)
+            connectivity_P = nx.all_pairs_shortest_path_length(product_graph)
+            diff = 0
+            for node in connectivity_R:
+                for target, length in connectivity_R[node].items():
+                    if target in connectivity_P[node]:
+                        diff += abs(length - connectivity_P[node][target])
+                    else:
+                        diff += length
+            return [diff]
+        else:
+            return []
 
     def ReactivityDistance(self, edge):
-        reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
-        product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
-        rd_R = nx.shortest_path_length(reactant_graph, source=edge[0], target=edge[1])
-        rd_P = nx.shortest_path_length(product_graph, source=edge[0], target=edge[1])
-        return [rd_P - rd_R]
+        if self.params.getreactivitydistance:
+            reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
+            product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
+            rd_R = nx.shortest_path_length(reactant_graph, source=edge[0], target=edge[1])
+            rd_P = nx.shortest_path_length(product_graph, source=edge[0], target=edge[1])
+            return [rd_P - rd_R]
+        else:
+            return []
 
     def ElectronFlowCorrelation(self, edge):
-        reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
-        product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
-        efc_R = nx.degree_centrality(reactant_graph)[edge[0]] * nx.degree_centrality(reactant_graph)[edge[1]]
-        efc_P = nx.degree_centrality(product_graph)[edge[0]] * nx.degree_centrality(product_graph)[edge[1]]
-        return [efc_P - efc_R]
+        if self.params.getelectronflowcorrelation:
+            reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
+            product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
+            efc_R = nx.degree_centrality(reactant_graph)[edge[0]] * nx.degree_centrality(reactant_graph)[edge[1]]
+            efc_P = nx.degree_centrality(product_graph)[edge[0]] * nx.degree_centrality(product_graph)[edge[1]]
+            return [efc_P - efc_R]
+        else:
+            return []

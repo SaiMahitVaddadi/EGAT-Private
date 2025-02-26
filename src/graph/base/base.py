@@ -5,6 +5,17 @@ from ...utils.descriptors.egat.stereo import StereoChemistry
 from ...utils.matrices.graph_seps import graph_seps
 from ...utils.misc.taffi_functions import return_rings,adjmat_to_adjlist
 from rdkit import Chem
+from dataclasses import dataclass
+from typing import Optional
+
+
+
+@dataclass
+class BaseReactionParams:
+    getradical: Optional[str] = None
+    stereo_full: Optional[bool] = False
+    acidbase: Optional[str] = None
+
 
 class BaseFeaturizer: 
     def __init__(self, smiles, arguments):

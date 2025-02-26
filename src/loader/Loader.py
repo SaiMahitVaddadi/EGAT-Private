@@ -20,7 +20,22 @@ from dataclasses import dataclass, field
 from typing import Optional, List
 
 
-
+@dataclass
+class DataLoaderParams:
+    data_path: str
+    exclude: Optional[str] = None
+    test_only: bool = False
+    root: str = ''
+    class_choice: Optional[str] = None
+    randomize: bool = False
+    fold: Optional[int] = None
+    foldtype: Optional[str] = None
+    size: Optional[int] = None
+    target: Optional[str] = None
+    additionals: Optional[List[str]] = None
+    addons: bool = False
+    molecular: bool = False
+    batch_size: int = 32
 
 class EGATDataLoader:
     def __init__(self,arguments):

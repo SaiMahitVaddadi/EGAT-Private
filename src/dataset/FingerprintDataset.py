@@ -10,7 +10,34 @@ from ..utils.descriptors.egat.encodings import Encodings
 from ..utils.database.csvfunctions import DenoteInputData
 from ..utils.descriptors.fingerprint.threedimensional import GeometricFingerprint
 from ..utils.descriptors.fingerprint.twodimensional import Fingerprint
+from dataclasses import dataclass, field
+from typing import List, Optional, Union
 
+
+@dataclass
+class DenotationParams:
+    split_type: str
+    splittotrain: str
+    smilescolumn: str
+    fold: Optional[int] = None
+
+@dataclass
+class FPDatasetParams:
+    data_path: str
+    rootfile: str
+    target: Union[str, List[str]]
+    additional: Optional[Union[str, List[str]]] = None
+    addons: Optional[Union[str, List[str]]] = None
+    modes: Optional[dict] = None
+    cache_size: int = 1000
+    randomize: bool = False
+    size: Optional[int] = None
+    exclude: Optional[List[str]] = None
+    denotation: Optional[dict] = None
+    splittotrain: Optional[str] = None
+    smilescolumn: Optional[str] = None
+    fold: Optional[int] = None
+    n_splits: Optional[int] = None
     
 class FPDataset(Dataset):
     def __init__(self,arguments):

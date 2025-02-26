@@ -4,6 +4,14 @@ from ..base.information import ReactiveAtomInformation,ReactiveBondInformation,R
 from ..molecular.Molecule import MoleculeFeaturizer
 from ..base.reaction import BaseReactionFeaturizer
 from .helper import ReactionHelper
+
+
+
+
+class ReactionParams:
+    oldbondencode: bool = False
+    addneighboringreactives: bool = False
+
 class ReactionComponentFeaturizer(BaseReactionComponentFeaturizer,MoleculeFeaturizer):
     def __init__(self, smiles, arguments):
         super(BaseReactionComponentFeaturizer, self).__init__(smiles, arguments)

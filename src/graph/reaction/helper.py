@@ -1,9 +1,14 @@
 from ..base.component import BaseReactionComponentFeaturizer
-from ..base.information import ReactiveAtomInformation,ReactiveBondInformation,ReactiveAtomGeometryInformation,ReactiveBondGeometryInformation
+from ..base.information import ReactiveAtomInformation,ReactiveBondInformation,ReactiveAtomGeometryInformation,ReactiveBondGeometryInformation,GlobalReactionBondInformation,ReactiveAtomChangeInformation
 from ..molecular.MoleculeGlobalGeometry import MoleculeFeaturizerwithPaddingandGeometry
 from ..base.reaction import BaseReactionFeaturizer
+from datackass import dataclass
+from typing import Optional, Union, List
 
 
+class ReactionHelperParams:
+    oldbondencode: bool = False
+    
 
 class ReactionHelper(BaseReactionFeaturizer,ReactiveAtomInformation,ReactiveBondInformation,ReactiveAtomGeometryInformation,ReactiveBondGeometryInformation,GlobalReactionBondInformation,ReactiveAtomChangeInformation):
     def __init__(self,reaction_smiles,arguments,component_class,denotation='>>',):

@@ -1,6 +1,21 @@
 from .MoleculeGeometry import MoleculeFeaturizerwithGeometry
 from ..base.information import GlobalBondInformation,NonBondedInformation,HydrogenBondInformation
+from dataclasses import dataclass
+from typing import Literal
 
+
+
+@dataclass
+class MoleculeGlobalParams:
+    addcho: bool = False
+    adddihydrogenbonds: bool = False
+    addcationpi: bool = False
+    addpipistack: bool = False
+    addhalogenbonds: bool = False
+    addmetallophilic: bool = False
+    addelectrostatic: bool = False
+    addeneg: bool = False
+    addmissingbonds: Literal['none', 'global', 'hbonds', 'all'] = 'none'
 
 class MoleculeFeaturizerwithPadding(MoleculeFeaturizerwithGeometry,NonBondedInformation,GlobalBondInformation,HydrogenBondInformation):
     def __init__(self, smiles, arguments):

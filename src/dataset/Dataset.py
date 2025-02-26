@@ -25,11 +25,46 @@ from ..graph.molecular.MoleculeGlobalGeometry import MoleculeFeaturizerwithPaddi
 from ..graph.reaction.ReactionGlobalGeometry import ReactionFeaturizerwithPaddingandGeometry
 from ..graph.molecular.MoleculeGlobal import MoleculeFeaturizerwithPadding
 from ..graph.reaction.ReactionGlobal import ReactionFeaturizerwithPadding
+from ..graph.reaction.Reaction import ReactionFeaturizer
 from ..tools.jepa.tools import mask_uv_vectors,mask_node_features,mask_node_features_v2,mask_edge_features,mask_edge_features_v2,mask_node_and_edges,mask_node_and_edges_v2,mask_node_and_edges_v3,mask_node_and_neighbors
 from torch_geometric.data import Data
 from dataclasses import dataclass
 from typing import List, Optional, Union
 
+
+@dataclass
+class DenotationParams:
+    split_type: str
+    splittotrain: str
+    smilescolumn: str
+    fold: Optional[int] = None
+
+
+@dataclass
+class EGATDatasetParams:
+    data_path: str
+    rootfile: str
+    exclude: Optional[List[str]] = None
+    denotation: Optional[DenotationParams] = None
+    splittotrain: Optional[str] = None
+    smilescolumn: Optional[str] = None
+    fold: Optional[int] = None
+    target: Union[str, List[str]] = None
+    additionals: Optional[Union[str, List[str]]] = None
+    graph: str = 'molecular'
+    dimension: str = '2d'
+    addmissingbonds: Optional[str] = None
+    randomize: bool = False
+    size: Optional[int] = None
+    mode: str = 'dgl'
+    jepa: bool = False
+    jepa_masking: Optional[str] = None
+    jepa_num_nodes: Optional[int] = None
+    jepa_num_edges: Optional[int] = None
+    jepa_neighbors: Optional[int] = None
+    addons: Optional[Union[str, List[str]]] = None
+    cache_size: int = 100
+    n_splits: Optional[int] = None
 
 
 

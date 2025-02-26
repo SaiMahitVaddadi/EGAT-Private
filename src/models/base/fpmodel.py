@@ -6,7 +6,15 @@ import torch.nn.functional as F
 
 
 
-
+@dataclass
+class FPModelParams:
+    input_size: int
+    output_size: int
+    hidden_layers: int
+    hidden_nodes: Union[int, List[int]] = 128
+    dropout: Optional[Union[float, List[float]]] = None
+    activation: Optional[Union[str, List[str]]] = None
+    softmax: Optional[str] = None
 
 class FPModel(nn.Module):
     def __init__(self, input_size, output_size, hidden_layers, hidden_nodes, dropout, activation=None, softmax=None):
