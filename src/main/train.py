@@ -408,9 +408,9 @@ class Train(Setup):
         for item in tqdm(loader, total=len(loader), smoothing=0.9):
             if self.params.hasaddons:
                 if self.params.additionals is not None:
-                    if self.params.molecular: 
+                    if self.params.graph == 'molecule': 
                         id,rtypes,Rgs,smiles,targets,additionals,Radd= item
-                    else:
+                    elif self.params.graph == 'reaction':
                         #collateall
                         id,rtypes,Rgs,Pgs,smiles,targets,additionals,Radd,Padd = item
                 else:
@@ -418,24 +418,24 @@ class Train(Setup):
                         self.logger.info('Error: Predictions Require Additional Values that are not given.')
                         break 
                     else:
-                        if self.params.molecular: 
+                        if self.params.graph == 'molecule': 
                             id,rtypes,Rgs,smiles,targets,Radd= item
-                        else:
+                        elif self.params.graph == 'reaction':
                             id,rtypes,Rgs,smiles,targets,Radd = item
             else:
                 if self.params.additionals is not None:
-                    if self.params.molecular:
+                    if self.params.graph == 'molecule':
                         id,rtypes,Rgs,smiles,targets,additionals = item
-                    else:
+                    elif self.params.graph == 'reaction':
                         id,rtypes,Rgs,Pgs,smiles,targets,additionals = item
                 else:
                     if self.params.model_type in ['Hr','BEP','Hr_multi']:
                         self.logger.info('Error: Predictions Require Additional Values that are not given.')
                         break 
                     else:
-                        if self.params.molecular:
+                        if self.params.graph == 'molecule':
                             id,rtypes,Rgs,Pgs,smiles,targets = item
-                        else:
+                        elif self.params.graph == 'reaction':
                             id,rtypes,Rgs,smiles,targets = item
             
             targets = self.GrabTargets(targets)
@@ -509,121 +509,126 @@ class Train(Setup):
                 wandb.log({"learning_rate":lr, "train_loss": np.mean(train), 'val_loss': np.mean(val),'ext_loss': np.mean(test)},step=epoch)
 
 
-    def SaveTorchModel(self,train,val,test,train_embeddings,val_embeddings,test_embeddings,val_loss_list,train_loss_list,epoch,columns,ensemble=None):
-        if np.mean(val_loss_list) < self.best_loss:   
-            if ensemble is not None:     
-                self.loss_increase_count = 0
-                self.best_loss = np.mean(val_loss_list)
-                self.logger.info('Save model...')
-                savepath = 'best_model.pth'
-                self.logger.info('Saving at %s' % savepath)
-                state = {
-                    'epoch': epoch,
-                    'train_acc': np.mean(train_loss_list),
-                    'test_acc': self.best_loss,
-                    'model_state_dict': self.model.state_dict(),
-                    'optimizer_state_dict': self.optimizer.state_dict(),
-                }
-                torch.save(state, savepath)
-                self.logger.info('Saving model....')
-                if self.params.save_style == 'best':
-                    self.SaveData(train,val,test,columns)
-                    self.SaveEmbeddings(train_embeddings,val_embeddings,test_embeddings)
-            else:
-                self.logger.info('Save model...')
-                savepath = f'best_model_{ensemble}.pth'
-                self.logger.info('Saving at %s' % savepath)
-                state = {
-                    'epoch': epoch,
-                    'train_acc': np.mean(train_loss_list),
-                    'test_acc': np.mean(val_loss_list),
-                    'model_state_dict': self.model.state_dict(),
-                    'optimizer_state_dict': self.optimizer.state_dict(),
-                }
-                torch.save(state, savepath)
-                self.logger.info('Saving model....')
-                if self.params.save_style == 'best':
-                    self.SaveData(train,val,test,columns,ensemble)
-                    self.SaveEmbeddings(train_embeddings,val_embeddings,test_embeddings,ensemble)
-        else:
-            if 'every-' in self.params.save_style:
-                if ensemble is None:
-                    
-                    interval = int(self.params.save_style.split('-')[1])
-                    if epoch % interval == 0:
-                        self.logger.info('Save model...')
-                        savepath = f'epoch_{epoch}.pth'
-                        self.logger.info('Saving at %s' % savepath)
-                        state = {
-                            'epoch': epoch,
-                            'train_acc': np.mean(train_loss_list),
-                            'test_acc': np.mean(val_loss_list),
-                            'model_state_dict': self.model.state_dict(),
-                            'optimizer_state_dict': self.optimizer.state_dict(),
-                        }
-                        torch.save(state, savepath)
-                        self.logger.info('Saving model....')
-                        self.SaveDataAtEpoch(train,val,test,columns,epoch)
-                        self.SaveEmbeddingsAtEpoch(train_embeddings,val_embeddings,test_embeddings)
+    def SaveTorchModel(self,train,val,test,train_embeddings,val_embeddings,test_embeddings,val_loss_list,train_loss_list,epoch,columns,ensemble=None,fold=None):
+        if np.mean(val_loss_list) < self.best_loss:  
+            self.loss_increase_count = 0
+            self.best_loss = np.mean(val_loss_list)
+            self.logger.info('Save model...')
+            
+            if ensemble is not None:
+                if fold is not None:
+                    savepath = f'best_model_ensemble_{ensemble}_fold_{fold}.pth'
                 else:
-                    interval = int(self.params.save_style.split('-')[1])
-                    if epoch % interval == 0:
-                        self.logger.info('Save model...')
-                        savepath = f'epoch_{epoch}_{ensemble}.pth'
-                        self.logger.info('Saving at %s' % savepath)
-                        state = {
-                            'epoch': epoch,
-                            'train_acc': np.mean(train_loss_list),
-                            'test_acc': np.mean(val_loss_list),
-                            'model_state_dict': self.model.state_dict(),
-                            'optimizer_state_dict': self.optimizer.state_dict(),
-                        }
-                        torch.save(state, savepath)
-                        self.logger.info('Saving model....')
-                        self.SaveDataAtEpoch(train,val,test,columns,epoch,ensemble)
-                        self.SaveEmbeddingsAtEpoch(train_embeddings,val_embeddings,test_embeddings,ensemble)
+                    savepath = f'best_model_ensemble_{ensemble}.pth'
+            else:
+                if fold is not None:
+                    savepath = f'best_model_fold_{fold}.pth'
+                else:
+                    savepath = 'best_model.pth'
+
+            self.logger.info('Saving at %s' % savepath)
+            state = {
+                'epoch': epoch,
+                'train_acc': np.mean(train_loss_list),
+                'test_acc': self.best_loss,
+                'model_state_dict': self.model.state_dict(),
+                'optimizer_state_dict': self.optimizer.state_dict(),
+            }
+            torch.save(state, savepath)
+            self.logger.info('Saving model....')
+            if self.params.save_style == 'best':
+                self.SaveData(train,val,test,columns,ensemble,fold)
+                self.SaveEmbeddings(train_embeddings,val_embeddings,test_embeddings,ensemble,fold)
+        else:
+            if 'every-' in self.params.save_style:    
+                interval = int(self.params.save_style.split('-')[1])
+                if epoch % interval == 0:
+                    self.logger.info('Save model...')
+                    if ensemble is not None:
+                        if fold is not None:
+                            savepath = f'epoch_{epoch}_ensemble_{ensemble}_fold_{fold}.pth'
+                        else:
+                            savepath = f'epoch_{epoch}_ensemble_{ensemble}.pth'
+                    else:
+                        if fold is not None:
+                            savepath = f'epoch_{epoch}_fold_{fold}.pth'
+                        else:
+                            savepath = f'epoch_{epoch}.pth'
+                    self.logger.info('Saving at %s' % savepath)
+                    state = {
+                        'epoch': epoch,
+                        'train_acc': np.mean(train_loss_list),
+                        'test_acc': np.mean(val_loss_list),
+                        'model_state_dict': self.model.state_dict(),
+                        'optimizer_state_dict': self.optimizer.state_dict(),
+                    }
+                    torch.save(state, savepath)
+                    self.logger.info('Saving model....')
+                    self.SaveDataAtEpoch(train,val,test,columns,epoch,ensemble,fold)
+                    self.SaveEmbeddingsAtEpoch(train_embeddings,val_embeddings,test_embeddings,ensemble,fold)
+               
     
-    def SaveData(self,train,val,test,columns,ensemble=None):
+    def SaveData(self,train,val,test,columns,ensemble=None,fold=None):
         ###### SAVE RESULTS AS CSV
         datasets = {'train': train, 'val': val, 'test': test}
         if ensemble is None:
-            filenames = {'train': 'best_train.csv', 'val': 'best_val.csv', 'test': 'best_test.csv'}
+            if fold is None:
+                filenames = {'train': 'best_train.csv', 'val': 'best_val.csv', 'test': 'best_test.csv'}
+            else:
+                filenames = {'train': f'best_train_fold_{fold}.csv', 'val': f'best_val_fold_{fold}.csv', 'test': f'best_test_fold_{fold}.csv'}
         else:
-            filenames = {'train': f'best_train_{ensemble}.csv', 'val': f'best_val_{ensemble}.csv', 'test': f'best_test_{ensemble}.csv'}
-             
+            if fold is None:
+                filenames = {'train': f'best_train_ensemble_{ensemble}.csv', 'val': f'best_val_ensemble_{ensemble}.csv', 'test': f'best_test_ensemble_{ensemble}.csv'}
+            else:
+                filenames = {'train': f'best_train_ensemble_{ensemble}_fold_{fold}.csv', 'val': f'best_val_ensemble_{ensemble}_fold_{fold}.csv', 'test': f'best_test_ensemble_{ensemble}_fold_{fold}.csv'}
+            
         for key in datasets:
             if datasets[key] is not None:
                 df = pd.DataFrame(datasets[key], columns=columns)
                 df.to_csv(filenames[key])
         
 
-    def SaveDataAtEpoch(self,train,val,test,columns,epoch=1,ensemble=None):
+    def SaveDataAtEpoch(self,train,val,test,columns,epoch=1,ensemble=None,fold=None):
         ###### SAVE RESULTS AS CSV
         datasets = {'train': train, 'val': val, 'test': test}
         if ensemble is None:
-            filenames = {'train': f'epoch_{epoch}_train.csv', 'val': f'epoch_{epoch}_val.csv', 'test': f'epoch_{epoch}_test.csv'}
+            if fold is None:
+                filenames = {'train': f'epoch_{epoch}_train.csv', 'val': f'epoch_{epoch}_val.csv', 'test': f'epoch_{epoch}_test.csv'}
+            else:
+                filenames = {'train': f'epoch_{epoch}_train_fold_{fold}.csv', 'val': f'epoch_{epoch}_val_fold_{fold}.csv', 'test': f'epoch_{epoch}_test_fold_{fold}.csv'}
         else:
-            filenames = {'train': f'epoch_{epoch}_train_{ensemble}.csv', 'val': f'epoch_{epoch}_val_{ensemble}.csv', 'test': f'epoch_{epoch}_test_{ensemble}.csv'}
-        
+            if fold is None:
+                filenames = {'train': f'epoch_{epoch}_train_ensemble_{ensemble}.csv', 'val': f'epoch_{epoch}_val_ensemble_{ensemble}.csv', 'test': f'epoch_{epoch}_test_ensemble_{ensemble}.csv'}
+            else:
+                filenames = {'train': f'epoch_{epoch}_train_ensemble_{ensemble}_fold_{fold}.csv', 'val': f'epoch_{epoch}_val_ensemble_{ensemble}_fold_{fold}.csv', 'test': f'epoch_{epoch}_test_ensemble_{ensemble}_fold_{fold}.csv'}
+
         for key in datasets:
             if datasets[key] is not None:
                 df = pd.DataFrame(datasets[key], columns=columns)
                 df.to_csv(filenames[key])
 
-    def SaveEmbeddingsAtEpoch(self,train,val,test,epoch=1,ensemble=None):
+    def SaveEmbeddingsAtEpoch(self,train,val,test,epoch=1,ensemble=None,fold=None):
         ###### SAVE RESULTS AS CSV
         datasets = {'train': train, 'val': val, 'test': test}
         if ensemble is None:
-            filenames = {'train': f'epoch_{epoch}_train_embeddings.csv', 'val': f'epoch_{epoch}_val_embeddings.csv', 'test': f'epoch_{epoch}_test_embeddings.csv'}
+            if fold is None:
+                filenames = {'train': f'epoch_{epoch}_train_embeddings.csv', 'val': f'epoch_{epoch}_val_embeddings.csv', 'test': f'epoch_{epoch}_test_embeddings.csv'}
+            else:
+                filenames = {'train': f'epoch_{epoch}_train_embeddings_fold_{fold}.csv', 'val': f'epoch_{epoch}_val_embeddings_fold_{fold}.csv', 'test': f'epoch_{epoch}_test_embeddings_fold_{fold}.csv'}
         else:
-            filenames = {'train': f'epoch_{epoch}_train_embeddings_{ensemble}.csv', 'val': f'epoch_{epoch}_val_embeddings_{ensemble}.csv', 'test': f'epoch_{epoch}_test_embeddings_{ensemble}.csv'}
+            if fold is None:
+                filenames = {'train': f'epoch_{epoch}_train_embeddings_ensemble_{ensemble}.csv', 'val': f'epoch_{epoch}_val_embeddings_ensemble_{ensemble}.csv', 'test': f'epoch_{epoch}_test_embeddings_ensemble_{ensemble}.csv'}
+            else:
+                filenames = {'train': f'epoch_{epoch}_train_embeddings_ensemble_{ensemble}_fold_{fold}.csv', 'val': f'epoch_{epoch}_val_embeddings_ensemble_{ensemble}_fold_{fold}.csv', 'test': f'epoch_{epoch}_test_embeddings_ensemble_{ensemble}_fold_{fold}.csv'}
 
         for key in datasets:
             if datasets[key] is not None:
                 df = pd.DataFrame(datasets[key])
                 df.to_csv(filenames[key])
 
-    def SaveLossesToCSV(self, train_loss_list, val_loss_list, test_loss_list, lr, epoch,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,val_comb_metrics_list,test_comb_metrics_list,ensemble=None):
+    def SaveLossesToCSV(self, train_loss_list, val_loss_list, test_loss_list, lr, 
+                        epoch,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,
+                        val_comb_metrics_list,test_comb_metrics_list,ensemble=None,fold=None):
         # Create a dictionary with the data
         data = {
             'epoch': [epoch],
@@ -655,10 +660,16 @@ class Train(Setup):
         df = pd.DataFrame(data)
         
         # Define the filename
-        if ensemble is not None:
-            filename = f'losses_{ensemble}.csv'
+        if ensemble is None:
+            if fold is None:
+                filename = 'losses.csv'
+            else:
+                filename = f'losses_fold_{fold}.csv'
         else:
-            filename = 'losses.csv'
+            if fold is None:
+                filename = f'losses_ensemble_{ensemble}.csv'
+            else:
+                filename = f'losses_ensemble_{ensemble}_fold_{fold}.csv'
         
         # Save the DataFrame to a CSV file
         if not os.path.isfile(filename):
@@ -666,59 +677,96 @@ class Train(Setup):
         else:
             df.to_csv(filename, mode='a', header=False, index=False)
 
-    def SaveEmbeddings(self,train,val,test,ensemble=None):
+    def SaveEmbeddings(self,train,val,test,ensemble=None,fold=None):
         ###### SAVE RESULTS AS CSV
         datasets = {'train': train, 'val': val, 'test': test}
         if ensemble is None:
-            filenames = {'train': 'best_train_embeddings.csv', 'val': 'best_val_embeddings.csv', 'test': 'best_test_embeddings.csv'}
+            if fold is None:
+                filenames = {'train': 'best_train_embeddings.csv', 'val': 'best_val_embeddings.csv', 'test': 'best_test_embeddings.csv'}
+            else:
+                filenames = {'train': f'best_train_embeddings_fold_{fold}.csv', 'val': f'best_val_embeddings_fold_{fold}.csv', 'test': f'best_test_embeddings_fold_{fold}.csv'}
         else:
-            filenames = {'train': f'best_train_embeddings_{ensemble}.csv', 'val': f'best_val_embeddings_{ensemble}.csv', 'test': f'best_test_embeddings_{ensemble}.csv'}
-            
+            if fold is None:
+                filenames = {'train': f'best_train_embeddings_ensemble_{ensemble}.csv', 'val': f'best_val_embeddings_ensemble_{ensemble}.csv', 'test': f'best_test_embeddings_ensemble_{ensemble}.csv'}
+            else:
+                filenames = {'train': f'best_train_embeddings_ensemble_{ensemble}_fold_{fold}.csv', 'val': f'best_val_embeddings_ensemble_{ensemble}_fold_{fold}.csv', 'test': f'best_test_embeddings_ensemble_{ensemble}_fold_{fold}.csv'}
 
         for key in datasets:
             if datasets[key] is not None:
                 df = pd.DataFrame(datasets[key])
                 df.to_csv(filenames[key])
 
-    def TrainbyEpoch(self,ensemble=None):
+    def TrainbyEpoch(self,ensemble=None,fold=None):
         for epoch in range(self.start_epoch, self.params.epoch+self.params.epoch_const):
             self.loss_increase_count += 1
             self.logger.info('Epoch %d (%d/%s):' % (self.global_epoch + 1, epoch + 1, self.params.epoch))
             train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,val_comb_metrics_list,test_comb_metrics_list = self.Loop(epoch)
             self.UpdateWandB(train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr)
-            self.SaveTorchModel(train,val,test,train_embeddings,val_embeddings,test_embeddings,val_loss_list,train_loss_list,epoch,self.columns)
-            self.SaveLossesToCSV(train_loss_list, val_loss_list, test_loss_list, lr, epoch,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,val_comb_metrics_list,test_comb_metrics_list)
+            self.SaveTorchModel(train,val,test,train_embeddings,val_embeddings,test_embeddings,val_loss_list,train_loss_list,epoch,self.columns,ensemble,fold)
+            self.SaveLossesToCSV(train_loss_list, val_loss_list, test_loss_list, lr, epoch,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,val_comb_metrics_list,test_comb_metrics_list,ensemble,fold)
             if self.loss_increase_count > self.params.patience:
                 break
             self.global_epoch += 1
+        
+        return np.mean(val_loss_list)
 
     
-    def TrainUntilConvergence(self,ensemble=None):
+    def TrainUntilConvergence(self,ensemble=None,fold=None):
         prev_loss = float('inf')
         epoch = self.start_epoch
         while abs(prev_loss - current_loss) >= self.params.loss_threshold:
             self.logger.info('Epoch %d:' % (self.global_epoch + 1))
-            train, val, test, train_embeddings, val_embeddings, test_embeddings, train_loss_list, val_loss_list, test_loss_list, lr = self.Loop(epoch)
+            train,val,test,train_embeddings,val_embeddings,test_embeddings,train_loss_list,val_loss_list,test_loss_list,lr,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,val_comb_metrics_list,test_comb_metrics_list = self.Loop(epoch)
             self.UpdateWandB(train_loss_list, val_loss_list, test_loss_list, lr)
-            self.SaveTorchModel(train, val, test, train_embeddings, val_embeddings, test_embeddings, val_loss_list, train_loss_list, epoch, self.columns)
-            
+            self.SaveTorchModel(train, val, test, train_embeddings, val_embeddings, test_embeddings, val_loss_list, train_loss_list, epoch, self.columns, ensemble,fold)
+            self.SaveLossesToCSV(train_loss_list, val_loss_list, test_loss_list, lr, epoch,train_metrics_list,val_metrics_list,test_metrics_list,train_comb_metrics_list,val_comb_metrics_list,test_comb_metrics_list,ensemble,fold)
             current_loss = np.mean(val_loss_list)
             if epoch == self.params.epoch + self.params.epoch_const:
                 break
             prev_loss = current_loss
             self.global_epoch += 1
             epoch += 1
+        
+        return current_loss
     
 
-    def Train(self,ensemble=None):
+    def Train(self,ensemble=None,fold=None):
         if self.params.loss_threshold is not None:
-            self.TrainUntilConvergence(ensemble)
+            loss = self.TrainUntilConvergence(ensemble,fold)
         else:
-            self.TrainbyEpoch(ensemble)
+            loss = self.TrainbyEpoch(ensemble,fold)
+        return loss 
 
-    def TrainEnsemble(self):
+    def TrainEnsemble(self,fold=None):
+        losses = []
         for model_idx in range(self.params.ensemble):
             self.logger.info(f'Training model {model_idx + 1}/{self.params.ensemble}')
-            self.Train(model_idx) # Train the model
+            loss = self.Train(model_idx,fold=fold) # Train the model
+            losses.append(loss)
+        return np.mean(losses)
             
-        
+    def TrainCV(self):
+        losses = []
+        for fold in range(self.params.fold):
+            self.logger.info(f'Training fold {fold + 1}/{self.params.fold}')
+            self.params.fold = fold
+            if self.params.ensemble > 1:
+                self.logger.info(f'Training ensemble for fold {fold + 1}/{self.params.fold}')
+                loss = self.TrainEnsemble(fold)
+            else:
+                loss = self.Train(fold=fold)
+            
+            losses.append(loss)
+        return np.mean(losses)
+
+    def TrainingProtocol(self):
+        if self.params.ensemble > 1 and not self.params.crossval:
+            loss = self.TrainEnsemble()    
+        elif self.params.crossval:
+            loss = self.TrainCV()
+        else:
+            loss = self.Train()
+        return loss
+    
+
+    

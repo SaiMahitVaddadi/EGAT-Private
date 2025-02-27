@@ -61,15 +61,15 @@ class Normalizer:
         for item in tqdm(loader, total=len(loader), smoothing=0.9):
             if self.params.hasaddons:
                 if self.params.additionals is not None:
-                    if self.params.molecular: 
+                    if self.params.graph == 'molecule': 
                         id,rtypes,Rgs,smiles,targets,additionals,Radd= item
-                    else:
+                    elif self.params.graph == 'reaction':
                         id,rtypes,Rgs,Pgs,smiles,targets,additionals,Radd,Padd = item        
             else:
                 if self.params.additionals is not None:
-                    if self.params.molecular:
+                    if self.params.graph == 'molecule':
                         id,rtypes,Rgs,smiles,targets,additionals = item
-                    else:
+                    elif self.params.graph == 'reaction':
                         id,rtypes,Rgs,Pgs,smiles,targets,additionals = item
         
             Hr = self.CreateBatch(targets=targets,additionals=additionals,istarget=istarget)

@@ -1,4 +1,6 @@
 import pandas as pd
+from dataclasses import dataclass
+from typing import List, Optional
 
 '''
 TO-DO:
@@ -7,8 +9,15 @@ TO-DO:
 '''
 
 
+@dataclass
+class DenoteInputDataParams:
+    denoteby: Optional[str] = None
+    split: Optional[str] = None
+    smilescol: Optional[str] = None
+    fold: Optional[int] = None
+
 class DenoteInputData:
-    def __init__(self, data, denoteby: str=None, split: str=None, smilescol: str=None,fold:int = None):
+    def __init__(self, data: pd.DataFrame, params: DenoteInputDataParams):
         """
         Initialize the DenoteInputData class. 
         
@@ -28,26 +37,24 @@ class DenoteInputData:
         Parameters:
         --------------------------------------------------------------------
         data (pd.DataFrame): The input data.
-        denoteby (str, optional): The column to denote by.
-        split (str, optional): The split type (e.g., 'train', 'test', 'val').
-        smilescol (str, optional): The column containing SMILES strings.
+        params (DenoteInputDataParams): The parameters for denotation and split.
         """
         self.data = data 
-        self.denoteby = denoteby
-        self.split = split
+        self.params = params
 
     def GetSplit(self):
         """
         Filter the data based on the split type.
         """
-        if self.fold is not None: self.data = self.data[self.data.fold == self.fold]
-        if self.split in ['train', 'test', 'val']:
-            self.data = self.data[self.data.split == self.split]
-        elif self.split == 'traintest':
+        if self.params.fold is not None:
+            self.data = self.data[self.data.fold == self.params.fold]
+        if self.params.split in ['train', 'test', 'val']:
+            self.data = self.data[self.data.split == self.params.split]
+        elif self.params.split == 'traintest':
             self.data = self.data[self.data.split.isin(['train', 'test'])]
-        elif self.split == 'trainval':
+        elif self.params.split == 'trainval':
             self.data = self.data[self.data.split.isin(['train', 'val'])]
-        elif self.split == 'testval':
+        elif self.params.split == 'testval':
             self.data = self.data[self.data.split.isin(['test', 'val'])]
         else:
             self.data = self.data
@@ -56,14 +63,15 @@ class DenoteInputData:
         """
         Filter the data based on the denotation type.
         """
-        if isinstance(self.denoteby, list):
-            self.data = self.data[self.data.rxntype.isin(self.denoteby)]
-        elif isinstance(self.denoteby, str):
-            self.data = self.data[self.data.rxntype == self.denoteby]
+        if isinstance(self.params.denoteby, list):
+            self.data = self.data[self.data.rxntype.isin(self.params.denoteby)]
+        elif isinstance(self.params.denoteby, str):
+            self.data = self.data[self.data.rxntype == self.params.denoteby]
         else:
             self.data = self.data
     
-    def getctype(smi, molecular=False):
+    @staticmethod
+    def getctype(smi: str, molecular: bool = False) -> str:
         """
         Get the reaction type based on the SMILES string.
 

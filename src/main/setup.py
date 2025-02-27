@@ -223,14 +223,14 @@ class Setup:
 
     def LoadAblationModel(self,predictorA,predictorB):
         if self.params.hasaddons:
-            if self.params.molecular:
+            if self.params.graph == 'molecule':
                 predictor = MolecularAblationModelwAddOns(self.params,predictorA,predictorB)
-            else:
+            elif self.params.graph == 'reaction':
                 predictor = ReactionAblationModelwAddOns(self.params,predictorA,predictorB)
         else:
-            if self.params.molecular:
+            if self.params.graph == 'molecule':
                 predictor = MolecularAblationModel(self.params,predictorA,predictorB)
-            else:
+            elif self.params.graph == 'reaction':
                 predictor = ReactionAblationModel(self.params,predictorA,predictorB)
         
         return predictor

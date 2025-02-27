@@ -103,6 +103,13 @@ class EGATDataset(Dataset):
             self.data = pd.read_excel(self.params.rootfile)
         elif '.txt' in self.params.rootfile:
             self.data = pd.read_csv(self.params.rootfile, delimiter='\t')
+        elif isinstance(self.params.rootfile, list):
+            if '.csv' in self.params.rootfile[0]:
+                self.data = pd.concat([pd.read_csv(file) for file in self.params.rootfile], ignore_index=True)
+            else:
+                self.data = pd.DataFrame({'smiles': self.params.rootfile})
+        elif isinstance(self.params.rootfile, dict):
+            self.data = pd.DataFrame(self.params.rootfile)
     
     def ReadExclude(self):
         self.exclude = []

@@ -44,7 +44,7 @@ class Predict(Setup):
         self.scaler.normalize(self.data)
 
     def CreateCSV(self):
-        if not self.params.molecular:
+        if self.params.graph == 'reaction':
             csv = []
             columns = ['ID','RTYPE','Rsmiles','Psmiles','Rinchi','Pinchi']
             if isinstance(self.params.target,list):
@@ -54,7 +54,7 @@ class Predict(Setup):
             else:
                 columns += [self.params.target+'_PRED']
                 columns += [self.params.target]
-        else:
+        elif self.params.graph == 'molecular':
             csv = []
             columns = ['ID','RTYPE','Rsmiles','Rinchi']
             if isinstance(self.params.target,list):
@@ -111,7 +111,7 @@ class Predict(Setup):
         RGgs.edata['x'].to(self.device)
         if self.params.hasaddons: 
             RAdd = Radd.to(self.device)
-        if not self.params.molecular:
+        if self.params.graph == 'reaction':
             PGgs      = Pgs.to(self.device)
             PGgs.ndata['x'].to(self.device)
             PGgs.edata['x'].to(self.device)
@@ -128,23 +128,23 @@ class Predict(Setup):
     def GetPrediction(self,RGgs,PGgs,RAdd,PAdd,Hr):
         ###### GET PREDICTION
         if self.params.model_type in ['direct','BEP','multi']:
-            if not self.params.molecular:
+            if self.params.graph == 'reaction':
                 if self.params.hasaddons:
                     pred = self.model(RGgs,PGgs,RAdd,PAdd)
                 else:
                     pred = self.model(RGgs,PGgs)
-            else:
+            elif self.params.graph == 'molecular':
                 if self.params.hasaddons:
                     pred = self.model(RGgs,RAdd)
                 else:
                     pred = self.model(RGgs)
         elif self.params.model_type in ['Hr','Hr_multi']:
-            if not self.params.molecular:
+            if self.params.graph == 'reaction':
                 if self.params.hasaddons:
                     pred = self.model(RGgs,PGgs,Hr,RAdd,PAdd)
                 else:
                     pred = self.model(RGgs,PGgs,Hr)
-            else:
+            elif self.params.graph == 'molecular':
                 if self.params.hasaddons:
                     pred = self.model(RGgs,Hr,RAdd)
                 else:
@@ -153,15 +153,15 @@ class Predict(Setup):
 
         if not self.params.Embed:
             if self.params.AttnMaps:
-                if not self.params.molecular:
+                if self.params.graph == 'reaction':
                     pred,Rmap,Pmap = pred
-                else:
+                elif self.params.graph == 'molecular':
                     pred,Rmap = pred
         else:
             if self.params.AttnMaps:
-                if not self.params.molecular:
+                if self.params.graph == 'reaction':
                     pred,embeddings,Rmap,Pmap = pred
-                else:
+                elif self.params.graph == 'molecular':
                     pred,embeddings,Rmap = pred
             else:
                 pred,embeddings = pred
@@ -208,9 +208,9 @@ class Predict(Setup):
         for item in tqdm(loader, total=len(loader), smoothing=0.9):
             if self.params.hasaddons:
                 if self.params.additionals is not None:
-                    if self.params.molecular: 
+                    if self.params.graph == 'molecule': 
                         id,rtypes,Rgs,smiles,targets,additionals,Radd= item
-                    else:
+                    elif self.params.graph == 'reaction':
                         #collateall
                         id,rtypes,Rgs,Pgs,smiles,targets,additionals,Radd,Padd = item
                 else:
@@ -218,24 +218,24 @@ class Predict(Setup):
                         self.logger.info('Error: Predictions Require Additional Values that are not given.')
                         break 
                     else:
-                        if self.params.molecular: 
+                        if self.params.graph == 'molecule': 
                             id,rtypes,Rgs,smiles,targets,Radd= item
-                        else:
+                        elif self.params.graph == 'reaction':
                             id,rtypes,Rgs,smiles,targets,Radd = item
             else:
                 if self.params.additionals is not None:
-                    if self.params.molecular:
+                    if self.params.graph == 'molecule':
                         id,rtypes,Rgs,smiles,targets,additionals = item
-                    else:
+                    elif self.params.graph == 'reaction':
                         id,rtypes,Rgs,Pgs,smiles,targets,additionals = item
                 else:
                     if self.params.model_type in ['Hr','BEP','Hr_multi']:
                         self.logger.info('Error: Predictions Require Additional Values that are not given.')
                         break 
                     else:
-                        if self.params.molecular:
+                        if self.params.graph == 'molecule':
                             id,rtypes,Rgs,Pgs,smiles,targets = item
-                        else:
+                        elif self.params.graph == 'reaction':
                             id,rtypes,Rgs,smiles,targets = item
             
             targets = self.GrabTargets(targets)

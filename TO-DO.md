@@ -1,6 +1,7 @@
 # TO-DO - Immediate:
 - Params:
     - Cleanup the params class. 
+    - Create a params class that caters to hyperparameter tuning
     - write a function that uses a cli to write a config file 
     - write a function that uses a cli to input the parameters
 
@@ -12,11 +13,8 @@
     - write a cli for hyperparameter tuning via grid search
     - write a cli that combines two yamls into one, any overlap is based on the last yaml file given, 
 
-- Training: 
-    - Set up CV training in series 
-    - Set up a grid search protocol
-    - Set up a hyperopt protocol
-    - Set up a optuna protocol
+- HT Tuning: 
+    - Set up a beam search protocol
 
 - Build it into a pip install 
 - Build it into a conda install 

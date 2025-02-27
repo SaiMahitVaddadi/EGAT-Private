@@ -70,31 +70,31 @@ class EGATDataLoader:
 
         exclude = self.Exclude()
         for split in splits:
-            self.data[split] = EGATDataset(root=self.params.root,split=split, class_choice=self.params.class_choice, exclude=exclude,randomize=self.params.randomize,fold=self.params.fold,foldtype=self.params.foldtype,size=self.params.size,target=self.params.target,additional=self.params.additionals,hasaddons=self.params.addons,molecular=self.params.molecular)
+            self.data[split] = EGATDataset(root=self.params.root,split=split, class_choice=self.params.class_choice, exclude=exclude,randomize=self.params.randomize,fold=self.params.fold,foldtype=self.params.foldtype,size=self.params.size,target=self.params.target,additional=self.params.additionals,hasaddons=self.params.addons,molecular=self.params.graph)
 
     
     def GrabCollateFunction(self):
         if self.params.hasaddons: #Check if we need RDKit Global Features. If we do, load them.
             if self.params.additionals is not None: # Check if there are added features. If we do, load them.
-                if self.params.molecular: # Check if we only need molecular features. If we do, only load R features. 
+                if self.params.graph == 'molecule': # Check if we only need molecular features. If we do, only load R features. 
                     self.collator = MolecularCollator.allprops
-                else:
+                elif self.params.graph == 'reaction':
                     self.collator = ReactionCollator.allprops
             else:
-                if self.params.molecular: # Check if we only need molecular features. If we do, only load R features. 
+                if self.params.graph == 'molecule': # Check if we only need molecular features. If we do, only load R features. 
                     self.collator = MolecularCollator.addons
-                else:
+                elif self.params.graph == 'reaction':
                     self.collator = ReactionCollator.addons
         else:
             if self.params.additionals is not None:
-                if self.params.molecular:
+                if self.params.graph == 'molecule':
                     self.collator = MolecularCollator.additionals
-                else:
+                elif self.params.graph == 'reaction':
                     self.collator = ReactionCollator.additionals
             else:
-                if self.params.molecular:
+                if self.params.graph == 'molecule':
                     self.collator = MolecularCollator.targets
-                else:
+                elif self.params.graph == 'reaction':
                     self.collator = ReactionCollator.targets
             
 

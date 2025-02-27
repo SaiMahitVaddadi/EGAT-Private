@@ -133,7 +133,7 @@ class FPDataset(Dataset):
             self.info[self.params.additional] = rxn[self.params.additional]
             
     def AddINCHI(self,rxn):
-        if 'reaction' in self.params.modes.graph:
+        if 'reaction' in self.params.graph:
             RPsmiles = rxn[self.smiles].split('>>')
             Rsmiles = RPsmiles[0]
             Psmiles = RPsmiles[1]        
@@ -143,7 +143,7 @@ class FPDataset(Dataset):
             NPsmiles = RemoveMapping(Psmiles)
             self.info["Rsmiles"] = Chem.MolToSmiles(NRsmiles)
             self.info["Psmiles"] = Chem.MolToSmiles(NPsmiles)
-        elif 'molecular' in self.params.modes.graph:
+        elif 'molecular' in self.params.graph:
             Rsmiles = rxn[self.smiles]
             self.info['Rinchi'] = getInchifromSMILES(Rsmiles)
             NRsmiles = RemoveMapping(Rsmiles)
@@ -177,10 +177,10 @@ class FPDataset(Dataset):
         samples = [self.info['Indices'],self.info['rxntype']]
 
         # Add the graph
-        if 'reaction' in self.params.modes.graph:
+        if 'reaction' in self.params.graph:
             samples += [self.info['R_Addon'],self.info['P_Addon']]
             samples += [[self.info['Rsmiles'],self.info['Psmiles'],self.info['Rinchi'],self.info['Pinchi']]]
-        elif 'molecular' in self.params.modes.graph:
+        elif 'molecular' in self.params.graph:
             samples += [self.info['R_Addon']]
             samples += [[self.info['Rsmiles'],self.info['Rinchi']]]
         
@@ -233,30 +233,30 @@ class FPDataset(Dataset):
         
     def CreateAddons(self):
         if isinstance(self.params.addons, list):
-            if 'reaction' in self.params.modes.graph:
+            if 'reaction' in self.params.graph:
                     self.info['R_Addon'] = []
                     self.info['P_Addon'] = []
                     for addon in self.params.addons:
                         self.info['R_Addon'].append(self.AddonFunction(addon,self.info['Rsmiles']))
                         self.info['P_Addon'].append(self.AddonFunction(addon,self.info['Psmiles']))
-            elif 'molecular' in self.params.modes.graph:
+            elif 'molecular' in self.params.graph:
                 self.info['R_Addon'] = []
                 for addon in self.params.addons:
                     self.info['R_Addon'].append(self.AddonFunction(addon,self.info['Rsmiles']))
         elif isinstance(self.params.addons, str):
-            if 'reaction' in self.params.modes.graph:
+            if 'reaction' in self.params.graph:
                 self.info['R_Addon'] = self.AddonFunction(self.params.addons,self.info['Rsmiles'])
                 self.info['P_Addon'] = self.AddonFunction(self.params.addons,self.info['Psmiles'])
-            elif 'molecular' in self.params.modes.graph:
+            elif 'molecular' in self.params.graph:
                 self.info['R_Addon'] = self.AddonFunction(self.params.addons,self.info['Rsmiles'])
 
     def Addons(self):
         # Add what the Add-Ons are
         if self.params.addons is not None: 
             self.CreateAddons()
-            if 'reaction' in self.params.modes.graph:
+            if 'reaction' in self.params.graph:
                 return [torch.Tensor(self.info['R_Addon']),torch.Tensor(self.info['P_Addon'])]
-            elif 'molecular' in self.params.modes.graph:
+            elif 'molecular' in self.params.graph:
                 return [torch.Tensor(self.info['R_Addon'])]
                 # save in cache
     
