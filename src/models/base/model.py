@@ -18,7 +18,26 @@ TO-DO:
 - Fully custom softmax layers
 
 '''
-
+@dataclass
+class ModelParams:
+    model: str
+    hidden_dim: int
+    num_heads: int
+    Resid: Optional[bool] = None
+    ResidBias: Optional[bool] = None
+    MessagePassing: Optional[bool] = False
+    egatlayers: Optional[int] = 2
+    Aggregate: Optional[str] = 'Concat'
+    MixingLayer: Optional[bool] = False
+    addons: Optional[bool] = None
+    model_type: Optional[str] = 'default'
+    targets: Optional[Union[str, List[str]]] = None
+    dropout: Optional[float] = None
+    NN_hidden_dim: Optional[Union[int, List[int]]] = 256
+    cascading: Optional[bool] = False
+    graph: Optional[str] = 'reaction'
+    getattentionmaps: Optional[bool] = False
+    getembeddings: Optional[int] = 0
 
 
 class EGATModel(nn.Module):

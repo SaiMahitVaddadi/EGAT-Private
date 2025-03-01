@@ -18,7 +18,23 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 
+@dataclass
+class AstartesParams:
+    hopts: dict
+    fingerprint: str
+    fingerprint_args: dict
 
+@dataclass
+class SplitParams:
+    split_type: str
+    train_size: float
+    test_size: float
+    random_state: int
+    n_splits: int
+    fold_shuffle: bool
+    smiles: str
+    target: str
+    astartes: AstartesParams
 
 
 class Splitter:

@@ -1,5 +1,15 @@
 from ..base.base import BaseFeaturizer
 from ..base.information import NeighborInformation,BondInformation,ElectronInformation,ChargeInformation,AcidBaseInformation,RDInformation,StereoInformation,RingInformation
+from dataclasses import dataclass
+from typing import List
+
+
+@dataclass
+class MoleculeFeaturizerParams:
+    removeelementinfo: bool = False
+
+# Example usage:
+# params = FeaturizerParams(removeelementinfo=True, element_encode=[1, 2, 3])
 
 
 class MoleculeFeaturizer(BaseFeaturizer,NeighborInformation,BondInformation,ElectronInformation,ChargeInformation,AcidBaseInformation,RDInformation,StereoInformation,RingInformation,RDInformation):

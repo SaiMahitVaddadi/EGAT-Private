@@ -2,7 +2,17 @@ from .base import BaseFeaturizer
 from ...utils.descriptors.egat.encodings import Encodings
 from ...utils.descriptors.egat.reactive import Reactive
 from rdkit import Chem
+import warnings
+from dataclasses import dataclass
+from typing import Any, Optional
 
+
+
+@dataclass
+class ReactionBaseParams:
+    mappingfunction: str
+    rxnmapper: Any
+    totalmapping: Optional[bool] = False
 class BaseReactionFeaturizer:
     def __init__(self,reaction_smiles,arguments,denotation='>>',reactionfeaturizer=BaseFeaturizer):
         self.reaction = reaction_smiles

@@ -3,6 +3,41 @@ from torch import nn
 from dataclasses import dataclass
 from typing import Optional
 
+from ..models.model import EGATModel
+from ..models.fpmodel import FPModel
+from ..models.ablation.ablationmodels import MolecularAblationModel,ReactionAblationModel,MolecularAblationModelwAddOns,ReactionAblationModelwAddOns
+
+
+
+@dataclass
+class SetupParams:
+    data_path: str
+    save_path: str
+    model_path: Optional[str] = None
+    base_model: Optional[str] = None
+    ablation_EGAT_model: Optional[str] = None
+    ablation_NN_model: Optional[str] = None
+    loss: str = 'CrossEntropy'
+    metric: str = 'Accuracy'
+    optimizer: str = 'adam'
+    scheduler: str = 'cosine'
+    learning_rate_min: float = 1e-5
+    momentum_orig: float = 0.9
+    lr_decay: float = 0.1
+    step_size: int = 10
+    weight_decay: float = 1e-4
+    epochs: int = 100
+    gpu: int = 0
+    parallel: bool = False
+    setup: str = 'cuda'
+    startpoint: str = 'Retrain'
+    weightsandbiases: bool = False
+    wandbproject: Optional[str] = None
+    wandbname: Optional[str] = None
+    model: str = 'EGAT'
+    hasaddons: bool = False
+    molecular: bool = False
+
 
 
 def bn_momentum_adjust(m, momentum):
@@ -127,9 +162,16 @@ class Setup:
                 checkpointB = None
             
             return best_loss, start_epoch,checkpointA,checkpointB,checkpoint
+        elif self.params.startpoint == 'Predict':
+            try:
+                best_loss, start_epoch,checkpoint = self.PreLoadModel(self.params.model_path)
+            except:
+                best_loss, start_epoch,checkpoint = self.StartFromScratch()
+            return best_loss, start_epoch,checkpoint
         # Attempt to start from scratch.
         else: 
             best_loss, start_epoch,checkpoint = self.StartFromScratch()
+            return best_loss, start_epoch,checkpoint
 
 
     def LossLoader(self,lossfcn):
@@ -172,21 +214,23 @@ class Setup:
             self.logger.info('Data Path cannot be found')
             return None    
 
-    def LoadPredictor(self,model):
-        shutil.copy(hydra.utils.to_absolute_path('models/{}/model.py'.format(model)), '.')
-        predictor = getattr(importlib.import_module('models.{}.model'.format(model)), 'EGAT_Rxn')(self.params).to(self.device)
+    def LoadPredictor(self):
+        if 'EGAT' in self.params.model:
+            predictor = EGATModel(self.params).to(self.device)
+        elif 'NN' in self.params.model:
+            predictor = FPModel(self.params).to(self.device)
         return predictor 
 
     def LoadAblationModel(self,predictorA,predictorB):
         if self.params.hasaddons:
-            if self.params.molecular:
+            if self.params.graph == 'molecule':
                 predictor = MolecularAblationModelwAddOns(self.params,predictorA,predictorB)
-            else:
+            elif self.params.graph == 'reaction':
                 predictor = ReactionAblationModelwAddOns(self.params,predictorA,predictorB)
         else:
-            if self.params.molecular:
+            if self.params.graph == 'molecule':
                 predictor = MolecularAblationModel(self.params,predictorA,predictorB)
-            else:
+            elif self.params.graph == 'reaction':
                 predictor = ReactionAblationModel(self.params,predictorA,predictorB)
         
         return predictor
