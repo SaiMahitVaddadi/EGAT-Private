@@ -14,7 +14,7 @@ setup(
     },
     include_package_data=True,
     description='A description of your package',
-    author='Your Name',
+    author='Sai Mahit Vaddadi',
     author_email='your.email@example.com',
     url='https://github.com/yourusername/EGAT',  # Replace with your repository URL
     classifiers=[
