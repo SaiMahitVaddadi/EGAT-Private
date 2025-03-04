@@ -56,7 +56,7 @@ def bn_momentum_adjust(m, momentum):
         m.momentum = momentum
     return m
 
-class Train(Setup):
+class MetaLearn(Setup):
     def __init__(self, arguments):
         super().__init__(arguments)
         self.params = arguments
@@ -243,17 +243,17 @@ class Train(Setup):
         if not self.params.Embed:
             if self.params.AttnMaps:
                 if not self.params.molecular:
-                    pred,Rmap,Pmap = pred
+                    pred,Rmap,Pmap,distance = pred
                 else:
-                    pred,Rmap = pred
+                    pred,Rmap,distance = pred
         else:
             if self.params.AttnMaps:
                 if not self.params.molecular:
-                    pred,embeddings,Rmap,Pmap = pred
+                    pred,embeddings,Rmap,Pmap,distance = pred
                 else:
-                    pred,embeddings,Rmap = pred
+                    pred,embeddings,Rmap,distance = pred
             else:
-                pred,embeddings = pred
+                pred,embeddings,distance = pred
                 
 
         if self.params.model_type == 'BEP': pred = pred[:, 0].unsqueeze(1) * Hr + pred[:, 1].unsqueeze(1)
@@ -262,7 +262,7 @@ class Train(Setup):
         embeddings = embeddings if 'PGgs' in locals() else None
         Rmap = Rmap if 'RAdd' in locals() else None
         Pmap = Pmap if 'PAdd' in locals() else None    
-        return pred,embeddings,Rmap,Pmap
+        return pred,embeddings,Rmap,Pmap,distance
     
 
 

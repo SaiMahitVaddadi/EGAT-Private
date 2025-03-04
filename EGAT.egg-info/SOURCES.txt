@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+EGAT.egg-info/PKG-INFO
+EGAT.egg-info/SOURCES.txt
+EGAT.egg-info/dependency_links.txt
+EGAT.egg-info/requires.txt
+EGAT.egg-info/top_level.txt

@@ -48,10 +48,12 @@ from ..main.hyperparamtertuning import Tune
 
 
 class EGAT:
-    def __init__(self,config=None):
+    def __init__(self,config=None,mode=None):
         self.config = config 
         self.setups = Config()
         self.params = Params()
+        if mode == 'fingerprint':
+            self.params.Embed = True 
         self.train = Train(params=self.params)
         self.predict = Predict(params=self.params)
         self.tuner = Tune(params=self.params)
@@ -60,16 +62,16 @@ class EGAT:
         pass
 
     def train(self):
-        pass
+        self.train.TrainingProtocol()
 
     def predict(self):
-        pass
+        self.predict.Run()
 
     def fingerprint(self):
-        pass
+        self.predict.Run()
 
     def tune(self):
-        pass
+        self.tuner.tune()
 
 
 
