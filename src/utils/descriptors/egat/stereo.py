@@ -13,6 +13,7 @@ class StereoChemistry:
         self.chiral_centers = {}
         self.Hybridization  = {}
         self.conjugation    = {}
+        self.bond_aromatic  = {}
         self.v2 = v2
 
     def ObtainChiralCenters(self):
@@ -23,7 +24,7 @@ class StereoChemistry:
             self.chiral_centers[atom_map_num] = chirality
 
     def ChiralCenters(self):
-        if self.mol_sanitized is not None:
+        if isinstance(self.mol_sanitized,Chem.rdchem.Mol):
             self.chiral_centers_sanitized = Chem.FindMolChiralCenters(self.mol_sanitized, includeUnassigned=True)
         else:
             self.chiral_centers_sanitized = Chem.FindMolChiralCenters(self.new_mol, includeUnassigned=True)
@@ -49,7 +50,7 @@ class StereoChemistry:
 
         if self.v2: func = self.EncodeBondStereov2
         else: func = self.EncodeBondStereo
-        if self.mol_sanitized is not None:
+        if isinstance(self.mol_sanitized,Chem.rdchem.Mol):
             # Get the bond stereo information from the sanitized molecule
             for bond in self.mol_sanitized.GetBonds(): func(bond)
         else:
@@ -159,7 +160,7 @@ class StereoChemistry:
         
     def AtomStereo(self):
         # go through heavy atoms
-        if self.mol_sanitized is not None:
+        if isinstance(self.mol_sanitized,Chem.rdchem.Mol):
             for atom in self.mol_sanitized.GetAtoms(): self.EncodeAtomStereo(atom)
         else:
             for bond in self.new_mol.GetBonds(): self.EncodeBondStereo(bond)

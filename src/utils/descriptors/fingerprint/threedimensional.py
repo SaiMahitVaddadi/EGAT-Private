@@ -22,7 +22,7 @@ from skfp.preprocessing import ConformerGenerator,MolFromSmilesTransformer
 import numpy as np
 import e3fp 
 from e3fp.pipeline import confs_from_smiles
-from reinvent.chemistry.rdgeom import Geometry
+from ..geometry.geometry import Geometry
 from mxfp.mxfp import MXFPCalculator
 
 

@@ -1,19 +1,64 @@
 from .molmatdesc import MolMatDesc
+
 from rdkit import Chem
 from rdkit.Chem import rdDistGeom
 import pandas as pd 
-import yarp as yp
+import sys 
+from .....addons.yarp.yarp import yarpecule
 from .properties import Properties
+
+
+"""
+:class:`RDKElectronInfo`
+    :param egatecule: Molecule descriptor object
+    :type egatecule: MolMatDesc
+
+    .. method:: __init__(egatecule)
+        :param egatecule: Molecule descriptor object
+        :type egatecule: MolMatDesc
+        :return: None
+
+    .. method:: GetValence(atom)
+        :param atom: Atom object
+        :type atom: rdkit.Chem.rdchem.Atom
+        :return: None
+
+    .. method:: GetBonds(atom)
+        :param atom: Atom object
+        :type atom: rdkit.Chem.rdchem.Atom
+        :return: Number of bonds
+        :rtype: float
+
+    .. method:: EncodeLonePair(atom)
+        :param atom: Atom object
+        :type atom: rdkit.Chem.rdchem.Atom
+        :return: Atom map number, lone pairs, and radicals
+        :rtype: tuple
+
+    .. method:: ChangeForSpecialCases(lp, atom)
+        :param lp: Lone pairs
+        :type lp: float
+        :param atom: Atom object
+        :type atom: rdkit.Chem.rdchem.Atom
+        :return: Adjusted lone pairs
+        :rtype: float
+
+    .. method:: GetElectronInfo()
+        :return: None
+
+    .. method:: run()
+        :return: None
+"""
+
 class RDKElectronInfo:
     def __init__(self,egatecule:MolMatDesc):
         self.new_mol = egatecule.new_mol
         self.props = Properties()
         rdDistGeom.EmbedMolecule(self.new_mol,useRandomCoords=True,randomSeed=42)
-        self.lp_atom_index = dict()
-        self.amap = dict()
 
     def GetValence(self,atom):
         symbol = atom.GetSymbol()
+        symbol = symbol.lower()
         self.valence = self.props.el_valence[symbol]
         self.alt_valence = self.props.el_alt_valence[symbol]
     
@@ -57,16 +102,75 @@ class RDKElectronInfo:
         result = pd.DataFrame({'lp_atom_index':lplist,'mapping':amaplist,'radical_atom_index':radlist})
         result = result.sort_values('mapping')
         self.lps = result['lp_atom_index'].tolist()
-        self.rads = result['lp_atom_index'].tolist()
+        self.rads = result['radical_atom_index'].tolist()
         
-    def __call__(self):
+        
+    def run(self):
         self.GetElectronInfo()
 
+'''
+A class to handle electron information for a molecule using RDKit.
+    Initializes the RDKElectronInfo object with a molecule descriptor.
+    Retrieves the valence information for a given atom.
+    Calculates the number of bonds for a given atom.
+    Encodes lone pair information for a given atom.
+    Adjusts lone pairs for special cases.
+    Retrieves electron information for the molecule.
+    Executes the electron information retrieval process.
+:class:`YARPElectronInfo`
+A class to handle electron information for a molecule using YARP.
+:param canon: Canonicalization flag
+:type canon: bool
+:param mapping: Mapping flag
+:type mapping: bool
+.. method:: __init__(egatecule, canon=True, mapping=True)
+    Initializes the YARPElectronInfo object with a molecule descriptor.
+    :param canon: Canonicalization flag
+    :type canon: bool
+    :param mapping: Mapping flag
+    :type mapping: bool
+    Retrieves the valence information for a given atom.
+.. method:: ValenceCheck(nbelectrons, bonds, fc, valence)
+    Checks the valence for a given atom.
+    :param nbelectrons: Number of electrons
+    :type nbelectrons: int
+    :param bonds: Number of bonds
+    :type bonds: float
+    :param fc: Formal charge
+    :type fc: int
+    :param valence: Valence
+    :type valence: int
+    :return: Lone pairs
+.. method:: EncodeRadicalInfo(bm, i)
+    Encodes radical information for a given atom.
+    :param bm: Bond matrix
+    :type bm: numpy.ndarray
+    :param i: Atom index
+    :type i: int
+    :return: Lone pairs
+.. method:: ChangeForSpecialCases(lp, atom, bm, row, i)
+    Adjusts lone pairs for special cases.
+    :param bm: Bond matrix
+    :type bm: numpy.ndarray
+    :param row: Bond matrix row
+    :type row: numpy.ndarray
+    :param i: Atom index
+    :type i: int
+.. method:: GetBonds(row, i)
+    Calculates the number of bonds for a given atom.
+    :param row: Bond matrix row
+    :type row: numpy.ndarray
+    :param i: Atom index
+    :type i: int
+    Retrieves electron information for the molecule.
+.. method:: run()
+    Executes the electron information retrieval process.
+'''
 
 class YARPElectronInfo: 
     def __init__(self,egatecule:MolMatDesc,canon:bool = True,mapping:bool = True):
         self.new_mol = egatecule.new_mol
-        self.yarpecule = yp.yarpecule(egatecule.new_smiles,canon,mapping) # this is a neat workaround, but we should see if we can just dump the molecule instead. 
+        self.yarpecule = yarpecule(egatecule.new_smiles,canon,mapping) # this is a neat workaround, but we should see if we can just dump the molecule instead. 
         self.lps = []
         self.rads = []
 
@@ -111,7 +215,7 @@ class YARPElectronInfo:
                 self.lps[ind].append(bm[i,i])
                 self.rads[ind].append(self.EncodeRadicalInfo(bm,i))
     
-    def __call__(self):
+    def run(self):
         self.GetElectronInfo()
 
 

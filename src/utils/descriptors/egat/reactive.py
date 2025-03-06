@@ -42,7 +42,7 @@ class Reactive:
                     if self.Rbond_mat[i][j] == 0:
                         self.bond.formed += [(i,j)]
                     # If there was no bond at the product, state that it is broken. 
-                    elif self.Rbond_mat[i][j] == 0:
+                    elif self.Pbond_mat[i][j] == 0:
                         self.bond.broken += [(i,j)]
                     elif self.Rbond_mat[i][j] > self.Pbond_mat[i][j]:
                         self.bond.ochangedown += [(i,j)]

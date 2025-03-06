@@ -19,10 +19,12 @@ class Properties:
     def lowercasedict(self,adict):
         for _ in list(adict.keys()):
             adict[_.lower()] = adict[_]
+        return adict
 
     def titleizedict(self,adict):
         for _ in list(adict.keys()):
             adict[_.title()] = adict[_]
+        return adict
 
     def elements_and_numbers(self):
         # element label to atomic number

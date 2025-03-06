@@ -1,6 +1,97 @@
 from rdkit import Chem 
 import numpy as np
 from rdkit.Chem import rdmolops
+from rdkit.Chem import AllChem
+
+"""
+MolMatDesc
+==========
+
+A class to generate molecular descriptors from atom-mapped SMILES strings.
+
+Methods
+-------
+
+__init__(AM_smiles)
+    Initialize the MolMatDesc object with a SMILES string.
+
+AddAtoms()
+    Add sorted atoms to the new molecule and create an atom map.
+
+AddBonds()
+    Add bonds to the new molecule using the atom map.
+
+CleanFinalMolecule()
+    Finalize the molecule and remove atom mapping numbers.
+
+BondMatrix()
+    Create adjacency and bond order matrices for the molecule.
+
+Elements()
+    Get the formal charges and element symbols of the atoms.
+
+GetMatrix()
+    Generate the molecule matrix and sanitize the molecule.
+
+ReturnAMSmiles()
+    Convert the molecule to SMILES format.
+
+RotatableBondCount()
+    Count the number of rotatable bonds in the molecule.
+
+readenegtable()
+    Read the electronegativity table from a file.
+
+Electronegativity()
+    Get the electronegativity values of the atoms.
+
+Spiro()
+    Find the location of spiro atoms in the molecule.
+
+BridgeHead()
+    Find the location of bridgehead atoms in the molecule.
+
+BondPolarityPauling()
+    Calculate the bond polarity using Pauling electronegativity values.
+
+GenerateRandom3DGeometry()
+    Generate a random 3D geometry for the molecule.
+
+Gasteiger()
+    Compute Gasteiger charges for the molecule.
+
+BondDipoleMoments()
+    Calculate the dipole moments for each bond in the molecule.
+
+run()
+    Execute the main workflow of the MolMatDesc class.
+
+
+Attributes
+----------
+    mol: RDKit molecule object.
+    sorted_atoms: List of sorted atom objects.
+    new_mol: RDKit editable molecule object.
+    smiles: Atom-mapped SMILES string.
+    atom_map: Dictionary of atom mapping numbers.
+    adj_mat: Numpy array of adjacency matrix.
+    bond_mat: Numpy array of bond order matrix.
+    fc: List of formal charges.
+    element: List of element symbols.
+    mol_sanitized: RDKit molecule object.
+    num_atoms: Number of atoms in the molecule.
+    electronegativity: List of electronegativity values.
+    spiro: List of spiro atom indices.
+    bridgehead: List of bridgehead atom indices.
+    polarity_pauling: List of bond polarity values.
+    bond_dipole_moments: List of bond dipole moments.
+    rotationalbond: List of rotatable bond indices.
+    new_smiles: SMILES string of the new molecule.
+    sanitized_smiles: SMILES string of the sanitized molecule.
+    
+
+"""
+
 
 class MolMatDesc:
     def __init__(self, AM_smiles):
@@ -11,9 +102,15 @@ class MolMatDesc:
         AM_smiles (str): Atom-mapped SMILES string of the molecule.
         """
         self.mol = Chem.MolFromSmiles(AM_smiles, sanitize=False)
+        self.AddMapping()
         self.sorted_atoms = sorted(self.mol.GetAtoms(), key=lambda atom: atom.GetAtomMapNum())
         self.new_mol = Chem.EditableMol(Chem.Mol())
         self.smiles = AM_smiles 
+
+    def AddMapping(self):
+        for i, atom in enumerate(self.mol.GetAtoms()):
+            if atom.GetAtomMapNum() == 0:
+                atom.SetAtomMapNum(i + 1)
 
     def AddAtoms(self):
         """
@@ -88,8 +185,10 @@ class MolMatDesc:
         Convert the molecule to SMILES format.
         """
         self.new_smiles = Chem.MolToSmiles(self.new_mol, isomericSmiles=True, kekuleSmiles=False, allBondsExplicit=False, allHsExplicit=False)
-        self.sanitized_smiles = Chem.MolToSmiles(self.mol_sanitized, isomericSmiles=True, kekuleSmiles=False, allBondsExplicit=False, allHsExplicit=False)
-
+        try:
+            self.sanitized_smiles = Chem.MolToSmiles(self.mol_sanitized, isomericSmiles=True, kekuleSmiles=False, allBondsExplicit=False, allHsExplicit=False)
+        except:
+            self.sanitized_smiles = self.new_smiles
     def RotatableBondCount(self):
         """
         Count the number of rotatable bonds in the molecule.
@@ -105,7 +204,7 @@ class MolMatDesc:
         dict: Dictionary of electronegativity values.
         list: List of element symbols in the dictionary.
         """
-        with open('/depot/bsavoie/data/Mahit-TS-Energy-Project/GitHub/EGAT/electroneg-pauling.txt', 'r') as file:
+        with open('/Users/svaddadi/Documents/GitHub/EGAT/src/utils/database/pauling.txt', 'r') as file:
             lines = file.readlines()
         electronegativity_dict = {}
         for line in lines:
@@ -131,22 +230,28 @@ class MolMatDesc:
             else:
                 electronegativity_list.append(0)
         self.electronegativity = electronegativity_list
+
+    def InitializeUniqueBonds(self):
+        if not self.new_mol.GetRingInfo() or self.new_mol.GetRingInfo().NumRings() == 0:
+            rdmolops.FindSSSR(self.new_mol)
+        rInfo = self.new_mol.GetRingInfo()
+        atoms = []
+        lAtoms = []
+        if not atoms:
+            atoms = lAtoms
+        return rInfo, atoms, lAtoms
+
     
     def Spiro(self):
         """
         Find the location of spiro atoms in the molecule.
         """
-        if not self.new_mol.getRingInfo() or not self.new_mol.getRingInfo().isInitialized():
-            rdmolops.findSSSR(self.new_mol)
-        rInfo = self.new_mol.getRingInfo()
-        lAtoms = []
-        if not atoms:
-            atoms = lAtoms
-        for i in range(len(rInfo.atomRings())):
-            ri = rInfo.atomRings()[i]
-            for j in range(i + 1, len(rInfo.atomRings())):
-                rj = rInfo.atomRings()[j]
-                inter = set(ri).intersection(rj)
+        rInfo, atoms, lAtoms = self.InitializeUniqueBonds()
+        for i in range(len(rInfo.AtomRings())):
+            ri = rInfo.AtomRings()[i]
+            for j in range(i + 1, len(rInfo.AtomRings())):
+                rj = rInfo.AtomRings()[j]
+                inter = list(set(ri).intersection(rj))
                 if len(inter) == 1:
                     if inter[0] not in atoms:
                         atoms.append(inter[0])
@@ -156,22 +261,17 @@ class MolMatDesc:
         """
         Find the location of bridgehead atoms in the molecule.
         """
-        if not self.new_mol.getRingInfo() or not self.new_mol.getRingInfo().isInitialized():
-            rdmolops.findSSSR(self.new_mol)
-        rInfo = self.new_mol.getRingInfo()
-        lAtoms = []
-        if not atoms:
-            atoms = lAtoms
-        for i in range(len(rInfo.bondRings())):
-            ri = rInfo.bondRings()[i]
-            for j in range(i + 1, len(rInfo.bondRings())):
-                rj = rInfo.bondRings()[j]
+        rInfo, atoms, lAtoms = self.InitializeUniqueBonds()
+        for i in range(len(rInfo.BondRings())):
+            ri = rInfo.BondRings()[i]
+            for j in range(i + 1, len(rInfo.BondRings())):
+                rj = rInfo.BondRings()[j]
                 inter = set(ri).intersection(rj)
                 if len(inter) > 1:
-                    atomCounts = [0] * self.new_mol.getNumAtoms()
+                    atomCounts = [0] * self.new_mol.GetNumAtoms()
                     for ii in inter:
-                        atomCounts[self.new_mol.getBondWithIdx(ii).getBeginAtomIdx()] += 1
-                        atomCounts[self.new_mol.getBondWithIdx(ii).getEndAtomIdx()] += 1
+                        atomCounts[self.new_mol.GetBondWithIdx(ii).GetBeginAtomIdx()] += 1
+                        atomCounts[self.new_mol.GetBondWithIdx(ii).GetEndAtomIdx()] += 1
                     for ti in range(len(atomCounts)):
                         if atomCounts[ti] == 1:
                             if ti not in atoms:
