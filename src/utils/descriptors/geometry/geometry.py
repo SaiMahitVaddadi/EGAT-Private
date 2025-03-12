@@ -7,10 +7,17 @@ from rdkit.Chem.MolStandardize import rdMolStandardize
 
 from scipy.spatial import ConvexHull
 
-from openff.toolkit.topology import Molecule
-from openff.toolkit.utils import RDKitToolkitWrapper
-from openff.units import unit 
-from molvs.tautomer import TautomerEnumerator
+try:
+    from openff.toolkit.topology import Molecule
+    from openff.toolkit.utils import RDKitToolkitWrapper
+    from openff.units import unit 
+except:
+    pass
+
+try:
+    from molvs.tautomer import TautomerEnumerator
+except:
+    pass
 
 from Auto3D.auto3D import options, main
 from Auto3D.ASE.thermo import calc_thermo
@@ -56,6 +63,7 @@ class ConformerGenerator:
         self.theory = theory
         self.methodlist = ['EDG','ETKDG','ETKDGv2','ETKDGv3','KDG','srETKDGv3']
         self.egatecule = egatecule
+        self.egatecule.new_mol = self.egatecule.new_mol.GetMol()
         self.Initialize(method,seed,verbose)
 
         if nconfs == 1:
@@ -73,9 +81,9 @@ class ConformerGenerator:
         return failed
 
     def _Case2(self,seed,attempts):
-        failed = rdDistGeom.EmbedMolecule(self.egatecule.mol,maxAttempts=attempts,randomSeed=seed)
+        failed = rdDistGeom.EmbedMolecule(self.egatecule.new_mol,maxAttempts=attempts,randomSeed=seed)
         if failed == -1:
-            failed = rdDistGeom.EmbedMolecule(self.egatecule.mol,maxAttempts=attempts,randomSeed=seed,useRandomCoords=True)
+            failed = rdDistGeom.EmbedMolecule(self.egatecule.new_mol,maxAttempts=attempts,randomSeed=seed,useRandomCoords=True)
             if failed == -1:
                 failed = self.EmbedwithOpenBabel(seed)
         return failed

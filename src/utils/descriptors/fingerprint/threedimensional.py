@@ -22,8 +22,9 @@ from skfp.preprocessing import ConformerGenerator,MolFromSmilesTransformer
 import numpy as np
 import e3fp 
 from e3fp.pipeline import confs_from_smiles
-from ..geometry.geometry import Geometry
+from ..geometry.geometry import ConformerGenerator
 from mxfp.mxfp import MXFPCalculator
+from ..egat.molmatdesc import MolMatDesc
 
 
 
@@ -41,8 +42,11 @@ class GeometricFingerprint:
         if 'mxfp' in fp.__class__.__name__.lower():
             fps = [] 
             for smi in smiles:
-                generator = Geometry(smi)
+                descriptor = MolMatDesc(smi)
+                descriptor.run()
+                generator = ConformerGenerator(descriptor)
                 if generator.mol is not None:
+                    print(generator.mol)
                     fps.append(fp.mxfp_from_mol(generator.mol))
                 else:
                     fps.append(None)
@@ -62,7 +66,7 @@ class GeometricFingerprint:
         fps = np.array(fps)
         return fps
     
-    def smiles_to_fp(self, smiles: List[str], fpname: str, variant: str = 'raw_bits') -> List[UIntSparseIntVect]:
+    def smiles_to_fp(self, smiles: List[str], vars:dict) -> List[UIntSparseIntVect]:
         """
         Converts a list of SMILES strings to their corresponding fingerprints.
 
@@ -71,6 +75,9 @@ class GeometricFingerprint:
         :param variant: Variant of the fingerprint, default is 'raw_bits'.
         :return: List of fingerprints as UIntSparseIntVect.
         """
+
+        fpname = vars['fpname']
+        variant = vars['variant']
         if fpname.upper() in ['E3FP', 'RDF', 'GETAWAY', 'USR', 'USRCAT', 'WHIM']:
             fp = getattr(f'{fpname.upper()}Fingerprint')()
         elif fpname.upper() == '3dpharm':

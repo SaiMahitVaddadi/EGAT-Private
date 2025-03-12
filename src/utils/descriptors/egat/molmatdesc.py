@@ -2,7 +2,7 @@ from rdkit import Chem
 import numpy as np
 from rdkit.Chem import rdmolops
 from rdkit.Chem import AllChem
-
+import yarp as yp 
 """
 MolMatDesc
 ==========
@@ -102,10 +102,22 @@ class MolMatDesc:
         AM_smiles (str): Atom-mapped SMILES string of the molecule.
         """
         self.mol = Chem.MolFromSmiles(AM_smiles, sanitize=False)
+        self.cule = yp.yarpecule(AM_smiles)
+        self.AddHydrogens()
         self.AddMapping()
         self.sorted_atoms = sorted(self.mol.GetAtoms(), key=lambda atom: atom.GetAtomMapNum())
         self.new_mol = Chem.EditableMol(Chem.Mol())
         self.smiles = AM_smiles 
+
+    def AddHydrogens(self):
+        """
+        Add hydrogens to the molecule. Uses RDKit but if it fails, uses YARP.
+        """
+        try:
+            self.mol = Chem.AddHs(self.mol)
+        except:
+            self.mol = self.cule.to_mol()
+
 
     def AddMapping(self):
         for i, atom in enumerate(self.mol.GetAtoms()):
@@ -233,7 +245,7 @@ class MolMatDesc:
 
     def InitializeUniqueBonds(self):
         if not self.new_mol.GetRingInfo() or self.new_mol.GetRingInfo().NumRings() == 0:
-            rdmolops.FindSSSR(self.new_mol)
+            rdmolops.GetSSSR(self.new_mol)
         rInfo = self.new_mol.GetRingInfo()
         atoms = []
         lAtoms = []
