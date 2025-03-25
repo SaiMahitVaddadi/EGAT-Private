@@ -16,7 +16,7 @@ class BaseReactionGraphParams:
 
 @dataclass
 class NeighborParams:
-    neighbor: str = 'all'
+    neighbor: str = 'onlyCHNO'
 
 @dataclass
 class RingParams:
@@ -172,13 +172,143 @@ class MoleculeGlobalParams:
 
 @dataclass
 class ReactionBaseParams:
-    mappingfunction: str
-    rxnmapper: Any
-    totalmapping: Optional[bool] = False
+    mappingfunction: str = 'RXNMapper'
+    totalmapping: Optional[bool] = True
 
 class ReactionHelperParams:
     oldbondencode: bool = False
     addneighboringreactives: bool = False
+
+
+@dataclass
+class ConformerGeneratorParams:
+    nconfs: int = 1
+    method: Optional[str] = None
+    seed: int = 1
+    verbose: bool = False
+    theory: str = 'UFF'
+    tmp: str = 'tmp'
+    window: Optional[int] = None
+    engine: str = 'ANI2x'
+    gpu: bool = False
+    enumerate_tautomer: bool = True
+    tauto_engine: str = "rdkit"
+    pKaNorm: bool = True
+    enumerate_isomer: bool = True
+    max_confs: Optional[int] = None
+    patience: int = 1000
+    opt_steps: int = 5000
+    convergence_threshold: float = .003
+    threshold: float = .3
+    genmode: str = 'confgen'
+    geomopt: bool = False
+    thermo: bool = False
+    tauto_k: Optional[int] = None
+    tauto_window: Optional[int] = None
+    opt_tol: float = .0002
+
+
+    infile: str = 'input.xyz'
+    charge: int = 0
+    uhf: int = 0
+    solvation: Optional[str] = None
+    optlev: Optional[str] = None
+    sampling: Optional[str] = None
+    sites: Optional[str] = None
+    mdlen: Optional[str] = None
+    shake: Optional[str] = None
+    tstep: Optional[str] = None
+    mddump: Optional[str] = None
+    vbdump: Optional[str] = None
+    zsort: bool = False
+    genzsort: bool = True
+    norotmd: bool = False
+    tnmd: Optional[str] = None
+    mrest: Optional[str] = None
+    hflip: bool = True
+    maxflip: Optional[str] = None
+    gcspeed: Optional[str] = None
+    props: Optional[str] = None
+    origin: bool = True
+    keepdir: bool = False
+    noreftopo: bool = False
+    noopt: bool = False
+    wall: Optional[str] = None
+    scthr: Optional[str] = None
+    ssthr: Optional[str] = None
+    trange: Optional[str] = None
+    ptot: Optional[str] = None
+    fscal: Optional[str] = None
+    sthr: Optional[str] = None
+    ithr: Optional[str] = None
+    cinp: Optional[str] = None
+    cbonds: Optional[str] = None
+    cheavy: Optional[str] = None
+    clight: Optional[str] = None
+    fc: Optional[str] = None
+    mdopt: Optional[str] = None
+    screen: Optional[str] = None
+    rrhoav: Optional[str] = None
+    thermo: Optional[str] = None
+    nanoreactor: Optional[str] = None
+    solvent: Optional[str] = None
+    testtopo: Optional[str] = None
+    inputfile: Optional[str] = None
+
+    tmp: str = 'tmp'
+    solvent: str = 'h2o'
+    run: str = 'grow'
+    nsolv: Optional[int] = None
+    nopreopt: bool = False
+    keepdir: bool = False
+    gfn1: bool = False
+    gfn2: bool = False
+    gfnff: bool = False
+    samerand: bool = False
+    chrg: Optional[int] = None
+    uhf: Optional[int] = None
+    wscal: Optional[float] = None
+    fixsolute: bool = False
+    nofix: bool = False
+    xtbiff: bool = False
+    normdock: bool = False
+    directed: Optional[str] = None
+    qcgmtd: bool = False
+    ncimtd: bool = False
+    mtd: bool = False
+    md: bool = False
+    enslvl: Optional[str] = None
+    mdlen: Optional[str] = None
+    mddump: Optional[str] = None
+    tstep: Optional[str] = None
+    vbdump: Optional[str] = None
+    norotmd: bool = False
+    tnmd: Optional[str] = None
+    mreset: Optional[str] = None
+    fin_opt_gfn2: bool = False
+    nocff: bool = False
+    esolv: bool = False
+    nclus: Optional[int] = None
+    freqlvl: Optional[str] = None
+    freqscal: Optional[float] = None
+
+    ewin: Optional[float] = None
+    rthr: Optional[float] = None
+    ethr: Optional[float] = None
+    bthr: Optional[float] = None
+    pthr: Optional[float] = None
+    nmr: bool = False
+    eqv: bool = False
+    athr: Optional[float] = None
+    temp: Optional[float] = None
+    esort: bool = False
+    nowr: bool = False
+    subrmsd: bool = False
+    notopo: Optional[str] = None
+    cluster: Optional[str] = None
+    pccap: Optional[float] = None
+    nopcmin: bool = False
+    pcaex: Optional[float] = None
 
 
 class GraphParams(BaseGraphParams,BaseReactionGraphParams, NeighborParams, RingParams, ElectronParams,
@@ -186,7 +316,10 @@ class GraphParams(BaseGraphParams,BaseReactionGraphParams, NeighborParams, RingP
                   BondGeometryParams, BRICSParams, AtomGeometryParams, ReactiveAtomParams,
                   ReactiveAtomChangeParams, ReactiveBondParams, NonBondedParams,
                   GlobalBondParams, HydrogenBondParams, GlobalReactionBondParams,MoleculeFeaturizerParams,MoleculeGlobalParams,ReactionBaseParams,ReactionHelperParams):
-    pass
+    
+    def __init__(self):
+        self.conformer = ConformerGeneratorParams()
+
 
 
 

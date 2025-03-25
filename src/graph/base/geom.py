@@ -1,25 +1,15 @@
-from ...utils.descriptors.egat.encodings import Encodings
-from ...utils.descriptors.egat.reactive import Reactive
-from ...utils.descriptors.egat.molmatdesc import MolMatDesc
-from ...utils.descriptors.egat.radicals import RDKElectronInfo,YARPElectronInfo
-from ...utils.descriptors.egat.stereo import StereoChemistry
-from ...utils.matrices.graph_seps import graph_seps
-from ...utils.misc.taffi_functions import return_rings,adjmat_to_adjlist
-from ...utils.descriptors.geometry.geometry import ConformerGenerator
+from ...utils.descriptors.geometry.geometry import ConformerGeneratorEGAT
 from rdkit import Chem
-from dataclasses import dataclass
-from typing import Literal
 from .base import BaseFeaturizer
 
 
-class GeomFeaturizer(BaseFeaturizer):
+class GeomFeaturizer(BaseFeaturizer,object):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
     
     def GenerateConformers(self):
         # Fix for each 3D Geometry Tools That's There
-        self.conformers = ConformerGenerator(self.matrixdescriptors,self.params.conformer.nconfs,self.params.conformer.method,
-                                             self.params.conformer.seed,self.params.conformer.verbose,self.params.conformer.rdkoptimizer)
+        self.conformers = ConformerGeneratorEGAT(self.matrixdescriptors,self.params.conformer)
 
         confgenerator = getattr(self.conformers,f'Generatewith{self.params.conformer.generator}',None)
 

@@ -14,13 +14,12 @@ from .rdkit import RDKitDescriptors
 from sklearn.preprocessing import StandardScaler
 
 class Descriptors:
-
     def __init__(self,calc='rdkit',is3d=False):
         self.calc = calc
         self.is3d = is3d
 
         if self.calc == 'fsscore':
-            self.model = LitRankNet.load_from_checkpoint(PRETRAIN_MODEL_PATH)
+            self.model = LitRankNet.load_from_checkpoint(PRETRAIN_MODEL_PATH) # does not work on CPU
         elif self.calc == 'descriptasourus-normed':
             self.model = rdNormalizedDescriptors.RDKit2DNormalized()
         elif self.calc == 'descriptasourus':
@@ -45,14 +44,12 @@ class Descriptors:
         return scorer.score(smi)
 
     def MolSkill(self, smis):
-        self.LoadMany(smis)
-        return [self.model.score(mol) for mol in self.mols]
-
+        return self.model.score(smis) 
     def QEP(self, smis):
         q = ppi.QEPPI_Calculator()
         q.read()
         self.LoadMany(smis)
-        return [q.calculate(mol) for mol in self.mols]
+        return [q.qeppi(mol) for mol in self.mols]
 
     def RAScoreNN(self, smis):
         self.LoadMany(smis)
@@ -67,6 +64,15 @@ class Descriptors:
         syba.fitDefaultScore()
         self.LoadMany(smis)
         return [syba.predict(mol) for mol in self.mols]
+
+    def Rawr(self, smis):
+        features = []
+        for smi in smis:
+            if self.model.process(smi)[0] == True:
+                features.append(self.model.process(smi)[1:])
+            else:
+                features.append(None)
+        return features
 
 
     def Load(self, smi:str):
@@ -105,25 +111,4 @@ class Descriptors:
             descs = list(self.model.descriptors.keys())
         return [self.model.compute(mol, desc) for mol in self.mols for desc in descs]
     
-    def NormalizeRDKit(self, smis, descs=None):
-        feats = self.RDKit(smis, descs)
-        scaler = StandardScaler()
-        return scaler.fit_transform(feats)
-
-    def NormalizeMordred(self, smis, descs=None):
-        feats = self.Mordred(smis, descs)
-        scaler = StandardScaler()
-        return scaler.fit_transform(feats)
-
-    def Normalize(self, smis, descs=None, method='rdkit'):
-        if method == 'rdkit':
-            feats = self.RDKit(smis, descs)
-        elif method == 'mordred':
-            feats = self.Mordred(smis, descs)
-        elif method == 'molskill':
-            feats = self.MolSkill(smis)
-        elif method == 'syba':
-            feats = self.Syba(smis)
-        else:
-            raise ValueError(f"Normalization method {method} not recognized.")
-        return (feats - feats.mean()) / feats.std()
+    

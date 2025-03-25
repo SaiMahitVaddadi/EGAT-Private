@@ -5,29 +5,40 @@ from rdkit import Chem
 import warnings
 from dataclasses import dataclass
 from typing import Any, Optional
-
-
+from rxnmapper import RXNMapper
+from localmapper import localmapper
+from aamutils.aam_expand import extend_aam_from_rsmi
 
 @dataclass
 class ReactionBaseParams:
-    mappingfunction: str
-    rxnmapper: Any
-    totalmapping: Optional[bool] = False
+    mappingfunction: str = 'RXNMapper'
+    totalmapping: Optional[bool] = True
 class BaseReactionFeaturizer:
     def __init__(self,reaction_smiles,arguments,denotation='>>',reactionfeaturizer=BaseFeaturizer):
         self.reaction = reaction_smiles
+        self.params = arguments
         self.SplitandCheckForMapping(denotation)
         self.reactant = reactionfeaturizer(self.reactant,arguments)
         self.product = reactionfeaturizer(self.product,arguments)
-        self.reactant.run()
-        self.product.run()
-        self.params = arguments
+       
         self.elementcheck = self.CheckElementConsistency()
         if self.elementcheck: self.ReactiveBondInformation()
+
+
+    def IsAtomMapped(self,smi):
+        molecule = Chem.MolFromSmiles(smi)
+        for i,atom in enumerate(molecule.GetAtoms()):
+            if atom.HasProp('molAtomMapNumber'):
+                if i > 0 and atom.GetAtomMapNum() == 0:
+                    return False
+            else:
+                return False
+        return True
 
     def SplitandCheckForMapping(self,denotation):
         self.reactant = self.reaction.split(denotation)[0]
         self.product = self.reaction.split(denotation)[1]
+        print(f"Reactant: {self.reactant}, Product: {self.product}")
 
         if not self.IsAtomMapped(self.reactant) or not self.IsAtomMapped(self.product):
             r = self.StripAtomMapping(self.reactant)
@@ -51,20 +62,30 @@ class BaseReactionFeaturizer:
         rxn = [r + '>>'+p]
         results = rxn_mapper.get_attention_guided_atom_maps(rxn)
         # Get Mapped Reaction
+        self.mapper_condfidence = results[0]['confidence'] 
         results = results[0]['mapped_rxn'].split('>>')
         rsmi = results[0]
         psmi = results[1]
-
-        #Add Hydrogens and Map Them
-        self.mapper_condfidence = results[0]['confidence'] 
-        if self.params.rxnmapper.totalmapping:
-            rmol = self.AddHMapping(rsmi)
-            pmol = self.AddHMapping(psmi)
-            rsmi = Chem.MolToSmiles(rmol)
-            psmi = Chem.MolToSmiles(pmol)
+        print(f"Reactant: {rsmi}, Product: {psmi}")
+        if self.params.totalmapping:
+            rsmi = self.AddHMapping(rsmi)
+            psmi = self.AddHMapping(psmi)
         return rsmi,psmi
 
-    def AddHMapping(smi):
+    def MapviaLocalMapper(self,r,p):
+        mapper = localmapper()
+        rxn = r + '>>'+p
+        result = mapper.get_atom_map(rxn,return_dict=True)
+        results = result['mapped_rxn'].split('>>')
+        self.template = result['template']
+        self.mapper_condfidence = result['confidence']
+    
+    
+
+    def MapviaAAMUtils(self,r,p):
+        result_smiles = extend_aam_from_rsmi(r + '>>'+p)
+
+    def AddHMapping(self,smi):
         mol = Chem.MolFromSmiles(smi)
         mol = Chem.AddHs(mol)
         for atom in mol.GetAtoms():
@@ -74,6 +95,7 @@ class BaseReactionFeaturizer:
 
     def StripAtomMapping(self, smi):
         molecule = Chem.MolFromSmiles(smi)
+        print(molecule,smi)
         for atom in molecule.GetAtoms():
             atom.SetAtomMapNum(0)
         return Chem.MolToSmiles(molecule)

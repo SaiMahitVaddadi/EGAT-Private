@@ -123,6 +123,7 @@ class MolMatDesc:
         for i, atom in enumerate(self.mol.GetAtoms()):
             if atom.GetAtomMapNum() == 0:
                 atom.SetAtomMapNum(i + 1)
+        
 
     def AddAtoms(self):
         """
@@ -150,6 +151,10 @@ class MolMatDesc:
         self.new_mol = self.new_mol.GetMol()
         for atom in self.new_mol.GetAtoms():
             atom.SetAtomMapNum(0)
+        self.num_atoms = self.new_mol.GetNumAtoms()
+    
+    def GetNumAtoms(self):
+        self.new_mol = self.new_mol.GetMol()
         self.num_atoms = self.new_mol.GetNumAtoms()
 
     def BondMatrix(self):
@@ -184,7 +189,8 @@ class MolMatDesc:
         """
         self.AddAtoms()
         self.AddBonds()
-        self.CleanFinalMolecule()
+        #self.CleanFinalMolecule()
+        self.GetNumAtoms()
         self.BondMatrix()
         self.Elements()
         try:
@@ -356,3 +362,4 @@ class MolMatDesc:
         self.BridgeHead()
         self.BondPolarityPauling()
         self.BondDipoleMoments()
+        

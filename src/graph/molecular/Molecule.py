@@ -1,5 +1,5 @@
 from ..base.base import BaseFeaturizer
-from ..base.information import NeighborInformation,BondInformation,ElectronInformation,ChargeInformation,AcidBaseInformation,RDInformation,StereoInformation,RingInformation
+from ..base.information import NeighborInformation,BondInformation,ElectronInformation,ChargeInformation,AcidBaseInformation,RDInformation,StereoInformation,RingInformation,BRICSInformation
 from dataclasses import dataclass
 from typing import List
 
@@ -12,9 +12,9 @@ class MoleculeFeaturizerParams:
 # params = FeaturizerParams(removeelementinfo=True, element_encode=[1, 2, 3])
 
 
-class MoleculeFeaturizer(BaseFeaturizer,NeighborInformation,BondInformation,ElectronInformation,ChargeInformation,AcidBaseInformation,RDInformation,StereoInformation,RingInformation,RDInformation):
+class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation,ChargeInformation,AcidBaseInformation,StereoInformation,RingInformation,RDInformation,BRICSInformation):
     def __init__(self, smiles, arguments):
-        super(BaseFeaturizer).__init__(smiles, arguments)
+        super().__init__(smiles, arguments)
         
     
     def EncodeElement(self,ind):
@@ -24,32 +24,58 @@ class MoleculeFeaturizer(BaseFeaturizer,NeighborInformation,BondInformation,Elec
             return []
         
 
-    def AtomFeatureVector(self,ind):
+    def AtomFeatureVector(self,ind,debug=False):
+        atom_map_number = self.matrixdescriptors.new_mol.GetAtoms()[ind].GetAtomMapNum()
+        if atom_map_number == 0 : atom_map_number = ind
+
+
         atom_feature = []
         atom_feature += self.EncodeElement(ind)
         atom_feature += self.GetNeighbors(ind)
-        atom_feature += self.RingCheck(ind)
+        atom_feature += self.RingCheck(atom_map_number)
         atom_feature += self.FormalCharge(ind)
-        atom_feature += self.AromaticityCheck(ind)
-        atom_feature += self.HybridizationCheck(ind)
-        atom_feature += self.ChiralityCheck(ind)
-        atom_feature += self.RadicalCheck(ind)
-        atom_feature += self.SpiroCheck(ind)
-        atom_feature += self.BridgeHeadCheck(ind)
-        atom_feature += self.ElectronegativityCheck(ind)
+
+        atom_feature += self.AromaticityCheck(atom_map_number,ind)
+        atom_feature += self.HybridizationCheck(atom_map_number,ind)
+        atom_feature += self.ChiralityCheck(atom_map_number)
+        atom_feature += self.RadicalCheck(atom_map_number)
+        atom_feature += self.SpiroCheck(atom_map_number)
+        atom_feature += self.BridgeHeadCheck(atom_map_number)
+        atom_feature += self.ElectronegativityCheck(atom_map_number)
         atom_feature += self.ChargeCheck(ind)
-        atom_feature += self.AcidBaseCheck(ind)
+        atom_feature += self.AcidBaseCheck(atom_map_number)
+        atom_feature += self.IsPartOfBRICSBond(ind)
+
+
+        if debug and ind == 0:
+            print("Encoded Element:", self.EncodeElement(ind))
+            print("Neighbors:", self.GetNeighbors(ind))
+            print("Ring Check:", self.RingCheck(atom_map_number))
+            print("Formal Charge:", self.FormalCharge(ind))
+
+            print("Aromaticity Check:", self.AromaticityCheck(atom_map_number, ind))
+            print("Hybridization Check:", self.HybridizationCheck(atom_map_number, ind))
+            print("Chirality Check:", self.ChiralityCheck(atom_map_number))
+            print("Radical Check:", self.RadicalCheck(atom_map_number))
+            print("Spiro Check:", self.SpiroCheck(atom_map_number))
+            print("Bridge Head Check:", self.BridgeHeadCheck(atom_map_number))
+            print("Electronegativity Check:", self.ElectronegativityCheck(atom_map_number))
+            print("Charge Check:", self.ChargeCheck(ind))
+            print("Acid Base Check:", self.AcidBaseCheck(atom_map_number))
+
+
         return atom_feature
 
     def BondFeatureVector(self,ind):
         bond_feature = []
         edge = sorted([self.edges_u[ind],self.edges_v[ind]])
-        bo = self.EncodeBondOrder()
+        bo = self.EncodeBondOrder(edge)
         bond_feature += self.BondinRing(edge)
         bond_feature += self.BondOrder(edge,bo)
         bond_feature += self.BondConjugation(edge,bo)
         bond_feature += self.BondStereochemistry(edge,bo)
         bond_feature += self.BondRotation(edge,bo)
+        bond_feature += self.IsBRICSBond(edge)
         return bond_feature
 
     def GenerateAtomFeatureVector(self):

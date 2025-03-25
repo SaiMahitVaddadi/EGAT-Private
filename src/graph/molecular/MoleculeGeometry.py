@@ -1,22 +1,53 @@
 from ..base.geom import GeomFeaturizer
 from .Molecule import MoleculeFeaturizer
-from ..base.information import BondGeometryInformation
+from ..base.information import BondGeometryInformation,AtomGeometryInformation
 
 
 
 # To-do: Blow this up for x number of conformers
 
-class MoleculeFeaturizerwithGeometry(GeomFeaturizer,MoleculeFeaturizer,BondGeometryInformation):
+class MoleculeFeaturizerwithGeometry(GeomFeaturizer,MoleculeFeaturizer,BondGeometryInformation,AtomGeometryInformation):
     def __init__(self, smiles, arguments):
-        super(GeomFeaturizer).__init__(smiles, arguments)
+        super().__init__(smiles, arguments)
         #super(MoleculeFeaturizer).__init__(smiles, arguments)
         self.GenerateConformers()
-        self.Spread()
+        
     
     def AtomFeatureVectorAddons(self,ind):
+        atom_feature_confs = dict()
         atom_feature = self.AtomFeatureVector(ind)
+        if self.params.conformer.nconfs == 1:
+            atom_feature = self._atomaddons(atom_feature,ind)
+        else:
+            for conf in self.matrixdescriptors.new_mol.GetConformer():
+                atom_feature_confs[conf] = atom_feature
+
+
+
         return atom_feature
 
+    def _atomaddons(self,atom_feature,ind):
+        atom_feature += self.AtomCoordination(ind)
+        atom_feature += self.DistanceToCenterOfMass(ind)
+        atom_feature += self.StericHindrance(ind)
+        atom_feature += self.AtomicSolventAccessibility(ind)
+        atom_feature += self.GaussianCurvature(ind)
+        atom_feature += self.MolecularShapeIndex(ind)
+        atom_feature += self.DistanceToConvexHull(ind)
+        atom_feature += self.GetVanDerWaalsRadii(ind)
+        return atom_feature
+    
+    def _atomaddonswithconf(self,atom_feature,ind,conf=0):
+        atom_feature += self.AtomCoordination(ind,conf)
+        atom_feature += self.DistanceToCenterOfMass(ind,conf)
+        atom_feature += self.StericHindrance(ind,conf)
+        atom_feature += self.AtomicSolventAccessibility(ind,conf)
+        atom_feature += self.GaussianCurvature(ind,conf)
+        atom_feature += self.MolecularShapeIndex(ind,conf)
+        atom_feature += self.DistanceToConvexHull(ind,conf)
+        atom_feature += self.GetVanDerWaalsRadii(ind,conf)
+        return atom_feature
+    
 
     def Edge(self,ind):
         bond_feature = []
@@ -31,6 +62,7 @@ class MoleculeFeaturizerwithGeometry(GeomFeaturizer,MoleculeFeaturizer,BondGeome
         bond_feature += self.BondAngle(edge)
         bond_feature += self.DihedralAngle(edge)
         return bond_feature
+    
 
     def GenerateAtomFeatureVector(self):
         self.atom_features = []

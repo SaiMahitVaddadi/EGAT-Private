@@ -190,10 +190,10 @@ class RingInformation(BaseFeaturizer):
         else:
             return []
     
-    def AromaticityCheck(self,ind):
-        if not self.args.removearomaticity:
+    def AromaticityCheck(self,ind,ind_=0):
+        if not self.params.removearomaticity:
             ###### GET AROMATICITY
-            if self.self.matrixdescriptors.element[ind] == 'H': aromaticity = 0
+            if self.matrixdescriptors.element[ind_] == 'H': aromaticity = 0
             elif self.stereo.atom_aromatic[ind]: aromaticity = 1
             else: aromaticity = 0
             return [aromaticity]
@@ -215,20 +215,20 @@ class ElectronInformation(BaseFeaturizer):
     
     
     def RadicalCheck(self,ind):
-        if self.args.getradical:
+        if self.params.getradical:
             return [self.electroninfo.rads[ind],self.electroninfo.lps[ind]]
         else:
             return []
     
-    def HybridizationCheck(self,ind):
+    def HybridizationCheck(self,ind,ind_=0):
         ###### GET HYBRIDIZATION
-        if not self.args.removehybridinfo:
-            if self.self.matrixdescriptors.element[ind] == 'H':
+        if not self.params.removehybridinfo:
+            if self.matrixdescriptors.element[ind_] == 'H':
                 if not self.params.useFullHyb: hybrid = [0,0,0,1]
                 else: hybrid = [0,0,0,1,0,0,0,0,0]
 
             else:
-                hybrid = self.stereo.Hybridization[ind] 
+                hybrid = self.properties.atom_hybrid_encode[self.stereo.Hybridization[ind]]
             return hybrid
         else:
             return []
@@ -239,21 +239,21 @@ class ChargeInformation(BaseFeaturizer):
         
     
     def ElectronegativityCheck(self,ind):
-        if self.args.getelectronegativity:
+        if self.params.getelectronegativity:
             return [self.matrixdescriptors.electronegativity[ind]]
         else:
             return []
         
     def FormalCharge(self,ind):
         if not self.params.removeformalchargeinfo:
-            fc = self.matrixdescriptor.fc[ind]
-            return fc
+            fc = self.matrixdescriptors.fc[ind]
+            return [fc]
         else:
             return []
 
     def ChargeCheck(self,ind):
         if self.params.charge == 'Gasteiger':
-            return [self.matrixdescriptors.gasteiger_charges[ind]]
+            return [float(self.matrixdescriptors.gasteiger_charges[ind])]
         elif self.params.charge == 'psi4':
             return []
         elif self.params.charge == 'pyscf':
@@ -296,13 +296,13 @@ class RDInformation(BaseFeaturizer):
         super().__init__(smiles, arguments)
     
     def SpiroCheck(self,ind):
-        if self.args.getspiro:
+        if self.params.getspiro:
             return [self.matrixdescriptors.spiro[ind]]
         else:
             return []
 
     def BridgeHeadCheck(self,ind):
-        if self.args.getbridgehead:
+        if self.params.getbridgehead:
             return [self.matrixdescriptors.bridgehead[ind]]
         else:
             return []
@@ -325,11 +325,11 @@ class StereoInformation(BaseFeaturizer):
         super().__init__(smiles, arguments)
 
     def ChiralityCheck(self,ind):
-        if not self.args.removechiralinfo:
+        if not self.params.removechiralinfo:
             ###### CHECK IF IT IS IN A CHIRAL CENTER
             if ind in self.stereo.chiral_centers: chiral = self.properties.atom_chiral_encode[self.stereo.chiral_centers[ind]]
             else: chiral = [0,0,1]
-            return [chiral]
+            return chiral
         else:
             return []
         
@@ -554,17 +554,14 @@ class BRICSInformation(BaseFeaturizer):
         super().__init__(smiles, arguments)
         self.brics = self.GetBRICSDecomposition()
     
-    def GetBRICSDecomposition(self):
-        mol = Chem.MolFromSmiles(self.smiles)
-        brics_bonds = list(BRICS.FindBRICSBonds(mol))
-        bond_breaks = [(bond[0][0], bond[0][1]) for bond in brics_bonds]
-        return bond_breaks
+    def _convert(self,ind):
+        atom = self.matrixdescriptors.new_mol.GetAtoms()[ind]
+        return atom.GetAtomMapNum()
 
-    def BRICSPattern(self,ind):
-        if self.params.getbrics:
-            return [self.brics[ind]]
-        else:
-            return []
+    def GetBRICSDecomposition(self):
+        brics_bonds = list(BRICS.FindBRICSBonds(self.matrixdescriptors.new_mol))
+        bond_breaks = [(self._convert(bond[0][0]), self._convert(bond[0][1])) for bond in brics_bonds]
+        return bond_breaks
     
     def IsPartOfBRICSBond(self, ind):
         if self.params.checkbricsbond:
@@ -574,6 +571,14 @@ class BRICSInformation(BaseFeaturizer):
             return [0]
         else:
             return []
+        
+    def IsBRICSBond(self,edge):
+        if self.params.checkbricsbond:
+            if edge in self.brics: return [0,1]
+            else: return [1,0]
+        else:
+            return []
+
     
 
 
@@ -581,11 +586,25 @@ class BRICSInformation(BaseFeaturizer):
 class AtomGeometryInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
+    
+
+    def GrabConformer(self,id=1):
+        if id == 1: return self.matrixdescriptors.new_mol
+        else:
+            return self.matrixdescriptors.new_mol.GetConformer(conf_id=id)
+    
+
+    def GrabGeometry(self,id=1):
+        mol = self.GrabConformer(id)
+        self.positions = []
+        for atoms in mol.GetAtoms():
+            self.positions.append([pos.x,pos.y,pos.z])
         
+    
     
     def AtomCoordination(self,ind):
         if not self.params.removecoordinationinfo:
-            return [self.matrixdescriptors.coord[ind]]
+            return [self.positions.ind] # Grab the conforem
         else:
             return []
 

@@ -3,6 +3,7 @@ from .molmatdesc import MolMatDesc
 from rdkit import Chem
 from .properties import Properties
 import numpy as np
+import rdkit 
 class StereoChemistry:
     def __init__(self,egatecule:MolMatDesc,v2=False):
         self.new_mol = egatecule.new_mol
@@ -14,13 +15,17 @@ class StereoChemistry:
         self.Hybridization  = {}
         self.conjugation    = {}
         self.bond_aromatic  = {}
+        self.atom_aromatic = {}
         self.v2 = v2
 
     def ObtainChiralCenters(self):
         # obtain chiral centers
         for chiral_center in self.chiral_centers_sanitized:
             atom_index, chirality = chiral_center
-            atom_map_num = self.mol_sanitized.GetAtomWithIdx(atom_index).GetAtomMapNum()
+            if isinstance(self.mol_sanitized,Chem.rdchem.Mol):
+                atom_map_num = self.mol_sanitized.GetAtomWithIdx(atom_index).GetAtomMapNum()
+            else:
+                atom_map_num = self.new_mol.GetAtomWithIdx(atom_index).GetAtomMapNum()
             self.chiral_centers[atom_map_num] = chirality
 
     def ChiralCenters(self):
@@ -160,11 +165,9 @@ class StereoChemistry:
         
     def AtomStereo(self):
         # go through heavy atoms
-        if isinstance(self.mol_sanitized,Chem.rdchem.Mol):
-            for atom in self.mol_sanitized.GetAtoms(): self.EncodeAtomStereo(atom)
-        else:
-            for bond in self.new_mol.GetBonds(): self.EncodeBondStereo(bond)
-
+        for atom in self.new_mol.GetAtoms(): self.EncodeAtomStereo(atom)
+        for bond in self.new_mol.GetBonds(): self.EncodeBondStereo(bond)
+        
     def run(self):
         self.ChiralCenters()
         self.BondStereo()

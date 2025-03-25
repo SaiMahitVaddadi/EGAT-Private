@@ -153,7 +153,7 @@ class Encodings(Properties):
     
 
     def atomchirality(self):
-        self.atom_chiral_encode = {
+        self.atom_chiral_encode_v2 = {
             Chem.rdchem.ChiralType.CHI_ALLENE: [1,0,0,0,0,0,0,0,0],
             Chem.rdchem.ChiralType.CHI_OCTAHEDRAL: [0,1,0,0,0,0,0,0,0],
             Chem.rdchem.ChiralType.CHI_OTHER: [0,0,1,0,0,0,0,0,0],

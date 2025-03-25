@@ -18,11 +18,11 @@ from rdkit.DataStructs.cDataStructs import UIntSparseIntVect
 from molvs import Standardizer
 from typing import List
 from skfp.fingerprints import *
-from skfp.preprocessing import ConformerGenerator,MolFromSmilesTransformer
+from skfp.preprocessing import MolFromSmilesTransformer,ConformerGenerator
 import numpy as np
 import e3fp 
 from e3fp.pipeline import confs_from_smiles
-from ..geometry.geometry import ConformerGenerator
+from ..geometry.geometry import ConformerGeneratorEGAT
 from mxfp.mxfp import MXFPCalculator
 from ..egat.molmatdesc import MolMatDesc
 
@@ -44,24 +44,25 @@ class GeometricFingerprint:
             for smi in smiles:
                 descriptor = MolMatDesc(smi)
                 descriptor.run()
-                generator = ConformerGenerator(descriptor)
-                if generator.mol is not None:
-                    print(generator.mol)
-                    fps.append(fp.mxfp_from_mol(generator.mol))
+                generator = ConformerGeneratorEGAT(descriptor)
+                if descriptor.new_mol is not None:
+                    fps.append(fp.mxfp_from_mol(descriptor.new_mol))
                 else:
                     fps.append(None)
         else:
             mol_from_smiles = MolFromSmilesTransformer()
             mols = mol_from_smiles.transform(smiles)
-            mols = [mol for mol in mols if mol is not None]
-            conf_gen = ConformerGenerator()
+            conf_gen = ConformerGenerator(n_jobs=-1)
+            mols = conf_gen.transform(mols)
             fps = []
             for mol in mols:
                 try:
-                    _ = conf_gen.transform([mol])
                     # Transform to Mordred fingerprints
-                    fps += [fp.transform(_)]
+                    res = fp.transform([mol])[0]
+                    res = np.where(np.isnan(res), -1000, res)
+                    fps += [res]
                 except Exception as e:
+                    print(f"Error processing SMILES {mol}: {e}")
                     fps.append(None)
         fps = np.array(fps)
         return fps
@@ -80,9 +81,9 @@ class GeometricFingerprint:
         variant = vars['variant']
         if fpname.upper() in ['E3FP', 'RDF', 'GETAWAY', 'USR', 'USRCAT', 'WHIM']:
             fp = getattr(f'{fpname.upper()}Fingerprint')()
-        elif fpname.upper() == '3dpharm':
+        elif fpname == '3dpharm':
             fp = PharmacophoreFingerprint(variant=variant, use_3D=True)
-        elif fpname == 'mordred':
+        elif fpname == '3dmordred':
             fp = MordredFingerprint(use_3D=True)
         elif fpname == 'mxfp':
             fp = MXFPCalculator(dimensionality='3D')
