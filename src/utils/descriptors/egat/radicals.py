@@ -64,12 +64,17 @@ class RDKElectronInfo:
     
     def GetBonds(self,atom):
         bonds = 0
+        num_aromatic_bonds = 0
         for neighbor in atom.GetNeighbors():
             bond = self.new_mol.GetBondBetweenAtoms(atom.GetIdx(), neighbor.GetIdx())
             if bond.GetIsAromatic():
                 bonds += 2.0
+                num_aromatic_bonds += 1
             else:
                 bonds += bond.GetBondTypeAsDouble()
+        if bond.GetIsAromatic():
+            if num_aromatic_bonds > 1:
+                bonds = bonds - (num_aromatic_bonds - 1)
         return bonds
     
     def EncodeLonePair(self,atom):

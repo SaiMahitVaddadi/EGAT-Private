@@ -1,0 +1,24 @@
+from ..base import BaseFeaturizer
+
+
+
+
+class HydrogenBondInformation(BaseFeaturizer):
+    def __init__(self, smiles, arguments):
+        super().__init__(smiles, arguments)
+    
+    def HydrogenBondCheck(self,ind):
+        if self.params.check_hbond:
+            hbond_info = []
+            if self.matrixdescriptors.element[ind] in ['O', 'N', 'F', 'Cl', 'Br', 'I']:
+                hbond_info.append([1, 0])  # Donor
+            elif self.matrixdescriptors.element[ind] == 'H':
+                for neighbor in range(len(self.matrixdescriptors.element)):
+                    if self.matrixdescriptors.adj_mat[ind][neighbor] > 0 and self.matrixdescriptors.element[neighbor] in ['O', 'N', 'F', 'Cl', 'Br', 'I']:
+                        hbond_info.append([0, 1])  # Acceptor
+                    break
+            else:
+                hbond_info.append([0, 0])  # Neither
+            return hbond_info
+        else:
+            return []

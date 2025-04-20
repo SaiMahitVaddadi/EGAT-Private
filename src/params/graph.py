@@ -115,18 +115,16 @@ class NonBondedParams:
 @dataclass
 class GlobalBondParams:
     getglobal: bool = False
-    getshortestpath: bool = False
-    getshortestpathweighted: bool = False
+    getshortestpath: str = None
+    bias_walk: str = 'random'
+    num_walks: int = 10
+    getuniquewalks: bool = False
     getrandomwalk: bool = False
-    getcommutetimes: bool = False
     getshortestpathcount: bool = False
-    geteffectiveresistance: bool = False
-    getcommonneighbors: bool = False
-    getpctcommonneighbors: bool = False
+    getcommonneighbors: str = None
     getglobaljaccard: bool = False
     getglobaladamicadar: bool = False
     getprefattachment: bool = False
-    getshortestpathpbc: bool = False
     getkatz: bool = False
     getEigenvectorCentrality: bool = False
     getBetweennessCentralityCorrelation: bool = False
@@ -134,11 +132,35 @@ class GlobalBondParams:
     getMaximumFlow: bool = False
     getLaplacianEigenvectorSimilarity: bool = False
     getFiedlerVectorSimilarity: bool = False
-    getGraphDistanceWeightedByBondOrder: bool = False
     getBetweennessCentralityOfPathways: bool = False
     getRingsInSharedPath: bool = False
+    getfirstpassagetime: bool = False
+    geteffectiveresistance: bool = False
+    getSameAromaticSequence: bool = False
+    getTopoOverlap: bool = False
+    getEdgeClustering: bool = False
+    getFormanCurve: bool = False
+    global_fingerprint_type: str = 'Morgan'
+    global_similarity_metric: str = 'Tanimoto'
     getLocalAtomicEnvironmentSimilarity: bool = False
+    getsamefg: bool = False
+    ct_method: str = 'spectral'
     sp_box_size: float = 10.0
+
+
+@dataclass
+class GlobalAtomParams:
+    getclusteringcoeff: bool = False
+    getclosenesscentrality: bool = False
+    getdegreecentrality: bool = False
+    getgraphdensity: bool = False
+    getavgdegneighbors: bool = False
+    getnodeclustering: bool = False
+    getassortativity: bool = False
+    getspectralradius: bool = False
+    getdegreeentropy: bool = False
+    getlocalbertzct: bool = False
+
 
 @dataclass
 class HydrogenBondParams:
@@ -311,11 +333,28 @@ class ConformerGeneratorParams:
     pcaex: Optional[float] = None
 
 
+@dataclass
+class FusedRingParams:
+    getfusedinformation: Optional[bool] = False
+
+@dataclass
+class DijkstraParams:
+    usebofactor_dijkstra: Optional[bool] = True
+    useconjfactor_dijkstra: Optional[bool]= True
+    userotfactor_dijkstra: Optional[bool] = True
+    usestereofactor_dijkstra: Optional[bool] = True
+    usedistfactor_dijkstra: Optional[bool] = True
+    combo_dijkstra: Optional[str] = 'product'
+    bias_walk: Optional[str] = 'dijkstra'
+
+
+
 class GraphParams(BaseGraphParams,BaseReactionGraphParams, NeighborParams, RingParams, ElectronParams,
                   ChargeParams, AcidBaseParams, RDParams, StereoParams, BondParams,
                   BondGeometryParams, BRICSParams, AtomGeometryParams, ReactiveAtomParams,
                   ReactiveAtomChangeParams, ReactiveBondParams, NonBondedParams,
-                  GlobalBondParams, HydrogenBondParams, GlobalReactionBondParams,MoleculeFeaturizerParams,MoleculeGlobalParams,ReactionBaseParams,ReactionHelperParams):
+                  GlobalBondParams, HydrogenBondParams, GlobalReactionBondParams,MoleculeFeaturizerParams,
+                  MoleculeGlobalParams,ReactionBaseParams,ReactionHelperParams,FusedRingParams,DijkstraParams,GlobalAtomParams):
     
     def __init__(self):
         self.conformer = ConformerGeneratorParams()

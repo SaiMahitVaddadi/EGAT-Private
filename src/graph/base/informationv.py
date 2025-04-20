@@ -8,8 +8,8 @@ from rdkit.Chem import BRICS
 from ...utils.descriptors.egat.functional import FunctionalGroups
 from dataclasses import dataclass
 from typing import List, Dict, Optional
-
-
+import cctk 
+from scipy.spatial import ConvexHull
 
 @dataclass
 class NeighborParams:
@@ -429,81 +429,119 @@ class BondGeometryInformation(BaseFeaturizer):
         super().__init__(smiles, arguments)
         
 
-    def BondLength(self,edge):
+    def GrabConformer(self,id=1):
+        if id == 1: return self.matrixdescriptors.new_mol
+        else:
+            return self.matrixdescriptors.new_mol.GetConformer(conf_id=id)
+    
+
+    def GrabGeometry(self,id=1):
+        mol = self.GrabConformer(id)
+        self.positions = {}
+        for atom in mol.GetAtoms():
+            pos = mol.GetConformer().GetAtomPosition(atom.GetIdx())
+            atom_map_num = atom.GetAtomMapNum()
+            ind = atom.GetIdx()
+            self.positions[ind] = [pos.x, pos.y, pos.z]
+    
+
+    def BondLength(self,edge,id=1):
         if self.params.getbondlength:
-            bond = self.new_mol.GetBondBetweenAtoms(edge[0], edge[1])
-            bond_length = bond.GetBondLength()
+            mol = self.GrabConformer(id)
+            bond = mol.GetBondBetweenAtoms(edge[0], edge[1])
+            atom1 = bond.GetBeginAtomIdx()
+            atom2 = bond.GetEndAtomIdx()
+            pos1 = mol.GetConformer().GetAtomPosition(atom1)
+            pos2 = mol.GetConformer().GetAtomPosition(atom2)
+            bond_length = pos1.Distance(pos2)
             return [bond_length]
         else:
             return []
 
-    def AtomDistance(self, edge):
+    def AtomDistance(self, edge,id=1):
         if self.params.getatomdistance:
-            
+            mol = self.GrabConformer(id)
             atom1 = edge[0]
             atom2 = edge[1]
-            pos1 = self.new_mol.GetConformer().GetAtomPosition(atom1)
-            pos2 = self.new_mol.GetConformer().GetAtomPosition(atom2)
+            pos1 = mol.GetConformer().GetAtomPosition(atom1)
+            pos2 = mol.GetConformer().GetAtomPosition(atom2)
             distance = pos1.Distance(pos2)
             return [distance]
         else:
             return []
 
-    def GetAngle(self,atom1, atom2):
+    def GetAngle(self,atom1, atom2,id=1):
         angles = []
-        for neighbor in self.GetNeighbor(atom2, atom1):
-            angle = self.new_mol.GetBondBetweenAtoms(atom1, atom2).GetAngle(self.new_mol.GetConformer(), atom1, atom2, neighbor)
+        mol = self.GrabConformer(id)
+        for neighbor in np.nonzero(self.matrixdescriptors.adj_mat[atom2])[0]:
+            angle = mol.GetBondBetweenAtoms(atom1, atom2).GetAngle(mol.GetConformer(), atom1, atom2, neighbor)
             angles.append(angle)
         return angles 
 
-    def BondAngle(self,edge):
+    def BondAngle(self,edge,id=1):
         if self.params.getbondangle == 'first': 
             atom1 = edge[0]
             atom2 = edge[1]
-            atom3 = self.GetNeighbor(atom2,atom1)[0]
-            angle = self.new_mol.GetBondBetweenAtoms(atom1, atom2).GetAngle(self.new_mol.GetConformer(), atom1, atom2, atom3)
-            return [angle]
+            neighbors = np.nonzero(self.matrixdescriptors.adj_mat[atom2])[0]
+            atom3 = neighbors[neighbors != atom1][0] if len(neighbors[neighbors != atom1]) > 0 else None
+            mol = self.GrabConformer(id)
+            try: 
+                angle = mol.GetBondBetweenAtoms(atom1, atom2).GetAngle(mol.GetConformer(), atom1, atom2, atom3)
+                return [angle]
+            except:
+                return [0]
         elif self.params.getbondangle == 'smallest':
-            angles = self.GetAngle(atom1,atom2)
+            angles = self.GetAngle(atom1,atom2,id)
             return [min(angles)]
         elif self.params.getbondangle == 'largest':
-            angles = self.GetAngle(atom1,atom2)
+            angles = self.GetAngle(atom1,atom2,id)
             return [max(angles)]
         elif self.params.getbondangle == 'average':
-            angles = self.GetAngle(atom1,atom2)
+            angles = self.GetAngle(atom1,atom2,id)
             return [sum(angles)/len(angles)]
         elif self.params.getbondangle == 'all':
-            angles = self.GetAngle(atom1,atom2)
+            angles = self.GetAngle(atom1,atom2,id)
             return self.FlattenList(angles)
         elif self.params.getbondangle == 'main':
-            angles = self.GetAngle(atom1,atom2)
+            angles = self.GetAngle(atom1,atom2,id)
             return [min(angles),max(angles),sum(angles)/len(angles)]
         else:
             return []
 
-    def GetDihedral(self, edge):
+    def GetDihedral(self, edge,id=1):
         atom1 = edge[0]
         atom2 = edge[1]
         dihedrals = []
-        for neighbor1 in self.GetNeighbor(atom2, atom1):
+        mol = self.GrabConformer(id)
+        for neighbor1 in np.nonzero(self.matrixdescriptors.adj_mat[int(atom2)])[0]:
             row = []
-            for neighbor2 in self.GetNeighbor(neighbor1, atom2):
-                dihedral = self.new_mol.GetBondBetweenAtoms(atom1, atom2).GetDihedral(self.new_mol.GetConformer(), atom1, atom2, neighbor1, neighbor2)
-                row.append(dihedral)
+            for neighbor2 in np.nonzero(self.matrixdescriptors.adj_mat[int(neighbor1)])[0]:
+                if int(neighbor1) != int(neighbor2):
+                    dihedral = Chem.rdMolTransforms.GetDihedralDeg(mol.GetConformer(), int(atom1), int(atom2), int(neighbor1), int(neighbor2))
+                    row.append(dihedral)
             dihedrals.append(row)
         return dihedrals
     
     def FlattenList(self, nested_list):
         return [item for sublist in nested_list for item in sublist]
 
-    def DihedralAngle(self,edge):
+    def DihedralAngle(self,edge,id=1):
         if self.params.getdihedral == 'first':
             atom1 = edge[0]
             atom2 = edge[1]
-            atom3 = self.GetNeighbor(atom2,atom1)[0]
-            atom4 = self.GetNeighbor(atom3,atom2)[0]
-            dihedral = self.new_mol.GetBondBetweenAtoms(atom1, atom2).GetDihedral(self.new_mol.GetConformer(), atom1, atom2, atom3, atom4)
-            return [dihedral]
+            neighbors_atom2 = np.nonzero(self.matrixdescriptors.adj_mat[atom2])[0]
+            atom3 = next((neighbor for neighbor in neighbors_atom2 if neighbor != atom1), None)
+            if atom3 is not None:
+                neighbors_atom3 = np.nonzero(self.matrixdescriptors.adj_mat[atom3])[0]
+                atom4 = next((neighbor for neighbor in neighbors_atom3 if neighbor != atom2), None)
+            else:
+                atom4 = None
+            mol = self.GrabConformer(id)
+            try:
+                dihedral = Chem.rdMolTransforms.GetDihedralDeg(mol.GetConformer(), int(atom1), int(atom2), int(atom3), int(atom4))
+                return [dihedral]
+            except:
+                return [0]
         elif self.params.getdihedral == 'firstsmallest':
             dihedrals = self.GetDihedral(edge)
             return [min(dihedrals[0])]
@@ -537,12 +575,13 @@ class BondGeometryInformation(BaseFeaturizer):
         else:
             return []
     
-    def BondMidpoint(self, edge):
+    def BondMidpoint(self, edge,id=1):
         if self.params.getbondmidpoint:
             atom1 = edge[0]
             atom2 = edge[1]
-            pos1 = self.new_mol.GetConformer().GetAtomPosition(atom1)
-            pos2 = self.new_mol.GetConformer().GetAtomPosition(atom2)
+            mol = self.GrabConformer(id)
+            pos1 = mol.GetConformer().GetAtomPosition(atom1)
+            pos2 = mol.GetConformer().GetAtomPosition(atom2)
             midpoint = (pos1 + pos2) / 2
             return [midpoint.x, midpoint.y, midpoint.z]
         else:
@@ -586,6 +625,21 @@ class BRICSInformation(BaseFeaturizer):
 class AtomGeometryInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
+        self.vdw_radii = {
+            'H': 1.20, 'He': 1.40, 'Li': 1.82, 'Be': 1.53, 'B': 1.92, 'C': 1.70, 'N': 1.55, 'O': 1.52, 'F': 1.47, 'Ne': 1.54,
+            'Na': 2.27, 'Mg': 1.73, 'Al': 1.84, 'Si': 2.10, 'P': 1.80, 'S': 1.80, 'Cl': 1.75, 'Ar': 1.88, 'K': 2.75, 'Ca': 2.31,
+            'Sc': 2.11, 'Ti': 2.00, 'V': 2.00, 'Cr': 2.00, 'Mn': 2.00, 'Fe': 2.00, 'Co': 2.00, 'Ni': 1.63, 'Cu': 1.40, 'Zn': 1.39,
+            'Ga': 1.87, 'Ge': 2.11, 'As': 1.85, 'Se': 1.90, 'Br': 1.85, 'Kr': 2.02, 'Rb': 3.03, 'Sr': 2.49, 'Y': 2.00, 'Zr': 2.00,
+            'Nb': 2.00, 'Mo': 2.00, 'Tc': 2.00, 'Ru': 2.00, 'Rh': 2.00, 'Pd': 1.63, 'Ag': 1.72, 'Cd': 1.58, 'In': 1.93, 'Sn': 2.17,
+            'Sb': 2.00, 'Te': 2.06, 'I': 1.98, 'Xe': 2.16, 'Cs': 3.43, 'Ba': 2.68, 'La': 2.00, 'Ce': 2.00, 'Pr': 2.00, 'Nd': 2.00,
+            'Pm': 2.00, 'Sm': 2.00, 'Eu': 2.00, 'Gd': 2.00, 'Tb': 2.00, 'Dy': 2.00, 'Ho': 2.00, 'Er': 2.00, 'Tm': 2.00, 'Yb': 2.00,
+            'Lu': 2.00, 'Hf': 2.00, 'Ta': 2.00, 'W': 2.00, 'Re': 2.00, 'Os': 2.00, 'Ir': 2.00, 'Pt': 1.75, 'Au': 1.66, 'Hg': 1.55,
+            'Tl': 1.96, 'Pb': 2.02, 'Bi': 2.07, 'Po': 2.00, 'At': 2.00, 'Rn': 2.00, 'Fr': 2.00, 'Ra': 2.00, 'Ac': 2.00, 'Th': 2.00,
+            'Pa': 2.00, 'U': 1.86, 'Np': 2.00, 'Pu': 2.00, 'Am': 2.00, 'Cm': 2.00, 'Bk': 2.00, 'Cf': 2.00, 'Es': 2.00, 'Fm': 2.00,
+            'Md': 2.00, 'No': 2.00, 'Lr': 2.00, 'Rf': 2.00, 'Db': 2.00, 'Sg': 2.00, 'Bh': 2.00, 'Hs': 2.00, 'Mt': 2.00, 'Ds': 2.00,
+            'Rg': 2.00, 'Cn': 2.00, 'Nh': 2.00, 'Fl': 2.00, 'Mc': 2.00, 'Lv': 2.00, 'Ts': 2.00, 'Og': 2.00
+        }
+        
     
 
     def GrabConformer(self,id=1):
@@ -596,110 +650,160 @@ class AtomGeometryInformation(BaseFeaturizer):
 
     def GrabGeometry(self,id=1):
         mol = self.GrabConformer(id)
-        self.positions = []
-        for atoms in mol.GetAtoms():
-            self.positions.append([pos.x,pos.y,pos.z])
+        self.positions = {}
+        for atom in mol.GetAtoms():
+            pos = mol.GetConformer().GetAtomPosition(atom.GetIdx())
+            atom_map_num = atom.GetAtomMapNum()
+            ind = atom.GetIdx()
+            self.positions[ind] = [pos.x, pos.y, pos.z]
         
     
     
-    def AtomCoordination(self,ind):
+    def AtomCoordination(self,ind,id=1):
         if not self.params.removecoordinationinfo:
-            return [self.positions.ind] # Grab the conforem
+            self.GrabGeometry(id)
+            return self.positions[ind] # Grab the conforem
         else:
             return []
 
-    def DistanceToCenterOfMass(self, ind):
+
+    def toCCTK(self,id=1):
+        mol = self.GrabConformer(id)
+        cctk_molecule = cctk.Molecule()
+        conformer = mol.GetConformer()
+        for atom in mol.GetAtoms():
+            atom_idx = atom.GetIdx()
+            atom_symbol = atom.GetSymbol()
+            atom_position = conformer.GetAtomPosition(atom_idx)
+            cctk_molecule.add_atom(atom_symbol, [atom_position.x, atom_position.y, atom_position.z])
+        return mol,cctk_molecule
+
+        
+    def DistanceToCenterOfMass(self, ind,id=1):
         if self.params.getdistancetocenterofmass:
-            mol = Chem.MolFromSmiles(self.smiles)
-            conformer = mol.GetConformer()
-            atom_positions = [conformer.GetAtomPosition(i) for i in range(mol.GetNumAtoms())]
-            center_of_mass = np.mean(atom_positions, axis=0)
-            atom_position = conformer.GetAtomPosition(ind)
-            distance = np.linalg.norm(atom_position - center_of_mass)
+            rdmolecule,cctkmolecule = self.toCCTK(id)
+            com = cctkmolecule.center_of_mass()
+            pos = rdmolecule.GetAtomPosition(ind)
+            position = np.array([pos.x, pos.y, pos.z])
+            distance = np.linalg.norm(position-com)
             return [distance]
         else:
             return []
 
-    def StericHindrance(self, ind):
+    def StericHindrance(self, ind,id=1):
         if self.params.getsterichindrance:
-            mol = Chem.MolFromSmiles(self.smiles)
-            conformer = mol.GetConformer()
-            atom_position = conformer.GetAtomPosition(ind)
+            mol = self.GrabConformer(id)
+            pos = mol.GetConformer().GetAtomPosition(ind)
+            adj_matrix = Chem.GetAdjacencyMatrix(mol)
+            position = np.array([pos.x, pos.y, pos.z])
             hindrance = 0
             for neighbor in range(mol.GetNumAtoms()):
                 if neighbor != ind:
-                    neighbor_position = conformer.GetAtomPosition(neighbor)
-                    distance = atom_position.Distance(neighbor_position)
-                    if distance < 3.5:  # typical steric hindrance distance cutoff
-                        hindrance += 1 / distance
+                    npos = mol.GetConformer().GetAtomPosition(neighbor)
+                    nposition = np.array([npos.x, npos.y, npos.z])
+                    distance = np.linalg.norm(npos-position)  # Calculate Euclidean distance
+                    if distance < 3.5:
+                        if adj_matrix[ind][neighbor] == 0:
+                            hindrance += 1 / distance
+                        elif adj_matrix[ind][neighbor] == 1:
+                            hindrance += 1/ (distance **.5)
+
+            return [hindrance]
+        else:
+            return []
+        
+    def VdWStrain(self, ind,id=1):
+        if self.params.getsterichindrance:
+            mol = self.GrabConformer(id)
+            pos = mol.GetConformer().GetAtomPosition(ind)
+            adj_matrix = Chem.GetAdjacencyMatrix(mol)
+            position = np.array([pos.x, pos.y, pos.z])
+            hindrance = 0
+            for neighbor in range(mol.GetNumAtoms()):
+                if neighbor != ind:
+                    npos = mol.GetConformer().GetAtomPosition(neighbor)
+                    nposition = np.array([npos.x, npos.y, npos.z])
+                    distance = np.linalg.norm(npos-position)  # Calculate Euclidean distance
+                    if distance < self.vdw_radii[self.matrixdescriptors.element[ind]] + self.vdw_radii[self.matrixdescriptors.element[neighbor]]:
+                        if adj_matrix[ind][neighbor] == 0:
+                            hindrance += 1 / distance
+                        elif adj_matrix[ind][neighbor] == 1:
+                            hindrance += 1 / (distance **.5)
+
             return [hindrance]
         else:
             return []
     
-    def AtomicSolventAccessibility(self, ind):
+
+    def getVdWSurfaceArea(self,mol,ind):
+        radius = self.vdw_radii[self.matrixdescriptors.element[ind]]  # Van der Waals radius of the atom
+        exposed_area = 4 * np.pi * radius**2  # Start with full surface area of the sphere
+        vdw_surface_area = exposed_area
+        return vdw_surface_area
+
+
+    def AtomicSolventAccessibility(self, ind,id=1):
         if self.params.getasa:
-            mol = Chem.MolFromSmiles(self.smiles)
-            conformer = mol.GetConformer()
-            atom_position = conformer.GetAtomPosition(ind)
-            
+            mol = self.GrabConformer(id)
             # Calculate solvent accessible surface area using RDKit
             radii = Chem.rdFreeSASA.classifyAtoms(mol)
             asa = Chem.rdFreeSASA.CalcSASA(mol, radii)
+            vdw = self.getVdWSurfaceArea(mol,ind)
             
-            return [asa[ind]]
+            return [asa,asa/vdw]
         else:
             return []
     
-    def GaussianCurvature(self, ind):
+    def GaussianCurvature(self, ind,id=1):
         if self.params.getgaussiancurvature:
-            mol = Chem.MolFromSmiles(self.smiles)
-            conformer = mol.GetConformer()
-            atom_position = conformer.GetAtomPosition(ind)
-            
+            mol = self.GrabConformer(id)
+            pos = mol.GetConformer().GetAtomPosition(ind)
+        
             # Calculate Gaussian curvature using neighboring atoms
-            neighbors = self.GetNeighbor(ind)
+            neighbors = np.nonzero(self.matrixdescriptors.adj_mat[ind])[0]
             if len(neighbors) < 3:
                 return [0]  # Not enough neighbors to define a surface
             angles = []
             for i in range(len(neighbors)):
                 for j in range(i + 1, len(neighbors)):
-                    pos1 = conformer.GetAtomPosition(neighbors[i])
-                    pos2 = conformer.GetAtomPosition(neighbors[j])
-                    angle = pos1.Angle(atom_position, pos2)
+                    pos1 = mol.GetConformer().GetAtomPosition(int(neighbors[i]))
+                    pos2 = mol.GetConformer().GetAtomPosition(int(neighbors[j]))
+                    v1 = np.array([pos1.x - pos.x, pos1.y - pos.y, pos1.z - pos.z])
+                    v2 = np.array([pos2.x - pos.x, pos2.y - pos.y, pos2.z - pos.z])
+                    cosine_angle = np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+                    angle = np.arccos(np.clip(cosine_angle, -1.0, 1.0))  # Clip to handle numerical errors
                     angles.append(angle)
             gaussian_curvature = 2 * np.pi - sum(angles)
             return [gaussian_curvature]
         else:
             return []
 
-    def MolecularShapeIndex(self, ind):
+    def MolecularShapeIndex(self, ind,id=1):
         if self.params.getmolecularshapeindex:
-            mol = Chem.MolFromSmiles(self.smiles)
-            conformer = mol.GetConformer()
-            atom_position = conformer.GetAtomPosition(ind)
-            
-            # Calculate molecular shape index using neighboring atoms
-            neighbors = self.GetNeighbor(ind)
+            mol = self.GrabConformer(id)
+            pos = mol.GetConformer().GetAtomPosition(ind)
+        
+           # Calculate Gaussian curvature using neighboring atoms
+            neighbors = np.nonzero(self.matrixdescriptors.adj_mat[ind])[0]
             if len(neighbors) < 3:
                 return [0]  # Not enough neighbors to define a surface
             distances = []
             for neighbor in neighbors:
-                pos = conformer.GetAtomPosition(neighbor)
-                distance = atom_position.Distance(pos)
+                pos = mol.GetConformer().GetAtomPosition(int(neighbor))
+                distance = np.linalg.norm(np.array([pos.x, pos.y, pos.z]) - np.array([self.positions[ind][0], self.positions[ind][1], self.positions[ind][2]]))
                 distances.append(distance)
             shape_index = sum(distances) / len(distances)
             return [shape_index]
         else:
             return []
 
-    def DistanceToConvexHull(self, ind):
+    def DistanceToConvexHull(self, ind,id=1):
         if self.params.getdistancetoconvexhull:
-            mol = Chem.MolFromSmiles(self.smiles)
-            conformer = mol.GetConformer()
-            atom_position = conformer.GetAtomPosition(ind)
+            mol = self.GrabConformer(id)
+            atom_position = mol.GetConformer().GetAtomPosition(ind)
             
             # Calculate convex hull of the molecule
-            atom_positions = [conformer.GetAtomPosition(i) for i in range(mol.GetNumAtoms())]
+            atom_positions = [mol.GetConformer().GetAtomPosition(i) for i in range(mol.GetNumAtoms())]
             points = np.array([[pos.x, pos.y, pos.z] for pos in atom_positions])
             hull = ConvexHull(points)
             
@@ -714,22 +818,8 @@ class AtomGeometryInformation(BaseFeaturizer):
             return []
 
     def GetVanDerWaalsRadii(self, ind):
-        vdw_radii = {
-            'H': 1.20, 'He': 1.40, 'Li': 1.82, 'Be': 1.53, 'B': 1.92, 'C': 1.70, 'N': 1.55, 'O': 1.52, 'F': 1.47, 'Ne': 1.54,
-            'Na': 2.27, 'Mg': 1.73, 'Al': 1.84, 'Si': 2.10, 'P': 1.80, 'S': 1.80, 'Cl': 1.75, 'Ar': 1.88, 'K': 2.75, 'Ca': 2.31,
-            'Sc': 2.11, 'Ti': 2.00, 'V': 2.00, 'Cr': 2.00, 'Mn': 2.00, 'Fe': 2.00, 'Co': 2.00, 'Ni': 1.63, 'Cu': 1.40, 'Zn': 1.39,
-            'Ga': 1.87, 'Ge': 2.11, 'As': 1.85, 'Se': 1.90, 'Br': 1.85, 'Kr': 2.02, 'Rb': 3.03, 'Sr': 2.49, 'Y': 2.00, 'Zr': 2.00,
-            'Nb': 2.00, 'Mo': 2.00, 'Tc': 2.00, 'Ru': 2.00, 'Rh': 2.00, 'Pd': 1.63, 'Ag': 1.72, 'Cd': 1.58, 'In': 1.93, 'Sn': 2.17,
-            'Sb': 2.00, 'Te': 2.06, 'I': 1.98, 'Xe': 2.16, 'Cs': 3.43, 'Ba': 2.68, 'La': 2.00, 'Ce': 2.00, 'Pr': 2.00, 'Nd': 2.00,
-            'Pm': 2.00, 'Sm': 2.00, 'Eu': 2.00, 'Gd': 2.00, 'Tb': 2.00, 'Dy': 2.00, 'Ho': 2.00, 'Er': 2.00, 'Tm': 2.00, 'Yb': 2.00,
-            'Lu': 2.00, 'Hf': 2.00, 'Ta': 2.00, 'W': 2.00, 'Re': 2.00, 'Os': 2.00, 'Ir': 2.00, 'Pt': 1.75, 'Au': 1.66, 'Hg': 1.55,
-            'Tl': 1.96, 'Pb': 2.02, 'Bi': 2.07, 'Po': 2.00, 'At': 2.00, 'Rn': 2.00, 'Fr': 2.00, 'Ra': 2.00, 'Ac': 2.00, 'Th': 2.00,
-            'Pa': 2.00, 'U': 1.86, 'Np': 2.00, 'Pu': 2.00, 'Am': 2.00, 'Cm': 2.00, 'Bk': 2.00, 'Cf': 2.00, 'Es': 2.00, 'Fm': 2.00,
-            'Md': 2.00, 'No': 2.00, 'Lr': 2.00, 'Rf': 2.00, 'Db': 2.00, 'Sg': 2.00, 'Bh': 2.00, 'Hs': 2.00, 'Mt': 2.00, 'Ds': 2.00,
-            'Rg': 2.00, 'Cn': 2.00, 'Nh': 2.00, 'Fl': 2.00, 'Mc': 2.00, 'Lv': 2.00, 'Ts': 2.00, 'Og': 2.00
-        }
         element = self.matrixdescriptors.element[ind]
-        return [vdw_radii.get(element, 2.00)]  # Default to 2.00 if element not found
+        return [self.vdw_radii.get(element, 2.00)]  # Default to 2.00 if element not found
 
 
 class ReactiveAtomInformation(BaseFeaturizer):

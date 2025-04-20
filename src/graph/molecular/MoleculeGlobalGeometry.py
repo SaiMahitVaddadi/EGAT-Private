@@ -39,6 +39,8 @@ class MoleculeFeaturizerwithPaddingandGeometry(MoleculeFeaturizerwithGeometry,No
         bond_feature += self.BondRotation(edge,bo)
         return bond_feature
 
+        
+
     def GlobalBondFeatures(self,edge):
         bond_feature = []
         bond_feature += self.ShortestPathDistance(edge)

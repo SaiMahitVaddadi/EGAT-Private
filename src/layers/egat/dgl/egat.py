@@ -165,6 +165,7 @@ class EGATConv(nn.Module):
                             fn.sum('m', 'h_out'))
 
             h_out = graph.ndata['h_out'].view(-1, self._num_heads, self._out_node_feats)
+            graph.edata['f_out'] = f_out
             if get_attention:
                 return h_out, f_out, graph.edata.pop('a')
             else:

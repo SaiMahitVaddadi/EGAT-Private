@@ -20,6 +20,7 @@ class Encodings(Properties):
         self.atomchirality()
         self.atomstereo()
         self.stereodescriptor()
+        self.globalbond()
 
     def element(self):
         """

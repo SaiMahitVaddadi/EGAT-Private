@@ -12,10 +12,10 @@ from rdkit.Chem import rdchem
 
 @dataclass
 class BaseReactionParams:
-    getradical: Optional[str] = None
-    stereo_full: Optional[bool] = False
-    acidbase: Optional[str] = None
-
+    getradical: Optional[str] = None  # Options: 'RDKit', 'YARP' - Determines the method for calculating radicals
+    stereo_full: Optional[bool] = False  # Options: True, False - Whether to use full stereochemistry in calculations
+    acidbase: Optional[str] = None  # Options: 'Lewis', 'BL' - Specifies the method for identifying acid and base sites
+    
 
 class BaseFeaturizer(object): 
     def __init__(self, smiles, arguments):
@@ -28,6 +28,8 @@ class BaseFeaturizer(object):
         self.InitializeAddons()
         self.Eneg()
         self.Stereochem()
+        self.Radicals()
+
 
     def Eneg(self):
         self.pauling_dict = {
@@ -66,9 +68,10 @@ class BaseFeaturizer(object):
     def Radicals(self):
         if self.params.getradical == 'RDKit':
             self.electroninfo = RDKElectronInfo(self.matrixdescriptors)
+            self.electroninfo.run()
         elif self.params.getradical == 'YARP':
             self.electroninfo = YARPElectronInfo(self.matrixdescriptors)
-
+            self.electroninfo.run()
     def Rotatability(self):
         self.matrixdescriptors.BridgeHead()
         self.matrixdescriptors.Spiro()

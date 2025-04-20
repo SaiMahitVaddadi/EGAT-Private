@@ -1,13 +1,46 @@
-# EGAT: Edge-Featured Graph Attention Networks for Reaction and Molecular Property Prediction
+# ChemEGAT: Edge-Featured Graph Attention Networks for Reaction and Molecular Property Prediction
 
-EGAT is a repository that uses Edge-Featured Graph Attention Networks for reaction and molecular property prediction. This is initially described in the paper published on ArXiv (https://chemrxiv.org/engage/chemrxiv/article-details/65410dc248dad23120c6e954) that is under review by the Journal of Physical Chemistry A. More details will come on that soon. Please cite these papers if EGAT is helpful to your research.
+ChemEGAT is a repository that adapts Edge-Featured Graph Attention Networks (EGAT) for applications in chemical property prediction. It was first described in the paper published on ArXiv (https://chemrxiv.org/engage/chemrxiv/article-details/65410dc248dad23120c6e954) that is now published in the Journal of Physical Chemistry A. More papers are on the way, and those will be highlighted in the READ-ME in the future. 
 
-**Applications:**
- - Reaction Prediction: ChemArXiv [https://chemrxiv.org/engage/chemrxiv/article-details/65410dc248dad23120c6e954]
- - Mass Spectra Peak Prediction: under construction
- - Molecular Property Prediction: under construction
- - Heat of Formation Prediction: under construction
+## Use Cases:
+ - Reaction Property Prediction: Performance on RGD1 [https://chemrxiv.org/engage/chemrxiv/article-details/65410dc248dad23120c6e954]
+ - Molecular Property Prediction: Coming Soon
+ - Large Property Model: Coming Soon
+ - Molecular Classification: under construction
  - Reaction Classification: under construction
+ - Few-shot Learning: under construction
+ - Many-shot Learning: under construction
+ - Imbalanced Learning: under construction
+ - Multi-Component Modeling: under construction
+ - Spectra Prediction: under construction
+
+## Applications:   
+ - Reaction Prediction: ChemArXiv  
+ - Molecular Property Prediction: Coming Soon
+ - Large Property Model: Coming Soon
+ 
+## Features:  
+
+| Feature               | Description                                                                 |
+|-----------------------|-----------------------------------------------------------------------------|
+| Node Features         | Includes atomic properties such as atomic number, hybridization, and valence.  |
+| Edge Features         | Captures bond properties like bond type, bond length, and aromaticity.         |
+| Graph-Level Features  | Represents global properties such as molecular weight and total charge.        |
+| Custom Features       | Allows users to define domain-specific features for specialized applications.   |
+
+
+## Graph Information:
+| **Feature** | **Molecule (2D)** | **Molecule (3D)** | **Molecule (2D,Global)** | **Molecule (3D,Global)** | **Reaction (2D)** | **Reaction (3D)** | **Reaction (2D,Global)** | **Reaction (3D,Global)** | 
+|-------------|-------------------|-------------------|--------------------------|--------------------------|-------------------|-------------------|--------------------------|--------------------------|
+| Acid-Base Site<sup>1</sup> | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Aromaticity<sup>1</sup> | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Bond Order<sup>2</sup> | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Distance to Center of Mass | X | ✅ | X | ✅ | X | ✅ | X | ✅ |
+| Steric Hindrance | X | ✅ | X | ✅ | X | ✅ | X | ✅ |
+| VdW Strain | X | ✅ | X | ✅ | X | ✅ | X | ✅ |
+| Distance to Center of Mass | X | ✅ | X | ✅ | X | ✅ | X | ✅ |
+
+
 
 **Documentation:** 
 

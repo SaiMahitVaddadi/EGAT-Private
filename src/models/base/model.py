@@ -8,7 +8,13 @@ from ...layers.egat.dgl import EGATConvDGL,EGATConvResidDGL, EGATConvResidSADGL,
 from ..propertynet import PropertyNet
 from dataclasses import dataclass
 from typing import Optional, Union, List
-
+from ..aggregators.dgl.attentive import AttentiveAggregator, CalcAttentiveAggregator
+from ..aggregators.dgl.weighted import WeightedSumAggregator 
+from ..aggregators.dgl.cluster import ClusterPooling
+from ..aggregators.dgl.diffpool import DiffPool
+from ..aggregators.dgl.edgepool import EdgePool,EdgePoolLayerwAttention
+from ..aggregators.dgl.environment import EnvironmentAggregator,EnvironmentAggregatorwithGAT
+from ..aggregators.dgl.sag import SAGPool,SAGPoolwAttention
 
 '''
 TO-DO:
@@ -152,7 +158,6 @@ class EGATModel(nn.Module):
             self.mlp1 = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads*2, 256, bias=True),nn.GELU())
         self.mlp2 = nn.Sequential(nn.Linear(256, 128, bias=True),nn.GELU())
         self.mlp3 = nn.Linear(128, len(self.params.targets), bias=True)
-
     
     def Initialize3MLP1OUTDropout(self):
         if self.params.Aggregate == 'Concat':
@@ -262,8 +267,14 @@ class EGATModel(nn.Module):
                 self.subnets = nn.ModuleList([PropertyNet(self.params.hidden_dim*self.params.num_heads*2, 256, 1) for _ in range(2)])
         pass
 
-
-
+    def InitializeAggregatorFunctions(self):
+        if self.params.pooling == 'WtSum':
+            self.agg_func = WeightedSumAggregator(self.inputnodes,self.inputedges)
+        elif self.params.pooling == 'LearnedAttn':
+            self.agg_func = AttentiveAggregator(self.inputnodes,self.inputedges)
+        elif self.params.pooling == 'CalcedAttn':
+            self.agg_func = CalcAttentiveAggregator(self.inputnodes,self.inputedges)
+        
 
     def LayerOne(self, graphR, graphP=None):
         Rnode_feats, Redge_feats = self.egat1(graphR, graphR.ndata['x'], graphR.edata['x'])
@@ -335,6 +346,98 @@ class EGATModel(nn.Module):
 
         return Rnode_feats, Redge_feats, Pnode_feats, Pedge_feats,R_combined_matrix,P_combined_matrix
 
+
+    def SumAgg(self,individual_graphs):
+        G_node_feats,G_edge_feats = [],[]
+        for graph in individual_graphs:
+            global_node_feature = graph.ndata['x'].sum(dim=0)
+            global_edge_feature = graph.edata['x'].sum(dim=0)
+            G_node_feats.append(global_node_feature)
+            G_edge_feats.append(global_edge_feature)
+
+        G_node_feats = torch.stack(G_node_feats)
+        G_edge_feats = torch.stack(G_edge_feats)
+        return G_node_feats,G_edge_feats
+    
+    def NormAgg(self,individual_graphs):
+        G_node_feats,G_edge_feats = [],[]
+        for graph in individual_graphs:
+            global_node_feature = graph.ndata['x'].sum(dim=0)
+            global_edge_feature = graph.edata['x'].sum(dim=0)
+            G_node_feats.append(global_node_feature)
+            G_edge_feats.append(global_edge_feature)
+
+        G_node_feats = G_node_feats/self.params.norm
+        G_edge_feats = G_edge_feats/self.params.norm
+
+        G_node_feats = torch.stack(G_node_feats)
+        G_edge_feats = torch.stack(G_edge_feats)
+        return G_node_feats,G_edge_feats
+
+    def MeanAgg(self,individual_graphs):
+        G_node_feats, G_edge_feats = [], []
+        for graph in individual_graphs:
+            global_node_feature = graph.ndata['x'].mean(dim=0)
+            global_edge_feature = graph.edata['x'].mean(dim=0)
+            G_node_feats.append(global_node_feature)
+            G_edge_feats.append(global_edge_feature)
+
+        G_node_feats = torch.stack(G_node_feats)
+        G_edge_feats = torch.stack(G_edge_feats)
+        return G_node_feats, G_edge_feats
+
+    def StdAgg(self,individual_graphs):
+        G_node_feats, G_edge_feats = [], []
+        for graph in individual_graphs:
+            global_node_feature = graph.ndata['x'].std(dim=0)
+            global_edge_feature = graph.edata['x'].std(dim=0)
+            G_node_feats.append(global_node_feature)
+            G_edge_feats.append(global_edge_feature)
+
+        G_node_feats = torch.stack(G_node_feats)
+        G_edge_feats = torch.stack(G_edge_feats)
+        return G_node_feats, G_edge_feats
+    
+    
+              
+    
+
+    def AttentiveAggv2(self,individual_graphs,node_feats=17,edge_feats=14):
+        G_node_feats, G_edge_feats = [], []
+        for graph in individual_graphs:
+            # Compute attention scores (logits)
+            node_logits = self.node_attn(node_feats).squeeze()  # [N]
+            node_e = node_logits.exp()                          # [N]
+            node_z = node_e.sum()                               # Scalar (sum for normalization)
+            node_alphas = node_e / node_z                       # [N]
+            # Weighted sum of node features
+            global_node_feature = (node_alphas.unsqueeze(-1) * node_feats).sum(dim=0)  # [d_node]
+
+            # --- Edge Attention ---
+            edge_feats = graph.edata['x']
+            # Compute attention scores (logits)
+            edge_logits = self.edge_attn(edge_feats).squeeze()  # [E]
+            edge_e = edge_logits.exp()                          # [E]
+            edge_z = edge_e.sum()                               # Scalar
+            edge_alphas = edge_e / edge_z                       # [E]
+            # Weighted sum of edge features
+            global_edge_feature = (edge_alphas.unsqueeze(-1) * edge_feats).sum(dim=0)  # [d_edge]
+
+            G_node_feats.append(global_node_feature)
+            G_edge_feats.append(global_edge_feature)
+        
+        return torch.stack(G_node_feats), torch.stack(G_edge_feats)
+
+            
+    def BondAgg(self,individual_graphs):
+        G_node_feats, G_edge_feats = [], []
+        for graph in individual_graphs:
+            # Weighted node aggregation based on bond features
+            bond_feats = graph.edata['x']
+            bond_weights = torch.sum(bond_feats, dim=1)
+
+
+
     def Aggregation(self,Pnode_feats,Rnode_feats,Pedge_feats,Redge_feats,graphR):
         if self.aggregate == 'Concat':
             Rxn_node_feature = self.agg_N_feats(torch.cat(Pnode_feats,Rnode_feats))
@@ -348,20 +451,15 @@ class EGATModel(nn.Module):
         graphR.edata['x'] = Rxn_edge_feature 
         individual_graphs = dgl.unbatch(graphR)
 
-        # Initialize a list to store the global features for each graph
-        G_node_feats,G_edge_feats = [],[]
-
-        # Iterate through the individual graphs
-        for graph in individual_graphs:
-            # Calculate the sum of the node features (assuming node features are stored in 'h')
-            global_node_feature = graph.ndata['x'].sum(dim=0)
-            global_edge_feature = graph.edata['x'].sum(dim=0)
-            G_node_feats.append(global_node_feature)
-            G_edge_feats.append(global_edge_feature)
-
-        G_node_feats = torch.stack(G_node_feats)
-        G_edge_feats = torch.stack(G_edge_feats)
-
+        if self.params.pooling == 'Sum':
+            G_node_feats,G_edge_feats = self.SumAgg(individual_graphs)
+        elif self.params.pooling == 'Norm':
+            G_node_feats,G_edge_feats = self.NormAgg(individual_graphs)
+        elif self.params.pooling == 'Mean':
+            G_node_feats,G_edge_feats = self.MeanAgg(individual_graphs)
+        elif self.params.pooling == 'Std':
+            G_node_feats,G_edge_feats = self.StdAgg(individual_graphs)
+        
         if self.MixingLayer:
             G_features = self.Mixing_Layer(G_node_feats,G_edge_feats)
             

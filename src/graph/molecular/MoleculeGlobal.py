@@ -1,9 +1,9 @@
 from .MoleculeGeometry import MoleculeFeaturizerwithGeometry
-from ..base.information import GlobalBondInformation,NonBondedInformation,HydrogenBondInformation
+from ..base.information import GlobalBondInformation,NonBondedInformation,HydrogenBondInformation,DijkstraFeaturizer
 from dataclasses import dataclass
 from typing import Literal
 
-
+# To-do: Add Dijkstra's algorithm for shortest path, and Floyd-Warshall algorithm for all pairs shortest path
 
 @dataclass
 class MoleculeGlobalParams:
@@ -17,9 +17,9 @@ class MoleculeGlobalParams:
     addeneg: bool = False
     addmissingbonds: Literal['none', 'global', 'hbonds', 'all'] = 'none'
 
-class MoleculeFeaturizerwithPadding(MoleculeFeaturizerwithGeometry,NonBondedInformation,GlobalBondInformation,HydrogenBondInformation):
+class MoleculeFeaturizerwithPadding(MoleculeFeaturizerwithGeometry,NonBondedInformation,GlobalBondInformation,HydrogenBondInformation,DijkstraFeaturizer):
     def __init__(self, smiles, arguments):
-        super(MoleculeFeaturizerwithGeometry).__init__(smiles, arguments)
+        super().__init__(smiles, arguments)
         
     def FindNBI(self):
         self.FindHBonds()
@@ -38,24 +38,34 @@ class MoleculeFeaturizerwithPadding(MoleculeFeaturizerwithGeometry,NonBondedInfo
     def BondFeatureVector(self, ind):
         edge = self.GetEdge(ind)
         bond_feature = super().BondFeatureVector(ind)
-        bond_feature += self.DefaultNBInteraction(ind)
+        if self.params.addmissingbonds == 'global':
+            bond_feature += self.GlobalBondFeatures(edge)
+        elif self.params.addmissingbonds == 'hbonds':
+            bond_feature += self.DefaultNBInteraction(ind)
+        elif self.params.addmissingbonds == 'all':
+            bond_feature += self.GlobalBondFeatures(edge)
+            bond_feature += self.DefaultNBInteraction(ind)
         return bond_feature,edge
     
     def BondFeatureVectorFromEdge(self,edge):
         bond_feature = []
-        bo = self.EncodeBondOrder()
+        bo = self.EncodeBondOrder(edge)
         bond_feature += self.BondinRing(edge)
         bond_feature += self.BondOrder(edge,bo)
         bond_feature += self.BondConjugation(edge,bo)
         bond_feature += self.BondStereochemistry(edge,bo)
         bond_feature += self.BondRotation(edge,bo)
+        
+        
         return bond_feature
 
     def GlobalBondFeatures(self,edge):
         bond_feature = []
+        bond_feature += self.IsGlobal(edge)
         bond_feature += self.ShortestPathDistance(edge)
         bond_feature += self.ShortestPathDistanceWithWeights(edge)
         bond_feature += self.ShortestPathDistanceWithPBC(edge)
+        bond_feature += self.BiasedRandomWalk(edge)
         bond_feature += self.RandomWalkCommuteTime(edge)
         bond_feature += self.CommuteTimeMetrics(edge)
         bond_feature += self.ShortestPathCount(edge)
@@ -95,40 +105,23 @@ class MoleculeFeaturizerwithPadding(MoleculeFeaturizerwithGeometry,NonBondedInfo
     def GlobalBondFeatureVector(self):
         for i in range(len(self.matrixdescriptors.element)):
             for j in range(len(self.matrixdescriptors.element)):
-                if i > j:
+                if i < j:
                     if [i,j] not in self.all_edges:
                         self.edges_u.append(i)
                         self.edges_v.append(j)
                         bond_feature = self.BondFeatureVectorFromEdge([i,j])
-                        bond_feature += self.GlobalBondFeatures([i,j])
+                        print(bond_feature,[i,j])
+                        if self.params.addmissingbonds == 'global':  
+                            bond_feature += self.GlobalBondFeatures([i,j])
+                        elif self.params.addmissingbonds == 'hbonds':
+                            bond_feature += self.NBIInteraction(i,j)
+                        elif self.params.addmissingbonds == 'all':
+                            bond_feature += self.GlobalBondFeatures([i,j])
+                            bond_feature += self.NBIInteraction(i,j)
+                        print(bond_feature,[i,j])
                         self.bond_features.append(bond_feature)
+                        self.all_edges.append([i,j])
 
-    def NonBondedFeatureVector(self):
-        self.FindNBI()
-        for i in range(len(self.matrixdescriptors.element)):
-            for j in range(len(self.matrixdescriptors.element)):
-                if i > j:
-                    if [i,j] not in self.all_edges:
-                        self.edges_u.append(i)
-                        self.edges_v.append(j)
-                        bond_feature = self.BondFeatureVectorFromEdge([i,j])
-                        bond_feature += self.NBIInteraction(i,j)
-                        self.bond_features.append(bond_feature)
-    
-
-
-
-    def GlobalNonBondFeatures(self):
-        for i in range(len(self.matrixdescriptors.element)):
-            for j in range(len(self.matrixdescriptors.element)):
-                if i > j:
-                    if [i,j] not in self.all_edges:
-                        self.edges_u.append(i)
-                        self.edges_v.append(j)
-                        bond_feature = self.BondFeatureVectorFromEdge([i,j])
-                        bond_feature += self.GlobalNonBondFeatures([i,j])
-                        bond_feature += self.NBIInteraction(i,j)
-                        self.bond_features.append(bond_feature)
                         
     def NBIInteraction(self,i,j):
         bond_feature = []
@@ -187,6 +180,7 @@ class MoleculeFeaturizerwithPadding(MoleculeFeaturizerwithGeometry,NonBondedInfo
 
     def GenerateBondFeatureVector(self):
         self.GenerateEdges()
+        self.FindNBI()
         self.bond_features = []
         self.all_edges = [] 
         for ind in range(len(self.edges_u)):
@@ -194,13 +188,8 @@ class MoleculeFeaturizerwithPadding(MoleculeFeaturizerwithGeometry,NonBondedInfo
             self.all_edges.append(edge)
             self.bond_features.append(bond_feature)
             self.bond_feature_length = len(bond_feature)
-        if self.params.addmissingbonds == 'global':  
-            self.GlobalBondFeatureVector()
-        elif self.params.addmissingbonds == 'hbonds':
-            self.NonBondedFeatureVector()
-        elif self.params.addmissingbonds == 'all':
-            self.GlobalNonBondFeatures()
-
+        self.GlobalBondFeatureVector()
+        
     def run(self):
         self.InitializeAddons()
         self.GenerateAtomFeatureVector()
