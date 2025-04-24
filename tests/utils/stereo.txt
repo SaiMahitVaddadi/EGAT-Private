@@ -1,0 +1,254 @@
+╭───────── <class 'EGAT.src.utils.descriptors.egat.stereo.StereoChemistry'> ─────────╮
+│ ╭────────────────────────────────────────────────────────────────────────────────╮ │
+│ │ <EGAT.src.utils.descriptors.egat.stereo.StereoChemistry object at 0x1428ebd30> │ │
+│ ╰────────────────────────────────────────────────────────────────────────────────╯ │
+│                                                                                    │
+│            atom_aromatic = {                                                       │
+│                                1: False,                                           │
+│                                2: True,                                            │
+│                                3: True,                                            │
+│                                4: True,                                            │
+│                                5: True,                                            │
+│                                6: True,                                            │
+│                                7: True,                                            │
+│                                8: True,                                            │
+│                                9: True,                                            │
+│                                10: True,                                           │
+│                                11: True,                                           │
+│                                12: True,                                           │
+│                                13: True,                                           │
+│                                14: True,                                           │
+│                                15: True,                                           │
+│                                16: True,                                           │
+│                                17: True,                                           │
+│                                18: True,                                           │
+│                                19: True,                                           │
+│                                20: True,                                           │
+│                                21: True,                                           │
+│                                22: True,                                           │
+│                                23: True,                                           │
+│                                24: True,                                           │
+│                                25: True,                                           │
+│                                26: True,                                           │
+│                                27: True,                                           │
+│                                28: True,                                           │
+│                                29: True,                                           │
+│                                30: True,                                           │
+│                                31: True,                                           │
+│                                32: False,                                          │
+│                                33: False,                                          │
+│                                34: False,                                          │
+│                                35: False,                                          │
+│                                36: False,                                          │
+│                                37: False,                                          │
+│                                38: False,                                          │
+│                                39: False,                                          │
+│                                40: False,                                          │
+│                                41: False,                                          │
+│                                42: False,                                          │
+│                                43: False,                                          │
+│                                44: False,                                          │
+│                                45: False,                                          │
+│                                46: False,                                          │
+│                                47: False,                                          │
+│                                48: False,                                          │
+│                                49: False,                                          │
+│                                50: False,                                          │
+│                                51: False,                                          │
+│                                52: False,                                          │
+│                                53: False,                                          │
+│                                54: False,                                          │
+│                                55: False                                           │
+│                            }                                                       │
+│              atom_stereo = {}                                                      │
+│         atom_stereo_bond = {}                                                      │
+│            bond_aromatic = {                                                       │
+│                                (2, 3): True,                                       │
+│                                (2, 4): False,                                      │
+│                                (3, 5): False,                                      │
+│                                (4, 6): True,                                       │
+│                                (5, 7): True,                                       │
+│                                (6, 8): False,                                      │
+│                                (7, 9): False,                                      │
+│                                (1, 10): False,                                     │
+│                                (2, 11): True,                                      │
+│                                (3, 12): True,                                      │
+│                                (4, 13): True,                                      │
+│                                (5, 14): True,                                      │
+│                                (6, 15): True,                                      │
+│                                (7, 16): True,                                      │
+│                                (8, 17): True,                                      │
+│                                (8, 18): True,                                      │
+│                                (9, 19): True,                                      │
+│                                (9, 20): True,                                      │
+│                                (10, 21): True,                                     │
+│                                (17, 21): True,                                     │
+│                                (10, 22): True,                                     │
+│                                (18, 22): True,                                     │
+│                                (11, 23): True,                                     │
+│                                (12, 24): True,                                     │
+│                                (23, 24): True,                                     │
+│                                (13, 25): True,                                     │
+│                                (14, 26): True,                                     │
+│                                (15, 27): True,                                     │
+│                                (25, 27): True,                                     │
+│                                (16, 28): True,                                     │
+│                                (26, 28): True,                                     │
+│                                (19, 29): True,                                     │
+│                                (20, 30): True,                                     │
+│                                (29, 31): True,                                     │
+│                                (30, 31): True,                                     │
+│                                (11, 32): False,                                    │
+│                                (12, 33): False,                                    │
+│                                (13, 34): False,                                    │
+│                                (14, 35): False,                                    │
+│                                (15, 36): False,                                    │
+│                                (16, 37): False,                                    │
+│                                (17, 38): False,                                    │
+│                                (18, 39): False,                                    │
+│                                (19, 40): False,                                    │
+│                                (20, 41): False,                                    │
+│                                (21, 42): False,                                    │
+│                                (22, 43): False,                                    │
+│                                (23, 44): False,                                    │
+│                                (24, 45): False,                                    │
+│                                (25, 46): False,                                    │
+│                                (26, 47): False,                                    │
+│                                (27, 48): False,                                    │
+│                                (28, 49): False,                                    │
+│                                (29, 50): False,                                    │
+│                                (30, 51): False,                                    │
+│                                (31, 52): False,                                    │
+│                                (1, 53): False,                                     │
+│                                (1, 54): False,                                     │
+│                                (1, 55): False                                      │
+│                            }                                                       │
+│              bond_stereo = {}                                                      │
+│         bond_stereo_bond = {}                                                      │
+│         bond_stereo_info = {}                                                      │
+│           bond_stereo_v2 = {}                                                      │
+│           chiral_centers = {1: '?'}                                                │
+│ chiral_centers_sanitized = [(0, '?')]                                              │
+│              conjugation = {                                                       │
+│                                (2, 3): True,                                       │
+│                                (2, 4): True,                                       │
+│                                (3, 5): True,                                       │
+│                                (4, 6): True,                                       │
+│                                (5, 7): True,                                       │
+│                                (6, 8): True,                                       │
+│                                (7, 9): True,                                       │
+│                                (1, 10): False,                                     │
+│                                (2, 11): True,                                      │
+│                                (3, 12): True,                                      │
+│                                (4, 13): True,                                      │
+│                                (5, 14): True,                                      │
+│                                (6, 15): True,                                      │
+│                                (7, 16): True,                                      │
+│                                (8, 17): True,                                      │
+│                                (8, 18): True,                                      │
+│                                (9, 19): True,                                      │
+│                                (9, 20): True,                                      │
+│                                (10, 21): True,                                     │
+│                                (17, 21): True,                                     │
+│                                (10, 22): True,                                     │
+│                                (18, 22): True,                                     │
+│                                (11, 23): True,                                     │
+│                                (12, 24): True,                                     │
+│                                (23, 24): True,                                     │
+│                                (13, 25): True,                                     │
+│                                (14, 26): True,                                     │
+│                                (15, 27): True,                                     │
+│                                (25, 27): True,                                     │
+│                                (16, 28): True,                                     │
+│                                (26, 28): True,                                     │
+│                                (19, 29): True,                                     │
+│                                (20, 30): True,                                     │
+│                                (29, 31): True,                                     │
+│                                (30, 31): True,                                     │
+│                                (11, 32): False,                                    │
+│                                (12, 33): False,                                    │
+│                                (13, 34): False,                                    │
+│                                (14, 35): False,                                    │
+│                                (15, 36): False,                                    │
+│                                (16, 37): False,                                    │
+│                                (17, 38): False,                                    │
+│                                (18, 39): False,                                    │
+│                                (19, 40): False,                                    │
+│                                (20, 41): False,                                    │
+│                                (21, 42): False,                                    │
+│                                (22, 43): False,                                    │
+│                                (23, 44): False,                                    │
+│                                (24, 45): False,                                    │
+│                                (25, 46): False,                                    │
+│                                (26, 47): False,                                    │
+│                                (27, 48): False,                                    │
+│                                (28, 49): False,                                    │
+│                                (29, 50): False,                                    │
+│                                (30, 51): False,                                    │
+│                                (31, 52): False,                                    │
+│                                (1, 53): False,                                     │
+│                                (1, 54): False,                                     │
+│                                (1, 55): False                                      │
+│                            }                                                       │
+│       global_bond_stereo = {}                                                      │
+│            Hybridization = {                                                       │
+│                                1: rdkit.Chem.rdchem.HybridizationType.SP3,         │
+│                                2: rdkit.Chem.rdchem.HybridizationType.SP2,         │
+│                                3: rdkit.Chem.rdchem.HybridizationType.SP2,         │
+│                                4: rdkit.Chem.rdchem.HybridizationType.SP2,         │
+│                                5: rdkit.Chem.rdchem.HybridizationType.SP2,         │
+│                                6: rdkit.Chem.rdchem.HybridizationType.SP2,         │
+│                                7: rdkit.Chem.rdchem.HybridizationType.SP2,         │
+│                                8: rdkit.Chem.rdchem.HybridizationType.SP2,         │
+│                                9: rdkit.Chem.rdchem.HybridizationType.SP2,         │
+│                                10: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                11: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                12: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                13: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                14: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                15: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                16: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                17: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                18: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                19: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                20: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                21: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                22: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                23: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                24: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                25: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                26: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                27: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                28: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                29: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                30: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                31: rdkit.Chem.rdchem.HybridizationType.SP2,        │
+│                                32: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                33: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                34: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                35: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                36: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                37: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                38: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                39: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                40: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                41: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                42: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                43: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                44: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                45: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                46: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                47: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                48: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                49: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                50: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                51: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                52: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                53: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                54: rdkit.Chem.rdchem.HybridizationType.S,          │
+│                                55: rdkit.Chem.rdchem.HybridizationType.S           │
+│                            }                                                       │
+│            mol_sanitized = rdkit.Chem.rdmolops.SanitizeFlags.SANITIZE_NONE         │
+│                  new_mol = <rdkit.Chem.rdchem.Mol object at 0x142924ba0>           │
+│                       v2 = False                                                   │
+╰────────────────────────────────────────────────────────────────────────────────────╯

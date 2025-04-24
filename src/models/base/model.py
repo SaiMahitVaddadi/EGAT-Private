@@ -8,8 +8,8 @@ from ...layers.egat.dgl import EGATConvDGL,EGATConvResidDGL, EGATConvResidSADGL,
 from ..propertynet import PropertyNet
 from dataclasses import dataclass
 from typing import Optional, Union, List
-from ..aggregators.dgl.attentive import AttentiveAggregator, CalcAttentiveAggregator
-from ..aggregators.dgl.weighted import WeightedSumAggregator 
+from ..aggregators.dgl.attentive import AttentiveAggregator, CalcAttentiveAggregator,CalcAttentiveAggregatorMLP
+from ..aggregators.dgl.weighted import WeightedSumAggregator, WeightedMeanAggregator
 from ..aggregators.dgl.cluster import ClusterPooling
 from ..aggregators.dgl.diffpool import DiffPool
 from ..aggregators.dgl.edgepool import EdgePool,EdgePoolLayerwAttention
@@ -115,15 +115,23 @@ class EGATModel(nn.Module):
             self.agg_E_feats = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads, self.params.hidden_dim*self.params.num_heads, bias=True), nn.GELU())
 
     def MixingLayer(self):  
-        if self.params.MixingLayer:
+        if self.params.MixingLayer == 'Bilinear' or self.params.MixingLayer == True:
             if self.params.Aggregate == 'Concat':
                 self.Mixing_Layer = nn.Sequential(nn.Bilinear(self.params.hidden_dim*self.params.num_heads*2,self.params.hidden_dim*self.params.num_heads*2,self.params.hidden_dim*self.params.num_heads*4,bias=True),nn.GELU())
             else:
                 self.Mixing_Layer = nn.Sequential(nn.Bilinear(self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads*2,bias=True),nn.GELU())
          
-        if self.params.addons is not None:
-            self.Mixing_Layer_RDkit = nn.Sequential(nn.Bilinear(self.hidden_dim*self.num_heads*2,self.addonlen,self.hidden_dim*self.num_heads*2,bias=True),nn.GELU())
-        
+            if self.params.addons is not None:
+                self.Mixing_Layer_RDkit = nn.Sequential(nn.Bilinear(self.hidden_dim*self.num_heads*2,self.addonlen,self.hidden_dim*self.num_heads*2,bias=True),nn.GELU())
+        elif self.params.MixingLayer == 'Linear':
+            if self.params.Aggregate == 'Concat':
+                self.Mixing_Layer = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads*2,self.params.hidden_dim*self.params.num_heads*4,bias=True),nn.GELU())
+            else:
+                self.Mixing_Layer = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads*2,bias=True),nn.GELU())
+            
+            if self.params.addons is not None:
+                self.Mixing_Layer_RDkit = nn.Sequential(nn.Linear(self.hidden_dim*self.num_heads*2,self.addonlen,bias=True),nn.GELU())
+    
     def Initialize1MLP(self):
         #BLOCK3: final MLP layers
         if self.params.model_type != 'BEP':
@@ -400,34 +408,6 @@ class EGATModel(nn.Module):
     
     
               
-    
-
-    def AttentiveAggv2(self,individual_graphs,node_feats=17,edge_feats=14):
-        G_node_feats, G_edge_feats = [], []
-        for graph in individual_graphs:
-            # Compute attention scores (logits)
-            node_logits = self.node_attn(node_feats).squeeze()  # [N]
-            node_e = node_logits.exp()                          # [N]
-            node_z = node_e.sum()                               # Scalar (sum for normalization)
-            node_alphas = node_e / node_z                       # [N]
-            # Weighted sum of node features
-            global_node_feature = (node_alphas.unsqueeze(-1) * node_feats).sum(dim=0)  # [d_node]
-
-            # --- Edge Attention ---
-            edge_feats = graph.edata['x']
-            # Compute attention scores (logits)
-            edge_logits = self.edge_attn(edge_feats).squeeze()  # [E]
-            edge_e = edge_logits.exp()                          # [E]
-            edge_z = edge_e.sum()                               # Scalar
-            edge_alphas = edge_e / edge_z                       # [E]
-            # Weighted sum of edge features
-            global_edge_feature = (edge_alphas.unsqueeze(-1) * edge_feats).sum(dim=0)  # [d_edge]
-
-            G_node_feats.append(global_node_feature)
-            G_edge_feats.append(global_edge_feature)
-        
-        return torch.stack(G_node_feats), torch.stack(G_edge_feats)
-
             
     def BondAgg(self,individual_graphs):
         G_node_feats, G_edge_feats = [], []

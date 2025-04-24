@@ -1,0 +1,82 @@
+╭───────── <class 'EGAT.src.utils.descriptors.egat.functional.FunctionalGroups'> ─────────╮
+│ ╭─────────────────────────────────────────────────────────────────────────────────────╮ │
+│ │ <EGAT.src.utils.descriptors.egat.functional.FunctionalGroups object at 0x1428ebb80> │ │
+│ ╰─────────────────────────────────────────────────────────────────────────────────────╯ │
+│                                                                                         │
+│ functional_groups = {                                                                   │
+│                         'Alcohol': 'CO',                                                │
+│                         'Aldehyde': 'C=O',                                              │
+│                         'Ketone': 'CC(=O)C',                                            │
+│                         'Carboxylic Acid': 'C(=O)O',                                    │
+│                         'Ester': 'CC(=O)OC',                                            │
+│                         'Ether': 'COC',                                                 │
+│                         'Amine': 'CN',                                                  │
+│                         'Amide': 'C(=O)N',                                              │
+│                         'Nitrile': 'C#N',                                               │
+│                         'Thiol': 'CS',                                                  │
+│                         'Sulfide': 'CSC',                                               │
+│                         'Disulfide': 'CSSC',                                            │
+│                         'Halide': 'C[F,Cl,Br,I]',                                       │
+│                         'Phenol': 'c1ccccc1O',                                          │
+│                         'Aniline': 'c1ccccc1N',                                         │
+│                         'Nitro': 'C[N+](=O)[O-]',                                       │
+│                         'Sulfonic Acid': 'CS(=O)(=O)O',                                 │
+│                         'Phosphate': 'CP(=O)(O)O',                                      │
+│                         'Sulfoxide': 'CS(=O)C',                                         │
+│                         'Sulfone': 'CS(=O)(=O)C',                                       │
+│                         'Imine': 'C=NC',                                                │
+│                         'Isocyanate': 'N=C=O',                                          │
+│                         'Isothiocyanate': 'N=C=S',                                      │
+│                         'Azide': 'N=[N+]=[N-]',                                         │
+│                         'Diazo': 'N=N',                                                 │
+│                         'Hydrazone': 'NN',                                              │
+│                         'Oxime': 'C=NO',                                                │
+│                         'Epoxide': 'C1OC1',                                             │
+│                         'Aziridine': 'C1NC1',                                           │
+│                         'Oxetane': 'C1CCO1',                                            │
+│                         'Azetidine': 'C1CCN1',                                          │
+│                         'Oxirane': 'C1CO1',                                             │
+│                         'Azirine': 'C1CN1',                                             │
+│                         'Oxazole': 'c1cocn1',                                           │
+│                         'Isoxazole': 'c1nocn1',                                         │
+│                         'Thiazole': 'c1cscn1',                                          │
+│                         'Isoxazoline': 'c1noccn1',                                      │
+│                         'Thiazoline': 'c1csccn1',                                       │
+│                         'Pyridine': 'c1ccncc1',                                         │
+│                         'Pyrrole': 'c1cccn1',                                           │
+│                         'Furan': 'c1ccoc1',                                             │
+│                         'Thiophene': 'c1ccsc1',                                         │
+│                         'Imidazole': 'c1cncn1',                                         │
+│                         'Pyrazole': 'c1cncn1',                                          │
+│                         'Triazole': 'c1nncn1',                                          │
+│                         'Tetrazole': 'c1nnnn1',                                         │
+│                         'Pyrimidine': 'c1cncnc1',                                       │
+│                         'Purine': 'c1ncncnc1',                                          │
+│                         'Indole': 'c1ccc2c(c1)ccn2',                                    │
+│                         'Quinoline': 'c1cc2cccnc2c1',                                   │
+│                         'Isoquinoline': 'c1cc2cccnc2c1',                                │
+│                         'Benzimidazole': 'c1ccc2c(c1)ccn2',                             │
+│                         'Benzothiazole': 'c1ccc2c(c1)ccs2',                             │
+│                         'Benzoxazole': 'c1ccc2c(c1)cco2',                               │
+│                         'Benzofuran': 'c1ccc2c(c1)cco2',                                │
+│                         'Benzothiophene': 'c1ccc2c(c1)ccs2',                            │
+│                         'Cyclopropane': 'C1CC1',                                        │
+│                         'Cyclobutane': 'C1CCC1',                                        │
+│                         'Cyclopentane': 'C1CCCC1',                                      │
+│                         'Cyclohexane': 'C1CCCCC1',                                      │
+│                         'Cycloheptane': 'C1CCCCCC1',                                    │
+│                         'Cyclooctane': 'C1CCCCCCC1',                                    │
+│                         'Cyclononane': 'C1CCCCCCCC1',                                   │
+│                         'Cyclodecane': 'C1CCCCCCCCC1',                                  │
+│                         'Cycloundecane': 'C1CCCCCCCCCC1',                               │
+│                         'Cyclododecane': 'C1CCCCCCCCCCC1',                              │
+│                         'Cyclotridecane': 'C1CCCCCCCCCCCC1',                            │
+│                         'Cyclotetradecane': 'C1CCCCCCCCCCCCC1',                         │
+│                         'Cyclopentadecane': 'C1CCCCCCCCCCCCCC1',                        │
+│                         'Cyclohexadecane': 'C1CCCCCCCCCCCCCCC1',                        │
+│                         'Cycloheptadecane': 'C1CCCCCCCCCCCCCCCC1',                      │
+│                         'Cyclooctadecane': 'C1CCCCCCCCCCCCCCCCC1',                      │
+│                         'Cyclononadecane': 'C1CCCCCCCCCCCCCCCCCC1',                     │
+│                         'Cycloeicosane': 'C1CCCCCCCCCCCCCCCCCCC1'                       │
+│                     }                                                                   │
+╰─────────────────────────────────────────────────────────────────────────────────────────╯

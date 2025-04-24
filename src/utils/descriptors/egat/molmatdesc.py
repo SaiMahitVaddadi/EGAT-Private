@@ -340,14 +340,15 @@ class MolMatDesc:
             self.Gasteiger()
         conf = self.new_mol.GetConformer()
         coords = np.array([list(conf.GetAtomPosition(i)) for i in range(self.num_atoms)])
-        bond_dipole_moments = []
+        bond_dipole_moments = np.zeros((self.num_atoms, self.num_atoms))
         for bond in self.new_mol.GetBonds():
             begin_idx = bond.GetBeginAtomIdx()
             end_idx = bond.GetEndAtomIdx()
             charge_diff = float(self.gasteiger_charges[begin_idx]) - float(self.gasteiger_charges[end_idx])
             bond_vector = coords[end_idx] - coords[begin_idx]
             bond_dipole = charge_diff * bond_vector
-            bond_dipole_moments.append(np.linalg.norm(bond_dipole))
+            bond_dipole_moments[begin_idx, end_idx] = np.linalg.norm(bond_dipole)
+            bond_dipole_moments[end_idx, begin_idx] = bond_dipole_moments[begin_idx, end_idx]  # Ensure symmetry
         self.bond_dipole_moments = bond_dipole_moments
 
     def run(self):

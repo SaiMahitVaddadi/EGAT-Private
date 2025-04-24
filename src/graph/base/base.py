@@ -165,3 +165,4 @@ class BaseFeaturizer(object):
                     self.edges_u.append(i)
                     self.edges_v.append(j)
 
+

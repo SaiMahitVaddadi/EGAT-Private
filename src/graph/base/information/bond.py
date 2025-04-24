@@ -1,6 +1,7 @@
 from ..base import BaseFeaturizer
 from rdkit import Chem
 from dataclasses import dataclass
+import networkx as nx
 
 @dataclass
 class BondParams:
@@ -80,4 +81,6 @@ class BondInformation(BaseFeaturizer):
                 else: return self.properties.bond_order_encode['B{}'.format(int(bo))]
         else:
             return []
-        
+    
+    
+    

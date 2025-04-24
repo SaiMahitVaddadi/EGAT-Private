@@ -442,7 +442,7 @@ class GlobalBondInformation(RandomWalk,DijkstraFeaturizer,MolecularAStar):
     def IsSameFG(self,edge):
         if self.params.getsamefg:
             fg = FunctionalGroups()
-            res = fg.are_atoms_in_same_functional_group(self.new_mol, edge[0], edge[1])
+            res = fg.are_atoms_in_same_functional_group(self.matrixdescriptors.new_mol, edge[0], edge[1])
             if res: 
                 return self.properties.functional_group_encode['TRUE']
             else:

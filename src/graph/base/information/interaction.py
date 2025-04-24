@@ -168,7 +168,7 @@ class DeltaFunctions(JazzyCommands,KallistoInformation):
         lp = self._get_lone_pairs(atom_idx)
         return strength * lp ** expa
 
-    def local_g_int(self,mol,atom_idx,gi=.1,k=1,id=1):
+    def local_g_int(self,atom_idx,gi=.1,k=1,id=1):
         nbrs = self._bondingpartners(atom_idx)
         nn = self._nearestneighbors(nbrs,atom_idx)
         nextnn = self._nearestnearestneighbors(nbrs,nn,atom_idx)
@@ -199,7 +199,7 @@ class InteractionInformation(DeltaFunctions):
 
         
     def FreeEnergies(self,ind,id=1):
-        return [self.local_g_polar(ind,id=id),self.local_g_int(ind,id=1)]
+        return [self.local_g_polar(ind,id=id),self.local_g_int(ind,id=1),self._interactive_contrib(ind,id=id)]
 
 
 

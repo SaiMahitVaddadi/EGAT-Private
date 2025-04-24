@@ -1,0 +1,10 @@
+╭─ <class 'EGAT.src.utils.descriptors.egat.reactive.BondDescriptor'> ─╮
+│ class BondDescriptor():                                             │
+│                                                                     │
+│      broken = [(0, 1)]                                              │
+│      change = [(0, 1)]                                              │
+│      formed = []                                                    │
+│     ochange = []                                                    │
+│ ochangedown = []                                                    │
+│   ochangeup = []                                                    │
+╰─────────────────────────────────────────────────────────────────────╯

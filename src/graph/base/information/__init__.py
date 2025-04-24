@@ -18,3 +18,4 @@ from .stereo import StereoInformation
 from .fused import FusedInformation
 from .interaction import InteractionInformation
 from .kallisto import KallistoInformation
+from .sterimol import SterimolFeaturizer

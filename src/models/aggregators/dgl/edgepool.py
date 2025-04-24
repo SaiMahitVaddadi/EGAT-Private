@@ -172,4 +172,4 @@ class EdgePoolwAttention(nn.Module):
             attn = edge_attentions[i]
             g, node_feats, edge_feats = layer(g, node_feats, edge_feats, attn)
 
-        return self.readout(node_feats)
+        return self.readout(node_feats),self.readout(edge_feats)

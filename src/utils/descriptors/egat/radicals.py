@@ -175,6 +175,7 @@ A class to handle electron information for a molecule using YARP.
 class YARPElectronInfo: 
     def __init__(self,egatecule:MolMatDesc,canon:bool = True,mapping:bool = True):
         self.new_mol = egatecule.new_mol
+        self.props = Properties()
         self.yarpecule = yarpecule(egatecule.new_smiles,canon,mapping) # this is a neat workaround, but we should see if we can just dump the molecule instead. 
         self.lps = []
         self.rads = []
@@ -182,8 +183,14 @@ class YARPElectronInfo:
     # check if we can pull atoms from the yarpecule
     def GetValence(self,atom):
         symbol = atom.GetSymbol()
-        self.valence = self.props.el_valence[symbol]
-        self.alt_valence = self.props.el_alt_valence[symbol]
+        try:
+            self.valence = self.props.el_valence[symbol.lower()]
+        except:
+            self.valence = self.props.el_valence[symbol]
+        try:
+            self.alt_valence = self.props.el_alt_valence[symbol.lower()]
+        except:
+            self.alt_valence = self.props.el_alt_valence[symbol]
     
     def ValenceCheck(self,nbelectrons,bonds,fc,valence):
         lp = valence - fc - bonds - nbelectrons
@@ -213,9 +220,12 @@ class YARPElectronInfo:
         return bonds
         
     def GetElectronInfo(self):
+        self.lps = []
+        self.rads = [] 
+        for i in range(len(self.yarpecule.bond_mats)):
+            self.lps += [[]]
+            self.rads += [[]]
         for ind,bm in enumerate(self.yarpecule.bond_mats):
-            self.lps[ind] = []
-            self.rads[ind]= []
             for i in range(bm.shape[0]):
                 self.lps[ind].append(bm[i,i])
                 self.rads[ind].append(self.EncodeRadicalInfo(bm,i))

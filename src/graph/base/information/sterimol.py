@@ -10,6 +10,14 @@ class SterimolFeaturizer(BaseFeaturizer):
         else:
             return self.matrixdescriptors.new_mol.GetConformer(conf_id=id)
     
+    def GrabPositions(self,id=1):
+        mol = self.GrabConformer(id)
+        self.positions = []
+        for atom in mol.GetAtoms():
+            pos = mol.GetConformer().GetAtomPosition(atom.GetIdx())
+            atom_map_num = atom.GetAtomMapNum()
+            ind = atom.GetIdx()
+            self.positions.append([pos.x, pos.y, pos.z])
 
     def local_sterimol(self,bond_atom1, bond_atom2, id=1, local_cutoff=4.0, use_vdw=False, radii_dict=None):
         """
@@ -27,7 +35,8 @@ class SterimolFeaturizer(BaseFeaturizer):
         """
         conf = self.GrabConformer(id)
         mol = self.matrixdescriptors.new_mol
-        coords = np.array([list(conf.GetAtomPosition(i)) for i in range(mol.GetNumAtoms())])
+        self.GrabPositions()
+        coords = np.array(self.positions)
         
         # Define the local bond axis (from atom1 to atom2)
         origin = coords[bond_atom1]
@@ -68,7 +77,7 @@ class SterimolFeaturizer(BaseFeaturizer):
         return [L_local, B1_local, B5_local],direction
     
   
-    def atom_sterimol(self,atom):
+    def atom_sterimol(self,atom,id=1):
         """
         Calculate Sterimol parameters for a single atom.
         
@@ -102,7 +111,7 @@ class SterimolFeaturizer(BaseFeaturizer):
               other_atom_idx = bond_atom2 if bond_atom1 == atom.GetIdx() else bond_atom1
 
               # Calculate Sterimol parameters for the bond
-              sterimol_params, _ = self.local_sterimol(atom.GetIdx(), other_atom_idx)
+              sterimol_params, _ = self.local_sterimol(atom.GetIdx(), other_atom_idx,id=id)
               L_values.append(sterimol_params[0])
               B1_values.append(sterimol_params[1])
               B5_values.append(sterimol_params[2])
@@ -114,8 +123,16 @@ class SterimolFeaturizer(BaseFeaturizer):
 
         return [L, B1, B5]
     
-
-
+    def GetSterimolFeatures(self,ind,id=1):
+        if self.params.getsterimol:
+            atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
+            sterimol_params = self.atom_sterimol(atom,id=id)
+            return sterimol_params
+        else:
+            return []
+        
+    
+'''
 import numpy as np
 import trimesh
 from trimesh.creation import ellipsoid
@@ -171,40 +188,7 @@ def compute_union_volume_surface(bond_parameters):
         'total_surface_area': combined.area
     }
 
-        
+'''
 
 
 
-
-
-from rdkit import Chem
-from rdkit.Chem import AllChem, rdFreeSASA
-
-def compute_atom_sasa_percentages(mol):
-    # Ensure the molecule has 3D coordinates
-    if mol.GetNumConformers() == 0:
-        AllChem.EmbedMolecule(mol)
-
-    radii = rdFreeSASA.ClassifyAtoms(mol)
-    sasa = rdFreeSASA.CalcSASA(mol, radii)
-
-    atom_sasa = [mol.GetAtomWithIdx(i).GetProp('SASA') for i in range(mol.GetNumAtoms())]
-    atom_sasa = list(map(float, atom_sasa))
-    total_sasa = sum(atom_sasa)
-
-    if total_sasa == 0:
-        return [0.0 for _ in atom_sasa]
-
-    return [100.0 * a / total_sasa for a in atom_sasa]
-
-def compute_bond_sasa_percentages(mol):
-    atom_sasa_percent = compute_atom_sasa_percentages(mol)
-    bond_sasa_percent = []
-
-    for bond in mol.GetBonds():
-        i = bond.GetBeginAtomIdx()
-        j = bond.GetEndAtomIdx()
-        bond_exposure = (atom_sasa_percent[i] + atom_sasa_percent[j]) / 2.0
-        bond_sasa_percent.append(bond_exposure)
-
-    return bond_sasa_percent
