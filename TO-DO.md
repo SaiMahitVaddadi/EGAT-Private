@@ -1,24 +1,37 @@
 # TO-DO - Tomorrow:
 
 ### Testing:
-- Test the Aggregators.
-- Test all Features for the Graphs. 
+- Test the Features on the Global Graphs. 
 - Check on the Datasets. 
 - Check on the Dataloader.
 - Check on the Training.
-- Check on the Prediction 
-
-
+- Check on the Prediction. 
+- Check the Reaction Graphs.
+- Check the Reaction Geometry Graphs.
+- Check the Reaction Global Graphs. 
 
 ### Code:
-- Normalization -  Write an object that takes the .csv file, gets the columns needed and uses the scalers needed on either all the data or on some portion of it that will be used. Make sure that is imported into the training scheme. 
+- Normalization - Make sure that is imported into the training scheme. 
 - Loading Multiple Geometries: Write out the workaround that for x conformers for a 3D based model, you load x molecules into the dataset and dataloader.
-
 
 # Future Versions:
 - Imbalanced Learning: 
     - Add codes that do the Density Smoothing for the Features and Labels. 
     - Add codes that do the Augmentation. 
+
+- EGAT:
+    - E(3) version: https://arxiv.org/pdf/2207.09453
+    - SE(3) version: https://proceedings.neurips.cc/paper/2020/file/15231a7ce4ba789d13b722cc5c955834-Paper.pdf
+    - Ewald version 
+    - Triplet version
+    - LINX version (A,D): https://arxiv.org/pdf/2110.14446
+    - https://pytorch-geometric.readthedocs.io/en/2.4.0/generated/torch_geometric.nn.models.PMLP.html
+    - https://pytorch-geometric.readthedocs.io/en/2.4.0/generated/torch_geometric.nn.models.CorrectAndSmooth.html#torch_geometric.nn.models.CorrectAndSmooth
+    - https://academic.oup.com/bioinformatics/article/40/5/btae304/7665710#455899395
+    - https://www.nature.com/articles/s41524-024-01444-x#Sec11
+    - https://www.sciencedirect.com/science/article/pii/S266682702400063X
+    - https://fentechsolutions.github.io/CausalDiscoveryToolbox/html/data.html
+    
 
 - Active Learning: 
     - Add codes that sample the uncertainity and pick new training points. 
@@ -27,6 +40,43 @@
     - Add codes that perform meta-learning tasks.
     - https://github.com/sicara/easy-few-shot-learning
     - https://github.com/uiuc-iml/few-shot-regression/tree/main
+    - https://arxiv.org/pdf/2410.18321
+    - https://github.com/open-mmlab/mmfewshot/blob/main/configs/classification/baseline/README.md
+    - https://github.com/open-mmlab/mmfewshot/blob/main/configs/classification/neg_margin/README.md
+    - https://github.com/open-mmlab/mmfewshot/blob/main/configs/classification/relation_net/README.md
+    - https://github.com/open-mmlab/mmfewshot/blob/main/configs/detection/tfa/README.md
+    - https://github.com/open-mmlab/mmfewshot/blob/main/configs/detection/fsce/README.md
+    - https://github.com/open-mmlab/mmfewshot/blob/main/configs/detection/attention_rpn/README.md
+    - https://github.com/open-mmlab/mmfewshot/blob/main/configs/detection/meta_rcnn/README.md
+    - https://github.com/open-mmlab/mmfewshot/blob/main/configs/detection/fsdetview/README.md
+    - https://github.com/open-mmlab/mmfewshot/blob/main/configs/detection/mpsr/README.md
+    - https://openaccess.thecvf.com/content/WACV2024/papers/Moreira_Hyperbolic_vs_Euclidean_Embeddings_in_Few-Shot_Learning_Two_Sides_of_WACV_2024_paper.pdf
+    - https://ieeexplore.ieee.org/abstract/document/10720520?casa_token=KSE8e-mBfhIAAAAA:4euV5zR5YQ3zsfb3bQtY3jnusIl79xFK-qS4SIRddMl7zvsXqNAzcXOWMzm_mSOx8WNZjPdz
+    - https://www.sciencedirect.com/science/article/pii/S0950705124013601?casa_token=ukZwtlgF99oAAAAA:0VKqt8lr48x2-aDRNWErA6BaFPB-M9oZFMB-xWkAhtYe65Ko7sOdwVBpQVqxj_Y28J4v3ukn
+    - https://www.mdpi.com/1424-8220/24/14/4630
+    - https://www.sciencedirect.com/science/article/abs/pii/S0893608024004969
+    - https://www.sciencedirect.com/science/article/abs/pii/S1434841119315638
+    - https://arxiv.org/abs/1910.03131
+    - https://arxiv.org/abs/2002.09434
+    - https://arxiv.org/abs/2411.15216
+    - https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5128151
+    - https://ieeexplore.ieee.org/abstract/document/10844892?casa_token=AFVzgwi8YYQAAAAA:BaDCwQScF97Ho0tt4KigjxzBP1iidyZUpZLnrApu3gP6mI5yiuaKVM7OiCXZcsDxneMmWcEc
+    - https://link.springer.com/article/10.1007/s11760-024-03792-z
+    - https://link.springer.com/article/10.1007/s10845-025-02575-8
+    - https://ieeexplore.ieee.org/abstract/document/10844892?casa_token=AFVzgwi8YYQAAAAA:BaDCwQScF97Ho0tt4KigjxzBP1iidyZUpZLnrApu3gP6mI5yiuaKVM7OiCXZcsDxneMmWcEc
+    - https://www.sciencedirect.com/science/article/abs/pii/S0031320324005673
+    - https://arxiv.org/abs/2501.16760
+    - https://arxiv.org/abs/2501.11175
+    - https://arxiv.org/abs/2010.04360
+    - https://openreview.net/pdf?id=r1ldYi9rOV
+    - https://pubs.acs.org/doi/full/10.1021/acs.jcim.4c00485
+    - https://onlinelibrary.wiley.com/doi/abs/10.1002/cpe.8103
+    - https://arxiv.org/pdf/2412.17245
+    - https://openreview.net/pdf?id=m6pvyXIQcu
+    https://arxiv.org/pdf/2002.02126
+    https://arxiv.org/pdf/2212.09034
+    Meta-learning Task-specific Regularization Weights for Few-shot Linear Regression
+    Silhouette Distance Loss for Learning Few-Shot Contrastive Representations
 
 
 - LPM Finetuning:
@@ -70,13 +120,11 @@
     - GIN
     - whatever PyG has 
 
-
 - Conformer Generation:
     - write out things for CgenFF
     
 - Atom mapping:
     - set up other codes for this. 
-
 
 - Bayesian Modeling:
     - https://helda.helsinki.fi/server/api/core/bitstreams/5760b1a9-991b-4967-864e-f4404c0dba2d/content
@@ -92,6 +140,7 @@
     - https://arxiv.org/pdf/2205.12934
     - BFN
     - PFN
+
 - Uncertainity Quanitification 
     - https://arxiv.org/pdf/2504.12627
     - https://chemprop.readthedocs.io/en/latest/autoapi/chemprop/uncertainty/index.html
@@ -168,11 +217,12 @@
 - Params:
     - Create a params class that caters to hyperparameter tuning
     
-    - YARP:
+- YARP:
     - Write the open shell functions. 
     - Write in the automated EGAT model with RGD1 in it. 
+    - Write in the AN1x-bb model 
 
-- Aggregators
-    - Add in the other aggregators. 
+- PyG Compatability
+
 
 

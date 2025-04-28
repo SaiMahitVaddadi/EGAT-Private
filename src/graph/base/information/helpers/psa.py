@@ -2,7 +2,11 @@ from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors
 
 def get_tpsa_contributions(mol):
-    total_tpsa, atom_contribs = rdMolDescriptors._CalcTPSAContribs(mol)
+    try:
+        total_tpsa, atom_contribs = rdMolDescriptors._CalcTPSAContribs(mol)
+    except:
+        atom_contribs = rdMolDescriptors._CalcTPSAContribs(mol)
+        total_tpsa = sum(list(atom_contribs))
     return atom_contribs, total_tpsa
 
 

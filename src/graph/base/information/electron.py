@@ -2,6 +2,21 @@ from ..base import BaseFeaturizer
 from rdkit import Chem
 
 from mordred import _atomic_property
+from dataclasses import dataclass
+
+
+@dataclass
+class ElectronParams:
+    getradical: str = 'RDKit'
+    removehybridinfo: bool = False
+    useFullHyb: bool = False
+    getpielectrons: bool = False
+    getsigmaelectrons: bool = False
+    getintrinsicstate: bool = False
+    getetabeta: bool = False
+    getionizationpotential: bool = False
+    getcoreelectrons: bool = False
+    getramificationnumber: bool = False
 
 
 class ElectronInformation(BaseFeaturizer):
@@ -70,20 +85,32 @@ class ElectronInformation(BaseFeaturizer):
             return []
 
     def EtaBeta(self,ind):
-        if self.getetabeta: 
+        if self.params.getetabeta: 
             atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
             return [_atomic_property.get_eta_beta_delta(atom),
                     _atomic_property.get_eta_beta_non_sigma(atom),
                     _atomic_property.get_eta_beta_sigma(atom),
                     _atomic_property.get_eta_gamma(atom),
-                    _atomic_property.get_eta_epsilon(atom),
-                    _atomic_property.get_eta_nonsigma_contribute(atom)]
+                    _atomic_property.get_eta_epsilon(atom)]
+        else:
+            return []
+
+    def EtaBond(self, edge):
+        if self.params.getetabeta:
+            atom1 = edge[0]
+            atom2 = edge[1]
+            bond = self.matrixdescriptors.new_mol.GetBondBetweenAtoms(atom1, atom2)
+            if bond:
+                return [_atomic_property.get_eta_nonsigma_contribute(bond)]
+            else:
+                return []
         else:
             return []
 
     def IonizationPotential(self,ind):
         if self.params.getionizationpotential:
             atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
+
             return [_atomic_property.get_ionization_potential(atom)]
         else:
             return []    
@@ -91,11 +118,11 @@ class ElectronInformation(BaseFeaturizer):
     def CoreElectrons(self,ind):
         if self.params.getcoreelectrons:
             atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
-            return [_atomic_property.get_core_electrons(atom)]
+            return [_atomic_property.get_core_count(atom)]
         else:
             return []
     
-    def RamificationNumber(self):
+    def RamificationNumber(self,ind):
         if self.params.getramificationnumber:
             atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
             pibonds = 0 
@@ -116,6 +143,26 @@ class ElectronInformation(BaseFeaturizer):
             lp = (ve - pibonds - sigmabonds - atom.GetFormalCharge() - atom.GetNumRadicalElectrons())/2
 
             return [lp + pibonds,lp + pibonds + sigmabonds]
+        else:
+            return []
+        
+    def SurroundingIPFeatures(self, ind):
+        if self.params.getionizationpotentialpooled:
+            atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
+            neighbor_ips = []
+            for neighbor in atom.GetNeighbors():
+                neighbor_ip = _atomic_property.get_ionization_potential(neighbor)
+                neighbor_ips.append(neighbor_ip)
+            
+            if neighbor_ips:
+                avg_ip = sum(neighbor_ips) / len(neighbor_ips)
+                median_ip = sorted(neighbor_ips)[len(neighbor_ips) // 2]
+                min_ip = min(neighbor_ips)
+                max_ip = max(neighbor_ips)
+                std_ip = (sum((x - avg_ip) ** 2 for x in neighbor_ips) / len(neighbor_ips)) ** 0.5
+                return [avg_ip, median_ip, min_ip, max_ip, std_ip]
+            else:
+                return [0, 0, 0, 0, 0]
         else:
             return []
 
@@ -160,91 +207,3 @@ class ChargeInformation(BaseFeaturizer):
         else:
             return []
         
-
-
-def get_core_count(atom):
-    Z = atom.GetAtomicNum()
-    if Z == 1:
-        return 0.0
-
-    Zv = _table.GetNOuterElecs(Z)
-    PN = period[Z]
-
-    return (Z - Zv) / (Zv * (PN - 1))
-
-
-def get_eta_epsilon(atom):
-    Zv = _table.GetNOuterElecs(atom.GetAtomicNum())
-    return 0.3 * Zv - get_core_count(atom)
-
-
-def get_eta_beta_sigma(atom):
-    e = get_eta_epsilon(atom)
-    return sum(
-        0.5 if abs(get_eta_epsilon(a) - e) <= 0.3 else 0.75
-        for a in atom.GetNeighbors()
-        if a.GetAtomicNum() != 1
-    )
-
-
-def get_eta_nonsigma_contribute(bond):
-    if bond.GetBondType() is Chem.BondType.SINGLE:
-        return 0.0
-
-    f = 1.0
-    if bond.GetBondTypeAsDouble() == Chem.BondType.TRIPLE:
-        f = 2.0
-
-    a = bond.GetBeginAtom()
-    b = bond.GetEndAtom()
-
-    dEps = abs(get_eta_epsilon(a) - get_eta_epsilon(b))
-
-    if bond.GetIsAromatic():
-        y = 2.0
-    elif dEps > 0.3:
-        y = 1.5
-    else:
-        y = 1.0
-
-    return y * f
-
-
-def get_eta_beta_delta(atom):
-    if (
-        atom.GetIsAromatic()
-        or atom.IsInRing()
-        or _table.GetNOuterElecs(atom.GetAtomicNum()) - atom.GetTotalValence() <= 0
-    ):
-        return 0.0
-
-    for b in atom.GetNeighbors():
-        if b.GetIsAromatic():
-            return 0.5
-
-    return 0.0
-
-
-
-def get_eta_beta_non_sigma(atom):
-    return sum(
-        get_eta_nonsigma_contribute(b)
-        for b in atom.GetBonds()
-        if get_other_atom(b, atom).GetAtomicNum() != 1
-    )
-
-
-def get_eta_gamma(atom):
-    beta = (
-        get_eta_beta_sigma(atom)
-        + get_eta_beta_non_sigma(atom)
-        + get_eta_beta_delta(atom)
-    )
-    if beta == 0:
-        return np.nan
-
-    return get_core_count(atom) / beta
-
-
-
-'''

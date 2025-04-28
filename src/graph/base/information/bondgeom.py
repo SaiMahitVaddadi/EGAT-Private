@@ -1,6 +1,7 @@
 from ..base import BaseFeaturizer
 from dataclasses import dataclass
-
+import numpy as np
+from rdkit import Chem
 
 @dataclass
 class BondGeometryParams:
@@ -31,26 +32,9 @@ class BondGeometryInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
         
-
-    def GrabConformer(self,id=1):
-        if id == 1: return self.matrixdescriptors.new_mol
-        else:
-            return self.matrixdescriptors.new_mol.GetConformer(conf_id=id)
-    
-
-    def GrabGeometry(self,id=1):
-        mol = self.GrabConformer(id)
-        self.positions = {}
-        for atom in mol.GetAtoms():
-            pos = mol.GetConformer().GetAtomPosition(atom.GetIdx())
-            atom_map_num = atom.GetAtomMapNum()
-            ind = atom.GetIdx()
-            self.positions[ind] = [pos.x, pos.y, pos.z]
-    
-
     def BondLength(self,edge,id=1):
         if self.params.getbondlength:
-            mol = self.GrabConformer(id)
+            mol = self.conformer
             bond = mol.GetBondBetweenAtoms(edge[0], edge[1])
             atom1 = bond.GetBeginAtomIdx()
             atom2 = bond.GetEndAtomIdx()
@@ -63,7 +47,7 @@ class BondGeometryInformation(BaseFeaturizer):
 
     def AtomDistance(self, edge,id=1):
         if self.params.getatomdistance:
-            mol = self.GrabConformer(id)
+            mol = self.conformer
             atom1 = edge[0]
             atom2 = edge[1]
             pos1 = mol.GetConformer().GetAtomPosition(atom1)
@@ -75,7 +59,7 @@ class BondGeometryInformation(BaseFeaturizer):
 
     def GetAngle(self,atom1, atom2,id=1):
         angles = []
-        mol = self.GrabConformer(id)
+        mol = self.conformer
         for neighbor in np.nonzero(self.matrixdescriptors.adj_mat[atom2])[0]:
             angle = mol.GetBondBetweenAtoms(atom1, atom2).GetAngle(mol.GetConformer(), atom1, atom2, neighbor)
             angles.append(angle)
@@ -87,7 +71,7 @@ class BondGeometryInformation(BaseFeaturizer):
             atom2 = edge[1]
             neighbors = np.nonzero(self.matrixdescriptors.adj_mat[atom2])[0]
             atom3 = neighbors[neighbors != atom1][0] if len(neighbors[neighbors != atom1]) > 0 else None
-            mol = self.GrabConformer(id)
+            mol = self.conformer
             try: 
                 angle = mol.GetBondBetweenAtoms(atom1, atom2).GetAngle(mol.GetConformer(), atom1, atom2, atom3)
                 return [angle]
@@ -115,7 +99,7 @@ class BondGeometryInformation(BaseFeaturizer):
         atom1 = edge[0]
         atom2 = edge[1]
         dihedrals = []
-        mol = self.GrabConformer(id)
+        mol = self.conformer
         for neighbor1 in np.nonzero(self.matrixdescriptors.adj_mat[int(atom2)])[0]:
             row = []
             for neighbor2 in np.nonzero(self.matrixdescriptors.adj_mat[int(neighbor1)])[0]:
@@ -139,7 +123,7 @@ class BondGeometryInformation(BaseFeaturizer):
                 atom4 = next((neighbor for neighbor in neighbors_atom3 if neighbor != atom2), None)
             else:
                 atom4 = None
-            mol = self.GrabConformer(id)
+            mol = self.conformer
             try:
                 dihedral = Chem.rdMolTransforms.GetDihedralDeg(mol.GetConformer(), int(atom1), int(atom2), int(atom3), int(atom4))
                 return [dihedral]
@@ -182,7 +166,7 @@ class BondGeometryInformation(BaseFeaturizer):
         if self.params.getbondmidpoint:
             atom1 = edge[0]
             atom2 = edge[1]
-            mol = self.GrabConformer(id)
+            mol = self.conformer
             pos1 = mol.GetConformer().GetAtomPosition(atom1)
             pos2 = mol.GetConformer().GetAtomPosition(atom2)
             midpoint = (pos1 + pos2) / 2

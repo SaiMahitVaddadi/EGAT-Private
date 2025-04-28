@@ -1,3 +1,5 @@
+import numpy as np
+
 def zeta(a: float, c: float, qref: float, q: float) -> float:
     """Charge scaling function for polarizabilities."""
 

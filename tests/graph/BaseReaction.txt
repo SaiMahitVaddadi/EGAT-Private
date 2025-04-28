@@ -1,12 +1,12 @@
 ╭────────────────────────────────────────── <class 'EGAT.src.graph.base.component.BaseReactionComponentFeaturizer'> ──────────────────────────────────────────╮
 │ ╭─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ │
-│ │ <EGAT.src.graph.base.component.BaseReactionComponentFeaturizer object at 0x100a47be0>                                                                   │ │
+│ │ <EGAT.src.graph.base.component.BaseReactionComponentFeaturizer object at 0x30ea4c310>                                                                   │ │
 │ ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
 │                                                                                                                                                             │
 │        acid_sites = [11]                                                                                                                                    │
 │         am_smiles = '[C:1]([C:2](=[O:3])[c:4]1[c:5]([H:16])[c:6]([H:17])[c:7]([C:10](=[O:11])[O:12][H:20])[c:8]([H:18])[c:9]1[H:19])([H:13])([H:14])[H:15]' │
 │        base_sites = [2, 10]                                                                                                                                 │
-│      electroninfo = <EGAT.src.utils.descriptors.egat.radicals.RDKElectronInfo object at 0x307af34c0>                                                        │
+│      electroninfo = <EGAT.src.utils.descriptors.egat.radicals.RDKElectronInfo object at 0x30b9a7580>                                                        │
 │                gs = array([[0., 1., 2., 2., 3., 4., 5., 4., 3., 6., 7., 7., 1., 1., 1., 4.,                                                                 │
 │                             5., 5., 4., 8.],                                                                                                                │
 │                            [1., 0., 1., 1., 2., 3., 4., 3., 2., 5., 6., 6., 2., 2., 2., 3.,                                                                 │
@@ -47,10 +47,10 @@
 │                             5., 3., 0., 6.],                                                                                                                │
 │                            [8., 7., 8., 6., 5., 4., 3., 4., 5., 2., 3., 1., 9., 9., 9., 6.,                                                                 │
 │                             5., 5., 6., 0.]])                                                                                                               │
-│ matrixdescriptors = <EGAT.src.utils.descriptors.egat.molmatdesc.MolMatDesc object at 0x30916b490>                                                           │
+│ matrixdescriptors = <EGAT.src.utils.descriptors.egat.molmatdesc.MolMatDesc object at 0x30ec36d10>                                                           │
 │            params = BaseReactionParams(getradical='RDKit', stereo_full=True, acidbase='BL')                                                                 │
-│        properties = <EGAT.src.utils.descriptors.egat.encodings.Encodings object at 0x30946bd00>                                                             │
+│        properties = <EGAT.src.utils.descriptors.egat.encodings.Encodings object at 0x30bd3fcd0>                                                             │
 │        ring_atoms = [[3, 4, 5, 6, 7, 8]]                                                                                                                    │
 │            smiles = 'CC(=O)C1=CC=C(C=C1)C(=O)O'                                                                                                             │
-│            stereo = <EGAT.src.utils.descriptors.egat.stereo.StereoChemistry object at 0x30926b520>                                                          │
+│            stereo = <EGAT.src.utils.descriptors.egat.stereo.StereoChemistry object at 0x30ec35120>                                                          │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯

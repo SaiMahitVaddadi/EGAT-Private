@@ -7,7 +7,6 @@ from dataclasses import dataclass
 class FusedInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
-        self.InitializeAddons()
     
 
     def ObtainFusedRingInfo(self):

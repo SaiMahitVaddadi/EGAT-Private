@@ -10,10 +10,26 @@ from .data.vdw import rahm, truhlar
 from numpy import linalg as LA
 from .data.alpha import refx, refh, hcount, ascale, refn,refcn, refsys, alphaiw, zeff,sscale, seciw, gam
 from .data.scaling import zeta, cngw
+from dataclasses import dataclass
 
 
-# To-do: Add Substructure Information and descriptors that check to see if it's in the same one 
-# To-do: Add jazzy features from here 
+
+
+
+@dataclass
+class KallistoParams:
+    threshold: float = 10.0
+    covalentnumber: str = "exp"
+    ps_size: Tuple[float, float] = (1.0, 1.5)
+    kallisto_thresholdCN: float = 10.0
+    kallisto_thresholdBond: float = 0.5
+    vdw_scale: float = 1.0
+    vdwtype: str = "truhlar"
+    getCN: bool = True
+    getPS: bool = True
+    getAPC: bool = True
+    getvdwkallisto: bool = True
+    getAP: bool = True
 
 
 class KallistoBase(BaseFeaturizer):
@@ -21,15 +37,15 @@ class KallistoBase(BaseFeaturizer):
         super().__init__(smiles, arguments)
         self.InitializeAddons()
 
-    def GrabConformer(self,id=1):
+    def GrabConformerKallisto(self,id=1):
         if id == 1: return self.matrixdescriptors.new_mol
         else:
             return self.matrixdescriptors.new_mol.GetConformer(conf_id=id)
     
-    def GrabGeometry(self,id=1):
-        mol = self.GrabConformer(id)
+    def GrabGeometryKallisto(self,id=1):
+        mol = self.GrabConformerKallisto(id)
         self.positions = {}
-        self.at = ()
+        self.at = {}
         self.positions_list = []
         for atom in mol.GetAtoms():
             pos = mol.GetConformer().GetAtomPosition(atom.GetIdx())
@@ -133,7 +149,7 @@ class CN(KallistoBase):
         CN values are calculated for a given structure and are returned as an
         array."""
 
-        self.GrabGeometry(id)
+        self.GrabGeometryKallisto(id)
         
         # Get covalent number
         if self.params.covalentnumber == "exp":
@@ -155,7 +171,7 @@ class ProximityShell(KallistoBase):
         Prox values are calculated for a given structure and are returned as an
         array."""
 
-        self.GrabGeometry(id)
+        self.GrabGeometryKallisto(id)
         # Fitted to match Wiberg bond orders of diatomic molecules
         k4 = 4.10451
         k5 = 19.08857
@@ -215,11 +231,22 @@ class APC(CN):
         self.eeq_gamm = np.array(eeq_gamm)
 
         # setup parameter arrays
-        self.z = self.at_list - 1
-        self.xi = eeq_en[self.z]
-        self.gam = eeq_gamm[self.z]
-        self.kappa = eeq_cnfak[self.z]
-        self.alpha = np.power(eeq_alp[self.z], 2)
+        self.z = np.array(self.at_list) - 1
+        self.xi = []
+        self.gam = []
+        self.kappa = []
+        self.alpha = []
+        for z in self.z:
+            self.xi.append(self.eeq_en[z])
+            self.gam.append(self.eeq_gamm[z])
+            self.kappa.append(self.eeq_cnfak[z])
+            self.alpha.append(np.power(self.eeq_alp[z], 2))
+        
+        # Convert xi, gam, kappa, and alpha into numpy arrays
+        self.xi = np.array(self.xi, dtype=np.float64)
+        self.gam = np.array(self.gam, dtype=np.float64)
+        self.kappa = np.array(self.kappa, dtype=np.float64)
+        self.alpha = np.array(self.alpha, dtype=np.float64)
 
         """Set up A matrix and X vector
 
@@ -239,7 +266,7 @@ class APC(CN):
         APC values are calculated for a given structure and are returned as an
         array."""
 
-        self.GrabGeometry(id)
+        self.GrabGeometryKallisto(id)
         self.SetupAPC(id)
         for i in range(self.nat):
             xyzi = self.positions_list[i]
@@ -248,7 +275,7 @@ class APC(CN):
                 if i == j:
                     continue
                 xyzj = self.positions_list[j]
-                r = LA.norm(xyzj - xyzi)
+                r = LA.norm(np.array(xyzj) - np.array(xyzi))
                 gamij = 1.0 / np.sqrt(self.alpha[i] + self.alpha[j])
                 self.A[j][i] = special.erf(gamij * r) / r
                 self.A[i][j] = self.A[j][i]
@@ -290,7 +317,7 @@ class CovalentPartner(KallistoBase):
 
         
 
-        self.GrabGeometry()
+        self.GrabGeometryKallisto()
         for i in range(self.nat):
             ia = self.at_list[i] - 1
             for j in range(self.nat):
@@ -354,7 +381,37 @@ class AP(APC):
         self.alpha = np.zeros(shape=(23,), dtype=np.float64)
         self.alphar = np.zeros(shape=(23, 7, 86), dtype=np.float64)
 
+    def covfunc(self):
+        self.covcn = np.zeros(shape=(self.nat,), dtype=np.float64)
+        # Fitted to match Wiberg bond orders of diatomic molecules
+        k4 = 4.10451
+        k5 = 19.08857
+        k6 = 2 * 11.28174**2
+
+        kn = 7.50
+        for i in range(self.nat):
+            ia = self.at_list[i] - 1
+            for j in range(self.nat):
+                if i is j:
+                    continue
+                ja = self.at_list[j] - 1
+                dx = self.positions_list[j][0] - self.positions_list[i][0]
+                dy = self.positions_list[j][1] - self.positions_list[i][1]
+                dz = self.positions_list[j][2] - self.positions_list[i][2]
+                rSquared = dx * dx + dy * dy + dz * dz
+                if rSquared > self.params.threshold:
+                    continue
+                r = np.sqrt(rSquared)
+                rco = rcov[ia] + rcov[ja]
+                eni = pauling_en[ia]
+                enj = pauling_en[ja]
+                den = k4 * np.exp(-((np.abs(eni - enj) + k5) ** 2) / k6)
+                damp = den * 0.5 * (1 + special.erf(-kn * (r - rco) / rco))
+                self.covcn[i] += damp
+
     def ObtainAP(self):
+        self.SetupAP()
+        self.covfunc()
         for i in range(self.nat):
             cncount = np.zeros(shape=(18,), dtype=int)
             cncount[0] = 1
@@ -454,7 +511,7 @@ class VdW(KallistoBase):
         VDW values are calculated for a given structure and are returned as an
         array."""
 
-        self.GrabGeometry()
+        self.GrabGeometryKallisto()
         self.SetupVdW()
 
         # get atomic polarizabilities
@@ -468,7 +525,7 @@ class VdW(KallistoBase):
         elif self.params.vdwtype == "rahm":
             self.rahm()
 
-class KallistoInformation(ProximityShell,APC,VdW,CovalentPartner):
+class KallistoInformation(ProximityShell,AP,VdW,CovalentPartner):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
         self.InitializeAddons()
@@ -478,23 +535,38 @@ class KallistoInformation(ProximityShell,APC,VdW,CovalentPartner):
         self.ObtainCN()
         self.ObtainProximityShell()
         self.ObtainAPC()
-
+        self.ObtainAP()
+        self.ObtainRadii()
 
     def GetCN(self,ind):
-        return [self.cns[ind]]
+        if self.params.getCN:
+            return [self.cns[ind]]
+        else:
+            return []
     
     def GetPS(self,ind):
-        return [self.ps[ind]]
+        if self.params.getPS:
+            return [self.ps[ind]]
+        else:
+            return []
     
     def GetAPC(self,ind):
-        return [self.qs[ind]]
+        if self.params.getAPC:
+            return [self.qs[ind]]
+        else:
+            return []
     
     def GetVdW(self,ind):
-        return [self.vdw[ind]]
-    
+        if self.params.getvdwkallisto:
+            return [self.vdw[ind]]
+        else:
+            return []   
+        
     def GetAP(self,ind):
-        return [self.ap[ind]]
-    
+        if self.params.getAP:
+            return [self.ap[ind]]
+        else:
+            return [] 
     
     
     

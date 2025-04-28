@@ -386,7 +386,10 @@ class MolecularAStar(BaseFeaturizer):
         return path
 
     def GetAStarPathLength(self,edge,id=1):
-        start, end = edge
-        path = self.search(start, end,id=id)
-        return [len(path)]
+        if self.params.bias_walk == 'astar':
+            start, end = edge
+            path = self.search(start, end,id=id)
+            return [len(path)]
+        else:
+            return []
     

@@ -1,6 +1,12 @@
 from ..base import BaseFeaturizer
 from ....utils.descriptors.egat.functional import FunctionalGroups
+from dataclasses import dataclass
 
+
+
+@dataclass
+class LocantParams:
+    getlocantcount: str = 'all'  # Options: 'all', 'carbononly'
 class LocantInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)

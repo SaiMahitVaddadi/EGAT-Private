@@ -4,6 +4,7 @@ from .kallisto import KallistoInformation
 from rdkit import Chem
 
 from math import floor
+from dataclasses import dataclass
 
 class JazzyCommands(BaseFeaturizer):
     def __init__(self, smiles, arguments):
@@ -27,7 +28,7 @@ class JazzyCommands(BaseFeaturizer):
                     if nbr.GetIdx() not in nearest_neighbors:
                         if nbr.GetIdx() not in nbrs:
                             neighbors.append(nbr.GetIdx())
-        return neighbors
+        return nearest_neighbors
         
     def _nearestnearestneighbors(self,nbrs,nearestnbrs,center):
         mol = self.matrixdescriptors.new_mol
@@ -42,7 +43,7 @@ class JazzyCommands(BaseFeaturizer):
                         if nbr.GetIdx() not in nbrs:
                             if nbr.GetIdx() not in nearestnbrs:
                                 neighbors.append(nbr.GetIdx())
-        return neighbors
+        return nearest_nearest_neighbors
 
 
 
@@ -52,7 +53,7 @@ class DeltaFunctions(JazzyCommands,KallistoInformation):
 
     def _q_delta(self,q_alpha, q_beta, q_gamma, t):
         """Calculates q delta as per Equation 9 in Gerber's paper."""
-        return t * sum(q_alpha) + (t**2) * sum(q_beta) + (t**3) * sum(q_gamma)
+        return t * q_alpha + (t**2) * q_beta + (t**3) * q_gamma
 
     def _charge(self,mol):
         Chem.rdPartialCharges.ComputeGasteigerCharges(mol)
@@ -89,10 +90,11 @@ class DeltaFunctions(JazzyCommands,KallistoInformation):
         return A*(q + q_delta)
     
 
-    def getstrength(self,mol, atom_idx, d=63.7, t=0.274,id=1):
+    def getstrength(self,atom_idx, d=63.7, t=0.274,id=1):
         nbrs = self._bondingpartners(atom_idx)
         nn = self._nearestneighbors(nbrs,atom_idx)
         nextnn = self._nearestnearestneighbors(nbrs,nn,atom_idx)
+        mol = self.matrixdescriptors.new_mol
         if mol.GetAtomWithIdx(atom_idx).GetAtomicNum() == 1:
             """Calculates strength of the atom based on its type."""
             return self._donor_strength(atom_idx, nbrs, nn, nextnn, d, t,id)
@@ -111,7 +113,7 @@ class DeltaFunctions(JazzyCommands,KallistoInformation):
         bonds = 0
         num_aromatic_bonds = 0
         for neighbor in atom.GetNeighbors():
-            bond = self.new_mol.GetBondBetweenAtoms(atom.GetIdx(), neighbor.GetIdx())
+            bond = self.matrixdescriptors.new_mol.GetBondBetweenAtoms(atom.GetIdx(), neighbor.GetIdx())
             if bond.GetIsAromatic():
                 bonds += 2.0
                 num_aromatic_bonds += 1
@@ -150,8 +152,8 @@ class DeltaFunctions(JazzyCommands,KallistoInformation):
     def local_g_polar(self,atom_idx,expd=.1,expa=.1,gd=.1,ga=.1,id=1):
         mol = self.matrixdescriptors.new_mol
         atoms = mol.GetAtoms()
-        total_hs = sum([self._get_hydrogens(atom.GetIdx()) for atom in atoms if atoms.GetAtomicNum() != 1])
-        lps = [self._get_lone_pairs(atom.GetIdx()) for atom in atoms if atoms.GetAtomicNum() != 1]
+        total_hs = sum([self._get_hydrogens(atom.GetIdx()) for atom in atoms if atom.GetAtomicNum() != 1])
+        lps = [self._get_lone_pairs(atom.GetIdx()) for atom in atoms if atom.GetAtomicNum() != 1]
         total_lp = sum(lps)
 
         strength = self.getstrength(atom_idx,id=id)
@@ -179,28 +181,37 @@ class DeltaFunctions(JazzyCommands,KallistoInformation):
 
         return gi * a_a * (alpha_int + beta_int + k*gamma_int)
 
+
+@dataclass
+class ParamsC:
+    getjazzydelta: bool = False
+    getjazzyfe: bool = False
 class InteractionInformation(DeltaFunctions):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
     
  
     def DeltaInteraction(self,ind,id=1):
-
-        if self.matrixdescriptors.new_mol.GetAtoms()[ind].GetAtomicNum() == 1: 
-            donororacceptor = [1,0,0]
-        else:
-            if self._get_lone_pairs(ind) > 0:
-                donororacceptor = [0,1,0]
+        if self.params.getjazzydelta:
+            if self.matrixdescriptors.new_mol.GetAtoms()[ind].GetAtomicNum() == 1: 
+                donororacceptor = [1,0,0]
             else:
-                donororacceptor = [0,0,1]
-        
-        strength = self.getstrength(ind,id=id)
-        return strength,donororacceptor
+                if self._get_lone_pairs(ind) > 0:
+                    donororacceptor = [0,1,0]
+                else:
+                    donororacceptor = [0,0,1]
+            
+            strength = self.getstrength(ind,id=id)
+            return [strength] + donororacceptor
+        else:
+            return []
 
         
     def FreeEnergies(self,ind,id=1):
-        return [self.local_g_polar(ind,id=id),self.local_g_int(ind,id=1),self._interactive_contrib(ind,id=id)]
-
+        if self.params.getjazzyfe: 
+            return [self.local_g_polar(ind,id=id),self.local_g_int(ind,id=1),self._interactive_contrib(ind,id=id)]
+        else:
+            return []
 
 
   

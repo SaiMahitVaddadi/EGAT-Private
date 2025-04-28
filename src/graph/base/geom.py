@@ -38,3 +38,5 @@ class GeomFeaturizer(BaseFeaturizer,object):
         mol = self.conformers.egatecule.new_mol
         mols = [Chem.Mol(mol, confId=i) for i in range(num_conformers)]
         self.matrixdescriptors.new_mol = mols
+
+    

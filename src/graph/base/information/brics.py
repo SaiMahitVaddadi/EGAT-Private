@@ -6,8 +6,7 @@ from rdkit.Chem import BRICS
 class BRICSInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
-        self.brics = self.GetBRICSDecomposition()
-    
+        
     def _convert(self,ind):
         atom = self.matrixdescriptors.new_mol.GetAtoms()[ind]
         return atom.GetAtomMapNum()
@@ -18,6 +17,7 @@ class BRICSInformation(BaseFeaturizer):
         return bond_breaks
     
     def IsPartOfBRICSBond(self, ind):
+        self.brics = self.GetBRICSDecomposition()
         if self.params.checkbricsbond:
             for bond in self.brics:
                 if ind in bond:
@@ -27,6 +27,7 @@ class BRICSInformation(BaseFeaturizer):
             return []
         
     def IsBRICSBond(self,edge):
+        self.brics = self.GetBRICSDecomposition()
         if self.params.checkbricsbond:
             if edge in self.brics: return [0,1]
             else: return [1,0]

@@ -137,7 +137,7 @@ class GlobalBondInformation(RandomWalk,DijkstraFeaturizer,MolecularAStar):
             return []
 
     def RandomWalkCommuteTime(self, edge):
-        if self.params.getrandomwalk:
+        if self.params.getrandomwalkcommutetime:
             try:
                 rwct = self.CommuteTime(edge[0], edge[1],method=self.params.ct_method)
                 return [rwct]

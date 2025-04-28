@@ -6,7 +6,7 @@ import pandas as pd
 import sys 
 from .....addons.yarp.yarp import yarpecule
 from .properties import Properties
-
+import numpy as np 
 
 """
 :class:`RDKElectronInfo`
@@ -230,8 +230,49 @@ class YARPElectronInfo:
                 self.lps[ind].append(bm[i,i])
                 self.rads[ind].append(self.EncodeRadicalInfo(bm,i))
     
+    def GetResonanceInfo(self):
+        bond_tensor = np.stack(self.yarpecule.bond_mats, axis=0)
+        n_atoms = bond_tensor.shape[1]
+        # Initialize dictionary to store unique values
+        unique_diagonals = {}
+        unique_bonds = {}
+        for i in range(n_atoms):
+            # Diagonal (atom-specific info)
+            diagcheck = len(np.unique(bond_tensor[:, i, i]))
+            if diagcheck == 1:
+                unique_diagonals[i] = [1,0]
+            else:
+                unique_diagonals[i] = [0,1]
+            for j in range(i + 1, n_atoms):  # off-diagonal pairs only once (i < j)
+                # Bonds between atom i and j
+                values = bond_tensor[:, i, j]
+                unique_vals = np.unique(values)
+                if unique_vals.size > 0:
+                    check = len(unique_vals)
+                    if check == 1:
+                        unique_bonds[(i, j)] = [1,0]
+                    else:
+                        unique_bonds[(i, j)] = [0,1]
+        return unique_diagonals,unique_bonds
+
+    def UniqueMats(self):
+        # Stack into 3D array: shape (num_structures, n_atoms, n_atoms)
+        bond_tensor = np.stack(self.yarpecule.bond_mats, axis=0)
+
+        # Flatten each matrix to 1D and view as rows in a 2D array
+        flattened = bond_tensor.reshape(len(bond_tensor), -1)
+
+        # Use np.unique across rows to get unique bond matrices
+        unique_bond_mats = np.unique(flattened, axis=0)
+
+        # Number of unique bond matrices
+        num_unique = unique_bond_mats.shape[0]    
+        return num_unique
+    
     def run(self):
         self.GetElectronInfo()
+        self.atom_resonance,self.bond_resonance = self.GetResonanceInfo()
+        self.unique_mats = self.UniqueMats()
 
 
 

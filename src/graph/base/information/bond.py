@@ -18,10 +18,12 @@ class BondParams:
 class BondInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
-        self.InitializeAddons()
-
-    def EncodeBondOrder(self,edge):
-        BO = self.matrixdescriptors.bond_mat[edge[0],edge[1]]
+        
+    def EncodeBondOrder(self,edge,yarpid=0):
+        if self.params.getradical is not 'YARP':
+            BO = self.matrixdescriptors.bond_mat[edge[0],edge[1]]
+        else:
+            BO = self.electroninfo.yarpecule.bond_mats[yarpid][edge[0],edge[1]]
         return BO
     
     def EncodeBondOrderRDKit(self,edge):

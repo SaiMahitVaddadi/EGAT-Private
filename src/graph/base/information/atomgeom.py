@@ -13,6 +13,18 @@ from collections import defaultdict
 #To-DO : Add The Steric Hindrance Index And Ionization Potential Index
 
 
+@dataclass
+class AtomGeometryParams:
+    removecoordinationinfo: bool = False
+    getdistancetocenterofmass: bool = False
+    getsterichindrance: bool = False
+    getasa: bool = False
+    getgaussiancurvature: bool = False
+    getmolecularshapeindex: bool = False
+    getdistancetoconvexhull: bool = False
+    getvdw: bool = False
+    getvdwstrain: bool = False
+    getburiedvolume: bool = False
 
 @dataclass
 class AtomGeometryParams:
@@ -50,46 +62,31 @@ class AtomGeometryParams:
     getdistancetoconvexhull: bool = False
     getburiedvolume: bool = False
 
+
 class AtomGeometryInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
-        self.vdw_radii = {
-            'H': 1.20, 'He': 1.40, 'Li': 1.82, 'Be': 1.53, 'B': 1.92, 'C': 1.70, 'N': 1.55, 'O': 1.52, 'F': 1.47, 'Ne': 1.54,
-            'Na': 2.27, 'Mg': 1.73, 'Al': 1.84, 'Si': 2.10, 'P': 1.80, 'S': 1.80, 'Cl': 1.75, 'Ar': 1.88, 'K': 2.75, 'Ca': 2.31,
-            'Sc': 2.11, 'Ti': 2.00, 'V': 2.00, 'Cr': 2.00, 'Mn': 2.00, 'Fe': 2.00, 'Co': 2.00, 'Ni': 1.63, 'Cu': 1.40, 'Zn': 1.39,
-            'Ga': 1.87, 'Ge': 2.11, 'As': 1.85, 'Se': 1.90, 'Br': 1.85, 'Kr': 2.02, 'Rb': 3.03, 'Sr': 2.49, 'Y': 2.00, 'Zr': 2.00,
-            'Nb': 2.00, 'Mo': 2.00, 'Tc': 2.00, 'Ru': 2.00, 'Rh': 2.00, 'Pd': 1.63, 'Ag': 1.72, 'Cd': 1.58, 'In': 1.93, 'Sn': 2.17,
-            'Sb': 2.00, 'Te': 2.06, 'I': 1.98, 'Xe': 2.16, 'Cs': 3.43, 'Ba': 2.68, 'La': 2.00, 'Ce': 2.00, 'Pr': 2.00, 'Nd': 2.00,
-            'Pm': 2.00, 'Sm': 2.00, 'Eu': 2.00, 'Gd': 2.00, 'Tb': 2.00, 'Dy': 2.00, 'Ho': 2.00, 'Er': 2.00, 'Tm': 2.00, 'Yb': 2.00,
-            'Lu': 2.00, 'Hf': 2.00, 'Ta': 2.00, 'W': 2.00, 'Re': 2.00, 'Os': 2.00, 'Ir': 2.00, 'Pt': 1.75, 'Au': 1.66, 'Hg': 1.55,
-            'Tl': 1.96, 'Pb': 2.02, 'Bi': 2.07, 'Po': 2.00, 'At': 2.00, 'Rn': 2.00, 'Fr': 2.00, 'Ra': 2.00, 'Ac': 2.00, 'Th': 2.00,
-            'Pa': 2.00, 'U': 1.86, 'Np': 2.00, 'Pu': 2.00, 'Am': 2.00, 'Cm': 2.00, 'Bk': 2.00, 'Cf': 2.00, 'Es': 2.00, 'Fm': 2.00,
-            'Md': 2.00, 'No': 2.00, 'Lr': 2.00, 'Rf': 2.00, 'Db': 2.00, 'Sg': 2.00, 'Bh': 2.00, 'Hs': 2.00, 'Mt': 2.00, 'Ds': 2.00,
-            'Rg': 2.00, 'Cn': 2.00, 'Nh': 2.00, 'Fl': 2.00, 'Mc': 2.00, 'Lv': 2.00, 'Ts': 2.00, 'Og': 2.00
-        }
         
-    
+    def ConformerCalcs(self,id=1):
+        self.GrabConformer(id)
+        self.GrabGeometry(id)
+        self.CalcASA(id)
+        self.BuriedVolumecalc(id=id)
 
-    def GrabConformer(self,id=1):
-        if id == 1: return self.matrixdescriptors.new_mol
+    def _ASAClassify(self,asa):
+        if asa == 1:
+            return [0,1,0]
+        elif asa == 2:
+            return [0,0,1]
+        elif asa == 0:
+            return [1,0,0]
         else:
-            return self.matrixdescriptors.new_mol.GetConformer(conf_id=id)
-    
+            return 'hydrophobic'
 
-    def GrabGeometry(self,id=1):
-        mol = self.GrabConformer(id)
-        self.positions = {}
-        for atom in mol.GetAtoms():
-            pos = mol.GetConformer().GetAtomPosition(atom.GetIdx())
-            atom_map_num = atom.GetAtomMapNum()
-            ind = atom.GetIdx()
-            self.positions[ind] = [pos.x, pos.y, pos.z]
-        return mol 
-    
     def CalcASA(self,id=1):
-        mol = self.GrabConformer(id)
-        radii = rdFreeSASA.ClassifyAtoms(mol)
-        total_asa = rdFreeSASA.CalcASA(mol, radii)
+        mol = self.conformer
+        radii = rdFreeSASA.classifyAtoms(mol)
+        total_asa = rdFreeSASA.CalcSASA(mol, radii)
         # Get total TPSA
         total_tpsa = rdMolDescriptors.CalcTPSA(mol)
         self.asa = []
@@ -99,9 +96,11 @@ class AtomGeometryInformation(BaseFeaturizer):
         self.tpsa = rdMolDescriptors._CalcTPSAContribs(mol)  # returns a list of floats
         self.percent_tpsa = list(np.array(self.tpsa)/total_tpsa * 100)
         self.percent_tpsa_wrt_atom = []
+        self.sasa_class = []
         for atom in mol.GetAtoms():
             idx = atom.GetIdx()
-            asa = float(mol.GetProp(f"_FreeSASA_atom_{idx}"))
+            asa = float(atom.GetProp(f"SASA"))
+            self.sasa_class.append(atom.GetProp('SASAClass'))
             percent = (asa / total_asa) * 100 if total_asa > 0 else 0
             self.asa.append(asa)
             self.percent_asa.append(percent)
@@ -112,7 +111,7 @@ class AtomGeometryInformation(BaseFeaturizer):
             self.percent_tpsa_wrt_atom.append(self.percent_tpsa[idx]/full_sa * 100)
 
     def BuriedVolumecalc(self,center_type="centroid", center_idx=None, center_coords=None, R=3.5, grid_step=0.1, id=1):
-        mol = self.GrabGeometry(id)
+        mol = self.conformer
         atom_coords = pd.DataFrame(self.positions).T.values
         symbols = [atom.GetSymbol() for atom in mol.GetAtoms()]
         radii = [self.vdw_radii.get(s, 2.00) for s in symbols]
@@ -159,11 +158,7 @@ class AtomGeometryInformation(BaseFeaturizer):
             self.bv.append(buried_volume)
             self.bvcontrib.append(contribution)
             self.bvratio.append(burial_ratio)
-
-        
-
-
-
+    
     def AtomCoordination(self,ind,id=1):
         if not self.params.removecoordinationinfo:
             self.GrabGeometry(id)
@@ -171,15 +166,13 @@ class AtomGeometryInformation(BaseFeaturizer):
         else:
             return []
 
-
     def toCCTK(self,id=1):
-        mol = self.GrabGeometry(id)
+        mol = self.conformer
         atomic_numbers = [atom.GetAtomicNum() for atom in mol.GetAtoms()]
         geometry = pd.DataFrame(self.positions).T.values
         cctk_molecule = cctk.Molecule(atomic_numbers=atomic_numbers, geometry=geometry)
         return mol, cctk_molecule
 
-        
     def DistanceToCenterOfMass(self, ind,id=1):
         if self.params.getdistancetocenterofmass:
             rdmolecule,cctkmolecule = self.toCCTK(id)
@@ -192,7 +185,7 @@ class AtomGeometryInformation(BaseFeaturizer):
 
     def StericHindrance(self, ind,id=1):
         if self.params.getsterichindrance:
-            mol = self.GrabGeometry(id)
+            mol = self.conformer
             position = self.positions[ind]
             adj_matrix = Chem.GetAdjacencyMatrix(mol)
             hindrance = 0
@@ -200,7 +193,7 @@ class AtomGeometryInformation(BaseFeaturizer):
                 if neighbor != ind:
                     npos = mol.GetConformer().GetAtomPosition(neighbor)
                     nposition = np.array([npos.x, npos.y, npos.z])
-                    distance = np.linalg.norm(npos-position)  # Calculate Euclidean distance
+                    distance = np.linalg.norm(nposition-np.array(position))  # Calculate Euclidean distance
                     if distance < 3.5:
                         if adj_matrix[ind][neighbor] == 0:
                             hindrance += 1 / distance
@@ -211,8 +204,8 @@ class AtomGeometryInformation(BaseFeaturizer):
             return []
         
     def VdWStrain(self, ind,id=1):
-        if self.params.getsterichindrance:
-            mol = self.GrabConformer(id)
+        if self.params.getvdwstrain:
+            mol = self.conformer
             pos = mol.GetConformer().GetAtomPosition(ind)
             adj_matrix = Chem.GetAdjacencyMatrix(mol)
             position = np.array([pos.x, pos.y, pos.z])
@@ -232,19 +225,15 @@ class AtomGeometryInformation(BaseFeaturizer):
         else:
             return []
     
-
-    def getVdWSurfaceArea(self,ind):
-        radius = self.vdw_radii[self.matrixdescriptors.element[ind]]  # Van der Waals radius of the atom
+    def getVdWSurfaceArea(self,radius):
         exposed_area = 4 * np.pi * radius**2  # Start with full surface area of the sphere
         vdw_surface_area = exposed_area
         return vdw_surface_area
     
-    def getVdWMol(self,ind):
-        radius = self.vdw_radii[self.matrixdescriptors.element[ind]]  # Van der Waals radius of the atom
+    def getVdWMol(self,radius):
         exposed_area = 4/2 * np.pi * radius**3  # Start with full surface area of the sphere
         vdw_surface_area = exposed_area
         return vdw_surface_area
-
 
     def AtomicSolventAccessibility(self, ind,id=1):
         if self.params.getasa:
@@ -254,7 +243,7 @@ class AtomGeometryInformation(BaseFeaturizer):
     
     def GaussianCurvature(self, ind,id=1):
         if self.params.getgaussiancurvature:
-            mol = self.GrabConformer(id)
+            mol = self.conformer
             pos = mol.GetConformer().GetAtomPosition(ind)
         
             # Calculate Gaussian curvature using neighboring atoms
@@ -278,7 +267,7 @@ class AtomGeometryInformation(BaseFeaturizer):
 
     def MolecularShapeIndex(self, ind,id=1):
         if self.params.getmolecularshapeindex:
-            mol = self.GrabConformer(id)
+            mol = self.conformer
             pos = mol.GetConformer().GetAtomPosition(ind)
         
            # Calculate Gaussian curvature using neighboring atoms
@@ -297,7 +286,7 @@ class AtomGeometryInformation(BaseFeaturizer):
 
     def DistanceToConvexHull(self, ind,id=1):
         if self.params.getdistancetoconvexhull:
-            mol = self.GrabConformer(id)
+            mol = self.conformer
             atom_position = mol.GetConformer().GetAtomPosition(ind)
             
             # Calculate convex hull of the molecule
@@ -316,17 +305,18 @@ class AtomGeometryInformation(BaseFeaturizer):
             return []
 
     def GetVanDerWaalsRadii(self, ind):
-        element = self.matrixdescriptors.element[ind]
-        return [self.vdw_radii.get(element, 2.00)]  # Default to 2.00 if element not found
+        if self.params.getvdw:
+            element = self.matrixdescriptors.element[ind]
+            return [self.vdw_radii.get(element, 2.00)]  # Default to 2.00 if element not found
+        else:
+            return []
 
-    
     def GetBuriedVolume(self,ind,id=1):
         if self.params.getburiedvolume:
             return [self.bv[ind],self.bvcontrib[ind],self.bvratio[ind]]
         else:
             return []
         
-
     def SurroundingVdWMetrics(self,ind,id=1):
         mol = self.matrixdescriptors.new_mol
         neighbors = [nbr.GetIdx() for nbr in mol.GetAtomWithIdx(ind).GetNeighbors()]
@@ -335,13 +325,18 @@ class AtomGeometryInformation(BaseFeaturizer):
         sub_sa_ratio = 0
         sub_vol_ratio = 0
         for neighbor_idx in neighbors:
-            sub_sa += self.getVdWSurfaceArea(mol.GetAtomWithIdx(neighbor_idx).GetSymbol())
-            sub_vol += self.getVdWMol(mol.GetAtomWithIdx(neighbor_idx).GetSymbol())
-        sub_sa_ratio = sub_sa / self.getVdWSurfaceArea(mol.GetAtomWithIdx(ind).GetSymbol())
-        sub_vol_ratio = sub_vol / self.getVdWMol(mol.GetAtomWithIdx(ind).GetSymbol())
+            try:
+                radius = self.vdw_radii[neighbor_idx]  # Van der Waals radius of the atom
+            except:
+                radius = 2.00
+            sub_sa += self.getVdWSurfaceArea(radius)
+            sub_vol += self.getVdWMol(radius)
+        try:
+            radius = self.vdw_radii[ind]  # Van der Waals radius of the atom
+        except:
+            radius = 2.00
+        sub_sa_ratio = sub_sa / self.getVdWSurfaceArea(radius)
+        sub_vol_ratio = sub_vol / self.getVdWMol(radius)
         return [sub_sa,sub_vol,sub_sa_ratio,sub_vol_ratio]
-    
-    def SurroundingIPMetrics(self,ind,id=1):
-        pass
 
 

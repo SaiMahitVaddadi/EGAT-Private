@@ -1,20 +1,84 @@
 from ..base import BaseFeaturizer
 from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors
-from dataclasses import dataclass
+from dataclasses import dataclass,field
 from rdkit.Chem.EState import EState
 import networkx as nx
 import numpy as np 
-from mordreddescs import _atomic_property
+from mordred import _atomic_property
 from .helpers.detourmatrix import detour_matrix,build_connectivity_matrix_B,build_modified_adjacency_matrix,get_pendent_matrix,compute_laplacians,get_distance_path_count_matrix
-from .helpers.edgewiener import edge_wiener_index, hyper_wiener_index
+from .helpers.edgewiener import edge_wiener_index, hyper_wiener_index,edge_wiener_index_byorder,hyper_wiener_index_byorder,vertex_edge_wiener_for_vertex,vertex_edge_wiener_for_edge,vertex_edge_distance_histogram_for_vertices,vertex_edge_distance_histogram_for_edges
 from .helpers.bfstree import BFSTree
 from .helpers.psa import get_tpsa_contributions,compute_atomwise_logs,get_slogp_smr_contributions
 from .helpers.estate import match_all_smarts
 from .helpers.morse import get_morse_descriptors,get_morse_sinc_descriptors
 from itertools import groupby
+from .helpers.mordredtable import PeriodicTable
 
-class MordredInformation(BaseFeaturizer):
+@dataclass
+class MordredParams:
+    useabc: str = None  # Options: 'reg', 'gg', None
+    useabs: str = None  # Options: 'gg', None
+    getbarysz: bool = False  # Whether to calculate Barysz descriptors
+    getats: str = None  # Options: 'ATS', 'AATS', 'ATSD', 'AATSD', 'AATSM', 'AATSG', None
+    getdetour: bool = False  # Whether to calculate detour matrix
+    getburdenmat: str = None  # Options: 'reg', 'modified', None
+    burdenweight: str = None  # Options: 'reg', 'atom', 'partialcharge', 'polarizability', 'ionizationpotential', 'pauling', 'sanderson', 'allred', None
+    getpropsrelativetocarbon: bool = False  # Whether to calculate properties relative to carbon
+    getvertexdistancedegree: bool = False  # Whether to calculate vertex distance degree
+    getbalabanbondfactor: bool = False  # Whether to calculate Balaban bond factor
+    getsuperdentic: bool = False  # Whether to calculate superdentic index
+    geteccentricity: bool = False  # Whether to calculate eccentricity
+    getschultz: bool = False  # Whether to calculate Schultz index
+    getgutman: bool = False  # Whether to calculate Gutman index
+    getxui: bool = False  # Whether to calculate Xui index
+    gethorary: bool = False  # Whether to calculate Horary index
+    getmohar: str = None  # Options: 'laplacian', None
+    gethp: bool = False  # Whether to calculate HP value
+    getcorecount: bool = False  # Whether to calculate core count
+    getvem: bool = False  # Whether to calculate VEM descriptors
+    getetacomposite: bool = False  # Whether to calculate eta composite
+    getetapsi: bool = False  # Whether to calculate eta psi
+    getgravity: bool = False  # Whether to calculate gravity index
+    getzagreb: int = None  # Options: 2, 3, ..., None
+    getharmonic: bool = False  # Whether to calculate harmonic index
+    getsombor: bool = False  # Whether to calculate Sombor index
+    getrandic: bool = False  # Whether to calculate Randic index
+    getnirmala: bool = False  # Whether to calculate Nirmala index
+    getsoss: bool = False  # Whether to calculate SOS index
+    getaugmentedgraphattributes: bool = False  # Whether to calculate augmented graph attributes
+    gethyperbolic: bool = False  # Whether to calculate hyperbolic index
+    getaugzagreb: bool = False  # Whether to calculate augmented Zagreb index
+    getklein: bool = False  # Whether to calculate Klein index
+    gethyperwiener: bool = False  # Whether to calculate hyper Wiener index
+    getwiener: bool = False  # Whether to calculate Wiener index
+    gethdsa: bool = False  # Whether to calculate HDSA index
+    getets: bool = False  # Whether to calculate ETS descriptors
+    getinformationcontent: int = None  # Options: 0, 1, 2, ..., None
+    getmoleculardistanceedge: bool = False  # Whether to calculate molecular distance edge
+    gettopocharge: int = None  # Options: 1, 2, ..., None
+    getSMR: bool = False  # Whether to calculate SMR descriptors
+    SLogP: list = None  # Options: ['Li', 'logPregion'], None
+    SMR: list = None  # Options: ['Ri', 'SMRregion'], None
+    getMoRSE: str = None  # Options: 'cos', 'sinc', None
+    getchi: int = None  # Options: 0, 1, 2, ..., None
+    getedgewiener: bool = False  # Whether to calculate edge Wiener index
+    getedgewienerbyorder: int = None
+    getvertexadjacency: bool = False  # Whether to calculate vertex adjacency
+    getTPSA: bool = False  # Whether to calculate TPSA
+    getASA: bool = False  # Whether to calculate ASA
+    LogS: bool = False  # Whether to calculate LogS
+    getEstate: str = None  # Options: 'all', 'vectoronly', 'indicesonly', None
+    getchivalence: int = None  # Options: 0, 1, 2, ..., None
+    MDEvalences: list = field(default_factory=lambda: [1, 1])  # Default valences for molecular distance edge
+    MDEreference: str = 'C'  # Default reference atom for molecular distance edge
+    mohar: str = None
+    getvewi: bool = False  # Whether to calculate vertex-edge Wiener index
+    getvewibyorder: int = None  # Options: 2, 3, ..., None
+
+
+
+class BaseMordredFunctions(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
         self.InitializeAddons()
@@ -27,31 +91,6 @@ class MordredInformation(BaseFeaturizer):
             G.add_edge(bond.GetBeginAtomIdx(), bond.GetEndAtomIdx(), bond_type=bond.GetBondType())
         return G
 
-    def ABCIndex(self,edge):
-        if self.params.useabc == 'reg':
-            du = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[0]).GetDegree()
-            dv = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[1]).GetDegree()
-            return [np.sqrt((du+dv-2)/(du*dv))]
-        elif self.params.useabs == 'gg':
-            # Convert RDKit molecule to NetworkX graph
-            G = self.mol_to_nx_graph(self.matrixdescriptors.new_mol)
-            u = edge[0]
-            v = edge[v]
-            if G.has_edge(u, v):
-                nodes = G.nodes()
-                du = sum(1 for x in nodes if nx.shortest_path_length(G, source=u, target=x) < nx.shortest_path_length(G, source=v, target=x))
-                dv = sum(1 for x in nodes if nx.shortest_path_length(G, source=v, target=x) < nx.shortest_path_length(G, source=u, target=x))
-    
-                # To avoid division by zero
-                if du == 0 or dv == 0:
-                    return [0.0]
-                return [np.sqrt((du+dv-2)/(du*dv))]
-            else:
-                return [0.0]
-        else:
-            return []
-        
-    
     def _atomicpropertyvector(self,ind):
         atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
         return [float(self.matrixdescriptors.gasteiger_charges[ind]),
@@ -62,54 +101,51 @@ class MordredInformation(BaseFeaturizer):
                     _atomic_property.get_mass(atom),
                     _atomic_property.get_sanderson_en(atom),
                     _atomic_property.get_pauling_en(atom),
-                    _atomic_property.get_allred_rowcow_en(atom),
+                    _atomic_property.get_allred_rocow_en(atom),
                     _atomic_property.get_polarizability(atom),
-                    _atomic_property.get_ioniziation_potential(atom),]
+                    _atomic_property.get_ionization_potential(atom),]
+
+    def carbon_properties(self,atom):
+        N = atom.GetAtomicNum()
+        if N == 1:
+            return 0
+        _table = Chem.GetPeriodicTable()
+        Zv = _table.GetNOuterElecs(N) - atom.GetFormalCharge()
+        Z = atom.GetAtomicNum() - atom.GetFormalCharge()
+        hi = 0
+        try:
+            he = sum(1 for a in atom.GetNeighbors() if a.GetAtomicNum() == 0)
+        except:
+            he = 0
+        h = hi + he
+
+        ve = (Zv - h) / (Z - Zv - 1)
+        return ve,he,0
+
 
     def _atomicpropertyvectorwrtcarbon(self,ind):
         pv = np.array(self._atomicpropertyvector(ind))
         atom = Chem.Atom(6)
+        ve,he,i = self.carbon_properties(atom)
+
+        
         carbon = [_atomic_property.get_gasteiger_charge(atom),
-                    _atomic_property.get_valence_electrons(atom),
-                    _atomic_property.get_sigma_electrons(atom),
-                    _atomic_property.get_intrinsic_state(atom),
+                    ve,he,i,
                     _atomic_property.get_atomic_number(atom),
                     _atomic_property.get_mass(atom),
                     _atomic_property.get_sanderson_en(atom),
                     _atomic_property.get_pauling_en(atom),
-                    _atomic_property.get_allred_rowcow_en(atom),
+                    _atomic_property.get_allred_rocow_en(atom),
                     _atomic_property.get_polarizability(atom),
-                    _atomic_property.get_ioniziation_potential(atom),]
+                    _atomic_property.get_ionization_potential(atom),]
 
         carbon = np.array(carbon)
         return pv/carbon
     
-
-    def BaryszBond(self,edge,bo):
-        if self.params.getbarysz:
-            if bo == 0:
-                return [0]
-            else:
-                Zc = 6
-                atom1 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[0])
-                atom2 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[1])
-                return [(1/bo)*(Zc**2)/(atom1.GetAtomicNum() + atom2.GetAtomicNum())]
-        else:
-            return []
-
-    def BaryszAtom(self,ind):
-        if self.params.getbarysz:
-            atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
-            Zc = 6
-            return [1 - Zc/atom.GetAtomicNum()]
-        else:
-            return []
-
-    def _graphdistmatrix(self,dist=2):
+    def _graphdistmatrix(self):
         mol = self.matrixdescriptors.new_mol
         num_atoms = mol.GetNumAtoms()
         dist_matrix = np.zeros((num_atoms, num_atoms), dtype=float)
-        counts = 0 
         for i in range(num_atoms):
             for j in range(num_atoms):
                 if i != j:
@@ -117,10 +153,16 @@ class MordredInformation(BaseFeaturizer):
                     dist_matrix[i, j] = len(path_length) - 1
                 else:
                     dist_matrix[i, j] = 0
-                if dist_matrix[i, j] == dist:
-                    counts += 1
-        return counts,dist_matrix 
+        return dist_matrix 
     
+    def _getcounts(self,dist,num_atoms=None,dist_matrix=None):
+        counts = 0
+        for i in range(num_atoms):
+            for j in range(num_atoms):
+                if i != j:
+                    if dist_matrix[i, j] == dist:
+                        counts += 1
+        return counts/2
     def _getallvectors(self):
         mol = self.matrixdescriptors.new_mol
         num_atoms = mol.GetNumAtoms()
@@ -158,99 +200,11 @@ class MordredInformation(BaseFeaturizer):
         total_w = total_w/(len(all_w)-1)
         return total_w
     
-    def ATSAtom(self,ind):
-        if self.getats == 'ATS':
-            pv = np.array(self._atomicpropertyvector(ind))
-            return [pv**2]
-        elif self.getats == 'AATS':
-            pv = np.array(self._atomicpropertyvector(ind))
-            return [pv/len(self.matrixdescriptors.new_mol.GetAtoms())]
-        elif self.getats == 'ATSD':
-            pv = np.array(self._atomicpropertyvector(ind))
-            w_hat = np.array(self._avgpropvector())    
-            return [(pv-w_hat)**2]
-        elif self.getats == 'AATSD':
-            pv = np.array(self._atomicpropertyvector(ind))
-            w_hat = np.array(self._avgpropvector())    
-            return [(pv-w_hat)**2/len(self.matrixdescriptors.new_mol.GetAtoms())]
-        elif self.getats == 'AATSM':
-            pv = np.array(self._atomicpropertyvector(ind))
-            w_hat = np.array(self._avgpropvector())  
-            denom = len(self.matrixdescriptors.new_mol.GetAtoms()) * self._morandenom()  
-            return [(pv-w_hat)**2/denom]
-        elif self.getats == 'AATSG':
-            pv = np.array(self._atomicpropertyvector(ind))
-            w_hat = np.array(self._avgpropvector())  
-            denom = 2 * len(self.matrixdescriptors.new_mol.GetAtoms()) * self._gearydenom()  
-            return [(pv-w_hat)**2/denom]
-        else:
-            return []
-
-    def ATSBond(self,edge):
-        if self.getats == 'ATS':
-            pv1 = np.array(self._atomicpropertyvector(edge[0]))
-            pv2 = np.array(self._atomicpropertyvector(edge[1]))
-            return [.5*pv1.dot(pv2)]
-        elif self.getats == 'AATS':
-            pv1 = np.array(self._atomicpropertyvector(edge[0]))
-            pv2 = np.array(self._atomicpropertyvector(edge[1]))
-            mol = self.matrixdescriptors.new_mol
-            path_length = Chem.rdmolops.GetShortestPath(mol, edge[0], edge[1])
-            graph_distance = len(path_length) - 1 if path_length else 0
-            totalints,_ = self._graphdistmatrix(graph_distance)
-            return [.5*(pv1+pv2)/totalints]
-        elif self.getats == 'ATSD':
-            pv1 = np.array(self._atomicpropertyvector(edge[0]))
-            pv2 = np.array(self._atomicpropertyvector(edge[1]))
-            w_hat = np.array(self._avgpropvector())
-            pv1 = pv1 - w_hat
-            pv2 = pv2 - w_hat    
-            return [.5*pv1.dot(pv2)]
-        elif self.getats == 'AATSD':
-            pv1 = np.array(self._atomicpropertyvector(edge[0]))
-            pv2 = np.array(self._atomicpropertyvector(edge[1]))
-            w_hat = np.array(self._avgpropvector())
-            pv1 = pv1 - w_hat
-            pv2 = pv2 - w_hat    
-            mol = self.matrixdescriptors.new_mol
-            path_length = Chem.rdmolops.GetShortestPath(mol, edge[0], edge[1])
-            graph_distance = len(path_length) - 1 if path_length else 0
-            totalints,_ = self._graphdistmatrix(graph_distance)
-            return [.5*pv1.dot(pv2)/totalints]
-        elif self.getats == 'AATSM':
-            pv1 = np.array(self._atomicpropertyvector(edge[0]))
-            pv2 = np.array(self._atomicpropertyvector(edge[1]))
-            w_hat = np.array(self._avgpropvector())
-            totalints,_ = self._graphdistmatrix(graph_distance)
-            denom = totalints * self._morandenom()
-            pv1 = pv1 - w_hat
-            pv2 = pv2 - w_hat    
-            return [.5*pv1.dot(pv2)/denom]
-        elif self.getats == 'AATSG':
-            pv1 = np.array(self._atomicpropertyvector(edge[0]))
-            pv2 = np.array(self._atomicpropertyvector(edge[1]))
-            w_hat = np.array(self._avgpropvector())
-            totalints,_ = self._graphdistmatrix(graph_distance)
-            denom = 2 * totalints * self._gearydenom()
-            pv1 = pv1 - w_hat
-            pv2 = pv2 - w_hat    
-            return [.5*pv1.dot(pv2)/denom]
-        else:
-            return []
-    
     def _detourmat(self):
         G = self.mol_to_nx_graph(self.matrixdescriptors.new_mol)
         D = detour_matrix(G)
         return D
     
-    def DetourMatrix(self,edge):
-        if self.getdetour:
-            D = self._detourmat()
-            return [D[edge[0], edge[1]]]
-        else:
-            return []
-    
-
     def _atomicwtmat(self):
         atom_weights = []
         for atom in self.matrixdescriptors.new_mol.GetAtoms():
@@ -272,10 +226,9 @@ class MordredInformation(BaseFeaturizer):
     def _ipmat(self):
         ionization_potentials = []
         for atom in self.matrixdescriptors.new_mol.GetAtoms():
-            ionization_potentials.append(_atomic_property.get_ioniziation_potential(atom))
+            ionization_potentials.append(_atomic_property.get_ionization_potential(atom))
         return np.array(ionization_potentials)
     
-
     def _enmat(self,entype='pauling'):
         electronegativities = []
         for atom in self.matrixdescriptors.new_mol.GetAtoms():
@@ -285,8 +238,9 @@ class MordredInformation(BaseFeaturizer):
                 electronegativities.append(_atomic_property.get_sanderson_en(atom))
             elif entype == 'allred':
                 electronegativities.append(_atomic_property.get_allred_rowcow_en(atom))
+            else:
+                electronegativities.append(0)
         return np.array(electronegativities)
-
 
     def _burdenmat(self):
         if self.params.getburdenmat == 'reg':
@@ -294,226 +248,38 @@ class MordredInformation(BaseFeaturizer):
         else:
             B = build_modified_adjacency_matrix(self.matrixdescriptors.new_mol)
         return B
-
-    def BurdenValue(self,edge):
-        if self.params.getburdenmat is not None and self.params.burdenweight is not None:
-            B = self._burdenmat()
-            Bval = B[edge[0], edge[1]]
-            if self.params.burdenweight == 'reg':
-                return [Bval]
-            elif self.params.burdenweight == 'atom':
-                atom_weights = self._atomicwtmat()
-                return [Bval * atom_weights[edge[0]] * atom_weights[edge[1]]]
-            elif self.params.burdenweight == 'partialcharge':
-                partial_charges = self._partialchargemat()
-                return [Bval * partial_charges[edge[0]] * partial_charges[edge[1]]]
-            elif self.params.burdenweight == 'polarizability':
-                polarizabilities = self._polarizabilitymat()
-                return [Bval * polarizabilities[edge[0]] * polarizabilities[edge[1]]]
-            elif self.params.burdenweight == 'ionizationpotential':
-                ionization_potentials = self._ipmat()
-                return [Bval * ionization_potentials[edge[0]] * ionization_potentials[edge[1]]]
-            elif self.params.burdenweight == 'pauling':
-                en = self._enmat(entype='pauling')
-                return [Bval * en[edge[0]] * en[edge[1]]]
-            elif self.params.burdenweight == 'sanderson':
-                en = self._enmat(entype='sanderson')
-                return [Bval * en[edge[0]] * en[edge[1]]]
-            elif self.params.burdenweight == 'allred':
-                en = self._enmat(entype='allred')
-                return [Bval * en[edge[0]] * en[edge[1]]]
-            elif self.params.burdenweight == 'atomandpartialcharge':
-                atom_weights = self._atomicwtmat()
-                partial_charges = self._partialchargemat()
-                return [Bval * atom_weights[edge[0]] * atom_weights[edge[1]] * partial_charges[edge[0]] * partial_charges[edge[1]]]
-            elif self.params.burdenweight == 'atomandpolarizability':
-                atom_weights = self._atomicwtmat()
-                polarizabilities = self._polarizabilitymat()
-                return [Bval * atom_weights[edge[0]] * atom_weights[edge[1]] * polarizabilities[edge[0]] * polarizabilities[edge[1]]]
-            elif self.params.burdenweight == 'partialchargeandpolarizability':
-                partial_charges = self._partialchargemat()
-                polarizabilities = self._polarizabilitymat()
-                return [Bval * partial_charges[edge[0]] * partial_charges[edge[1]] * polarizabilities[edge[0]] * polarizabilities[edge[1]]]
-            elif self.params.burdenweight == 'atomandionizationpotential':
-                atom_weights = self._atomicwtmat()
-                ionization_potentials = self._ipmat()
-                return [Bval * atom_weights[edge[0]] * atom_weights[edge[1]] * ionization_potentials[edge[0]] * ionization_potentials[edge[1]]]
-            elif self.params.burdenweight == 'partialchargeandionizationpotential':
-                partial_charges = self._partialchargemat()
-                ionization_potentials = self._ipmat()
-                return [Bval * partial_charges[edge[0]] * partial_charges[edge[1]] * ionization_potentials[edge[0]] * ionization_potentials[edge[1]]]
-            elif self.params.burdenweight == 'polarizabilityandionizationpotential':
-                polarizabilities = self._polarizabilitymat()
-                ionization_potentials = self._ipmat()
-                return [Bval * polarizabilities[edge[0]] * polarizabilities[edge[1]] * ionization_potentials[edge[0]] * ionization_potentials[edge[1]]]
-            elif self.params.burdenweight == 'all':
-                atom_weights = self._atomicwtmat()
-                partial_charges = self._partialchargemat()
-                polarizabilities = self._polarizabilitymat()
-                ionization_potentials = self._ipmat()
-                en = self._enmat(entype='pauling')
-                return [Bval * atom_weights[edge[0]] * atom_weights[edge[1]] * partial_charges[edge[0]] * partial_charges[edge[1]] * polarizabilities[edge[0]] * polarizabilities[edge[1]] * ionization_potentials[edge[0]] * ionization_potentials[edge[1]] * en[edge[0]] * en[edge[1]]]
-        else:
-            return []
-        
-
-
-    def PropsRelativetoCarbon(self,ind):
-        if self.params.getpropsrelativetocarbon:
-            pv = self._atomicpropertyvectorwrtcarbon(ind)
-            return pv
-        else:
-            return []
     
-
     def _vertexdegree(self,ind):
-        _,distmat = self._graphdistmatrix(dist=1)
-        rowsum = np.sum(distmat[ind, :])
+        rowsum = np.sum(self.D[ind, :])
         return rowsum
     
-    def VertexDistanceDegreeAtom(self,ind):
-        if self.params.getvertexdistancedegree:
-            pv = self._vertexdegree(ind)
-            return [pv]
-        else:
-            return []
-        
-    def VertexDistanceDegreeBond(self,edge):
-        if self.params.getvertexdistancedegree:
-            pv1 = self._vertexdegree(edge[0])
-            pv2 = self._vertexdegree(edge[1])
-            return [pv1*pv2]
-        else:
-            return []
-    
-    def BalabanBondFactor(self,edge):
-        if self.params.getbalabanbondfactor:
-            pv1 = self._vertexdegree(edge[0])
-            pv2 = self._vertexdegree(edge[1])
-            num_bonds = self.matrixdescriptors.new_mol.GetNumBonds()
-            num_rings = self.matrixdescriptors.new_mol.GetRingInfo().NumRings()
-            return [1/np.sqrt(pv1*pv2)*(num_bonds/(num_rings+1))]
-        else:
-            return []
-
     def _pendent(self):
-        G = self.mol_to_nx_graph(self.matrixdescriptors.new_mol)
-        _,distmat = self._graphdistmatrix(dist=1)
-        pendent_matrix = get_pendent_matrix(G, distmat)
+        pendent_matrix = get_pendent_matrix(self.G, self.D)
         return np.array(pendent_matrix)
-
-    def SuperdenticIndex(self,ind):
-        if self.params.getsuperdentic:
-            pendent = self._pendent()
-            pendentrow = pendent[ind,:]
-            nonzeros = pendentrow[pendentrow != 0]
-            return [np.prod(nonzeros)]
-        else:
-            return [] 
-        
+    
     def _eccentricity(self,ind):
-        _,distmat = self._graphdistmatrix(dist=1)
-        return np.max(distmat[ind,:])
+        return np.max(self.D[ind,:])
 
     def _avgeccentricity(self):
-        mol = self.matrixdescriptors.new_mol
-        num_atoms = mol.GetNumAtoms()
-        eccentricities = [self._eccentricity(i) for i in range(num_atoms)]
+        eccentricities = [self._eccentricity(i) for i in range(self.Natoms)]
         return np.mean(eccentricities)
     
     def _valence(self,ind):
         atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
         return atom.GetTotalValence()
-
-    def Eccentricity(self,ind):
-        if self.params.geteccentricity:
-            pv = self._eccentricity(ind)
-            num_atoms = self.matrixdescriptors.new_mol.GetNumAtoms()
-            return [pv,(1/num_atoms) * np.abs(pv - self._avgeccentricity()),pv*self._valence(ind)]
-        else:
-            return []
-        
+    
     def _degreevector(self):
         degvector = [] 
         for atom in self.matrixdescriptors.new_mol.GetAtoms():
             degvector.append(_atomic_property.get_sigma_electrons(atom))
         return np.array(degvector)
-    
-    def Schultz(self,ind):
-        if self.params.getschultz:
-            _,distmat = self._graphdistmatrix(dist=1)
-            mat = self.matrixdescriptors.adj_mat + distmat
-            deg = self._degreevector()
-            result = mat @ deg
-            return [result[ind]]
-        else:
-            return []
 
-    def Gutman(self,edge):
-        if self.params.getgutman:
-            _,distmat = self._graphdistmatrix(dist=1)
-            deg = self._degreevector()
-            return [distmat[edge[0], edge[1]] * deg[edge[0]] * deg[edge[1]]]
-        else:
-            return []
-    
-    def Xui(self,node):
-        if self.params.getxui:
-            deg = self._degreevector()
-            atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(node)
-            return [deg[node]* _atomic_property.get_valence_electrons(atom),
-                    deg[node] * _atomic_property.get_valence_electrons(atom)**2]
-        else:
-            return []
-    
-    def Horary(self,edge):
-        if self.params.gethorary:
-            _,distmat = self._graphdistmatrix(dist=1)
-            return [distmat[edge[0], edge[1]]/2]
-        else:
-            return []
-        
     def _laplacian(self):
-        G = self.mol_to_nx_graph(self.matrixdescriptors.new_mol)
-        laplacians = compute_laplacians(G)
+        laplacians = compute_laplacians(self.G)
         return laplacians
-    
-    def Mohar(self,edge):
-        if self.params.getmohar is not None:
-            laplacians = self._laplacian()[self.params.mohar]
-            return [laplacians[edge[0], edge[1]]]
-        else:
-            return []
 
     def _pdmatrix(self):
-        G = self.mol_to_nx_graph(self.matrixdescriptors.new_mol)
-        return get_distance_path_count_matrix(G)
-
-    
-    def HPValue(self,edge):
-        if self.params.gethp:
-            distmat = self._pdmatrix()
-            return [distmat[edge[0], edge[1]]/2]
-        else:
-            return []
-    
-    def CoreCount(self,node):
-        if self.params.getcorecount:
-            return [_atomic_property.get_core_count(self.matrixdescriptors.new_mol.GetAtomWithIdx(node))]
-        else:
-            return []
-        
-    def VEMAtom(self,ind):
-        if self.params.getvem:
-            atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
-            return [_atomic_property.get_eta_beta_sigma(atom)/2,
-                    _atomic_property.get_eta_beta_non_sigma(atom)/2,
-                    _atomic_property.get_eta_beta_sigma(atom) + _atomic_property.get_eta_beta_non_sigma(atom),
-                    _atomic_property.get_eta_beta_sigma(atom) - _atomic_property.get_eta_beta_non_sigma(atom),
-                    _atomic_property.get_eta_beta_delta(atom)]
-        else:
-            return []
-        
+        return get_distance_path_count_matrix(self.G)
 
     def _getbondcounts(self,edge):
         mol = self.matrixdescriptors.new_mol
@@ -546,7 +312,7 @@ class MordredInformation(BaseFeaturizer):
         e1 = _atomic_property.get_eta_epsilon(atom1)
         e2 = _atomic_property.get_eta_epsilon(atom2)
 
-        aromatic = bond.IsAromatic() if bond else False
+        aromatic = bond.GetIsAromatic() if bond else False
 
         sigmacheck = np.abs(e1-e2) <= .3
 
@@ -556,245 +322,6 @@ class MordredInformation(BaseFeaturizer):
                 return 1
             else:
                 return 1.5
-
-
-        
-    def VEMBond(self,edge):
-        if self.params.getvem:
-            atom1 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[0])
-            atom2 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[1])
-            sigma, pi = self._getbondcounts(edge)
-            
-            # Check if the bond between atom1 and atom2 is aromatic
-            bond = self.matrixdescriptors.new_mol.GetBondBetweenAtoms(edge[0], edge[1])
-            
-            xij = self._bondepsigma(atom1, atom2)
-            yij = self._bondeppi(atom1, atom2, bond)
-
-            
-            return [xij * sigma,yij*pi,xij*sigma - yij*pi]
-        else:
-            return []
-    
-    def EtaComposite(self,edge):
-        if self.params.getetacomposite:
-            atom1 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[0])
-            atom2 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[1])
-            _,distmat = self._graphdistmatrix()
-            g1 = _atomic_property.get_eta_gamma(atom1)
-            g2 = _atomic_property.get_eta_gamma(atom2)
-
-            
-            return [g1*g2/distmat[edge[0], edge[1]]]
-        else:
-            return []
-    
-    def EtaPsi(self,ind):
-        if self.params.getetapsi:
-            atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
-            psi = _atomic_property.get_core_count(atom)/_atomic_property.get_eta_epsilon(atom)
-            return [psi]
-        else:
-            return []
-    
-    def Gravity(self,edge):
-        if self.params.getgravity:
-            atom1 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[0])
-            atom2 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[1])
-            _,distmat = self._graphdistmatrix()
-            m1 = _atomic_property.get_mass(atom1)
-            m2 = _atomic_property.get_mass(atom2)
-            return [m1*m2/distmat[edge[0], edge[1]]]    
-        else:
-            return []
-    
-
-    def ZagrebAtom(self,ind):
-        if self.params.getzagreb is not None:
-            deg = self._degreevector()
-            return [deg[ind] ** 2]
-        elif isinstance(self.params.getzagreb,int) and self.params.getzagreb > 2:
-            deg = self._degreevector()
-            return [deg[ind] ** self.params.getzagreb]
-        else:
-            return []
-    
-    def ZagrebBond(self,edge):
-        if self.params.getzagreb:
-            deg = self._degreevector()
-            return [deg[edge[0]] * deg[edge[1]],deg[edge[0]] + deg[edge[1]]]
-        elif isinstance(self.params.getzagreb,int) and self.params.getzagreb > 2:
-            deg = self._degreevector()
-            return [(deg[edge[0]] * deg[edge[1]])**(self.params.zagreb-1),(deg[edge[0]] + deg[edge[1]])**(self.params.zagreb-1)]
-        else:
-            return []
-        
-    def Harmonic(self,edge):
-        if self.params.getharmonic:
-            _,distmat = self._graphdistmatrix()
-            deg = self._degreevector()
-            return [2/distmat[edge[0], edge[1]],2/(deg[edge[0]] + deg[edge[1]])]
-        else:
-            return []
-    
-
-    def Sombor(self,edge):
-        if self.params.getsombor:
-            _,distmat = self._graphdistmatrix()
-            deg = self._degreevector()
-            return [np.sqrt(distmat[edge[0], edge[1]]**2 + deg[edge[0]]**2 + deg[edge[1]]**2),
-                    np.sqrt(deg[edge[0]]**2 + deg[edge[1]]**2)]
-        else:
-            return []
-    
-
-    def Randic(self,edge):
-        if self.params.getrandic:
-            _,distmat = self._graphdistmatrix()
-            deg = self._degreevector()
-            return [1/(distmat[edge[0], edge[1]]**(1/2) * deg[edge[0]]**(1/2) * deg[edge[1]]**(1/2)),
-                    deg[edge[0]]**(1/2) * deg[edge[1]]**(1/2)]
-        else:
-            return []
-    
-
-    def Nirmala(self,edge):
-        if self.params.getnirmala:
-            _,distmat = self._graphdistmatrix()
-            deg = self._degreevector()
-            return [np.exp(np.sqrt(distmat[edge[0], edge[1]] * (deg[edge[0]] + deg[edge[1]]))),
-                    np.exp(np.sqrt(deg[edge[0]] + deg[edge[1]]))]
-        else:
-            return []
-    
-    def ESOS(self,edge):
-        if self.params.getsoss:
-            deg = self._degreevector()
-            return [(deg[edge[0]] + deg[edge[1]])* np.sqrt(deg[edge[0]]**2 + deg[edge[1]]**2)]
-        else:
-            return []
-    
-
-    def AugmentedGraphAttribute(self,edge):
-        if self.params.getaugmentedgraphattributes:
-            deg = self._degreevector()
-            a = 2*np.sqrt(deg[edge[0]] * deg[edge[1]])/(deg[edge[0]] + deg[edge[1]])
-            b = edge[0]/edge[1] + edge[1]/edge[0]
-            return [a,1/a,b]
-        else:
-            return []
-    
-
-    def Hyperbolic(self,edge):
-        if self.params.gethyperbolic:
-            _,distmat = self._graphdistmatrix()
-            deg = self._degreevector()
-            return [np.exp(distmat[edge[0], edge[1]]/(deg[edge[0]] + deg[edge[1]])),
-                    np.exp(deg[edge[0]]/(deg[edge[0]] + deg[edge[1]])),
-                    np.exp(deg[edge[1]]/(deg[edge[0]] + deg[edge[1]])),
-                    4*(deg[edge[0]] * deg[edge[1]])/(deg[edge[0]] + deg[edge[1]])**2]
-        else:
-            return []
-    
-    def AugZagreb(self,edge):
-        if self.params.getaugzagreb:
-            deg = self._degreevector()
-            return [(deg[edge[0]] * deg[edge[1]])/(deg[edge[0]] + deg[edge[1]]-2)]
-        else:
-            return []
-    
-
-    
-        
-    def Klein(self,edge):
-        if self.params.getklein:
-            deg = self._degreevector()
-            return [.5*(deg[edge[0]]**2 + deg[edge[1]]**2) + .5*(deg[edge[0]] + deg[edge[1]])]
-        else:
-            return []
-        
-    def HyperWienerDegree(self,edge):
-        if self.params.gethyperwiener:
-            deg = self._degreevector()
-            return [(deg[edge[0]] + deg[edge[1]])/(2**(deg[edge[0]] + deg[edge[1]])),
-                    (deg[edge[0]] * deg[edge[1]])/(2**(deg[edge[0]] + deg[edge[1]]))]
-        else:
-            return []
-    
-    def Wiener(self,edge):
-        if self.params.getwiener:
-            _,distmat = self._graphdistmatrix()
-            return [distmat[edge[0], edge[1]]]
-        else:
-            return []
-    
-    def HDSA(self,ind):
-        if self.params.gethdsa:
-            atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
-            charge = _atomic_property.get_gasteiger_charge(atom)
-            Sd = _atomic_property.get_intrinsic_state(atom)
-            Stot = 0
-            for atom in self.matrixdescriptors.new_mol.GetAtoms():
-                Stot += _atomic_property.get_intrinsic_state(atom)
-            return [charge*Sd**.5/Stot]
-        else:
-            return []
-
-    def ETSBond(self,edge):
-        if self.params.getets:
-            _,distmat = self._graphdistmatrix()
-            atom1 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[0])
-            atom2 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[1])
-            Ii = _atomic_property.get_intrinsic_state(atom1)
-            Ij = _atomic_property.get_intrinsic_state(atom2)
-            return [np.abs(Ii-Ij)/distmat[edge[0], edge[1]]]
-        else:
-            return []
-    
-    def ETSAtom(self,ind):
-        if self.params.getets:
-            atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
-            Ii = _atomic_property.get_intrinsic_state(atom)
-
-            bonds = []
-            for bond in self.matrixdescriptors.new_mol.GetBonds():
-                if bond.GetBeginAtomIdx() == ind or bond.GetEndAtomIdx() == ind:
-                    bonds.append([bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()])
-
-            if len(bonds) == 0:
-                return [Ii]
-            else:
-                Ib = 0
-                for b in bond:
-                    Ib += self.ETSBond(b)[0]
-                return [Ii+Ib]
-        else:
-            return []
-    
-    def InformationContent(self,ind):
-        deg = self._degreevector()
-        total = sum(deg)
-        if self.params.getinformationcontent is not None and self.params.getinformationcontent == 0:
-            pi = deg[ind]/total
-            A = self.matrixdescriptors.new_mol.GetNumAtoms()
-            B = sum(b.GetBondTypeAsDouble() for b in self.matrixdescriptors.new_mol.GetBonds())
-            se = np.log2(pi) * pi
-            return [pi, se, A*se,se/np.log2(A),se/np.log2(B)]
-        elif self.params.getinformationcontent > 0:
-            tree = BFSTree(self.matrixdescriptors.new_mol)
-            atoms = [
-                tree.get_code(i, self._order) for i in range(self.matrixdescriptors.new_mol.GetNumAtoms())
-            ]
-            ad = {a: i for i, a in enumerate(atoms)}
-            Ags = [(k, sum(1 for _ in g)) for k, g in groupby(sorted(atoms))]
-            Nags = len(Ags)
-            pi = np.fromiter((ag for _, ag in Ags), "float", Nags)
-            A = self.matrixdescriptors.new_mol.GetNumAtoms()
-            B = sum(b.GetBondTypeAsDouble() for b in self.matrixdescriptors.new_mol.GetBonds())
-            se = np.log2(pi) * pi
-            return [pi, se, A*se,se/np.log2(A),se/np.log2(B)]
-        else:
-            return []
 
     def _getwt(self,wt,ind):
         if wt == 'mass':
@@ -808,7 +335,7 @@ class MordredInformation(BaseFeaturizer):
             return _atomic_property.get_polarizability(atom)
         elif wt == 'ionizationpotential':
             atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
-            return _atomic_property.get_ioniziation_potential(atom)
+            return _atomic_property.get_ionization_potential(atom)
         elif wt == 'pauling':
             atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
             return _atomic_property.get_pauling_en(atom)
@@ -822,12 +349,554 @@ class MordredInformation(BaseFeaturizer):
             atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
             return atom.GetAtomicNum()
 
-    def WeightedInformationContent(self,ind,wt='mass'):
-        deg = self._degreevector()
-        w = [self._getwt(wt, i) for i in range(len(deg))]
-        total = sum(list(np.array(w).dot(np.array(deg))))
+    def _refcheck(self,edge,V,valences=[1,1],reference='C'):
+        try:
+            refatom = self.properties.element_encode[reference]
+        except:
+            refatom = self.properties.element_encode[reference.lower()]
+        if (V[edge[0]] == valences[0] and V[edge[1]] == valences[1]) or (V[edge[1]] == valences[0] and V[edge[0]] == valences[1]):
+            masses = [self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[0]).GetMass(),self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[1]).GetMass()]
+            if masses[0] == masses[1]:
+                if masses[0] == refatom:
+                    return True
+        return False
+    
+    def _topochargemats(self):
+        self.A = self.matrixdescriptors.adj_mat
+        D = np.array(self.D)
+        self.D_inv_square = np.linalg.inv(D**2)
+        self.M = np.matmul(self.A, self.D_inv_square)
+    
+    def _chiterm(self,atom,valence=False):
+        if valence:
+            return _atomic_property.get_valence_electrons(atom)
+        else:
+            return _atomic_property.get_sigma_electrons(atom) 
+        
+    def _chivector(self,valence=False):
+        chi = []
+        for atom in self.matrixdescriptors.new_mol.GetAtoms():
+            chi.append(self._chiterm(atom,valence=valence))
+        return chi 
+    
+    def _getgdistlocs(self,ind,dist):
+        locations = np.argwhere(self.D[ind, :] == dist)[0]
+        return locations
+    
+class MordredInformation(BaseMordredFunctions):
+    def __init__(self, smiles, arguments):
+        super().__init__(smiles, arguments)
+        self.InitializeAddons()
+
+    def RunMordredBases(self):
+        self.G = self.mol_to_nx_graph(self.matrixdescriptors.new_mol)
+        self.D = self._graphdistmatrix()
+        self.P = self._getallvectors()
+        self.w_hat = np.array(self._avgpropvector())
+        self.geary = self._gearydenom()
+        self.moran = self._morandenom()
+        self.Detour = self._detourmat()
+        self.deg = self._degreevector()
+        self.Natoms = len(self.matrixdescriptors.new_mol.GetAtoms())
+        self.wtmat = self._atomicwtmat()
+        self.enmat = self._enmat(self.params.burdenweight)
+        self.ipmat = self._ipmat()
+        self.chargemat = self._partialchargemat()
+        self.polmat = self._polarizabilitymat()
+        self.B = self._burdenmat()
+        self.num_bonds = self.matrixdescriptors.new_mol.GetNumBonds()
+        self.num_rings = self.matrixdescriptors.new_mol.GetRingInfo().NumRings()
+        self.pendent = self._pendent()
+        if self.params.mohar is not None and isinstance(self.params.mohar, str): 
+            self.laplacian = self._laplacian()[self.params.mohar] #if mohar is a list, get a set of them. 
+        elif self.params.mohar is not None and isinstance(self.params.mohar, list):
+            self.laplacian = [self._laplacian()[self.params.mohar[i]] for i in range(len(self.params.mohar))]
+        elif self.params.mohar is None:
+            self.laplacian = None
+        self.pdmat = self._pdmatrix()
+        self.tpsas = get_tpsa_contributions(self.matrixdescriptors.new_mol)
+        self.vsa_contribs    = list(rdMolDescriptors._CalcLabuteASAContribs(self.matrixdescriptors.new_mol)[0])
+        self.logS = compute_atomwise_logs(self.matrixdescriptors.new_mol)
+        self.estate_indices  = EState.EStateIndices(self.matrixdescriptors.new_mol)
+        self.atom_vector = match_all_smarts(self.matrixdescriptors.new_mol)
+        self._topochargemats()
+        self.Li,self.Ri,self.logP,self.SMR = get_slogp_smr_contributions(self.matrixdescriptors.new_mol)
+        
+        self.Bmat = Chem.GetAdjacencyMatrix(self.matrixdescriptors.new_mol, useBO=True, force=True)
+        self.V = self.Bmat.sum(axis=0)
+        self.Vlen = len(self.V)
+        self.chis = self._chivector()
+        self.chivalences = self._chivector(valence=False)
+        self.vewi_edges = vertex_edge_distance_histogram_for_edges(self.G)
+        self.vewi_nodes = vertex_edge_distance_histogram_for_vertices(self.G)
+        
+    def RunMordred3D(self):
+        if self.params.getMoRSE == 'cos': 
+            self.morse_vector, self.contribs = get_morse_descriptors(self.matrixdescriptors.new_mol)
+        elif self.params.getMoRSE == 'sinc':
+            self.morse_vector, self.contribs = get_morse_sinc_descriptors(self.matrixdescriptors.new_mol)
+    
+    def RunAtomVector(self,ind):
+        self.pv = np.array(self._atomicpropertyvector(ind))
+        self.pvc = np.array(self._atomicpropertyvectorwrtcarbon(ind))
+        self.atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
+        self.vdeg = self._vertexdegree(ind)
+        self.valence = self.pv[1]
+
+    def RunBondVector(self,edge):
+        self.du = self.deg[edge[0]]
+        self.dv = self.deg[edge[1]]
+        self.u = edge[0]
+        self.v = edge[1]
+        self.atom1 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[0])
+        self.atom2 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[1])
+        self.path_length = Chem.rdmolops.GetShortestPath(self.matrixdescriptors.new_mol, edge[0], edge[1])
+        self.graph_distance = len(self.path_length) - 1 if self.path_length else 0
+        self.totalints = self._getcounts(self.graph_distance,self.Natoms,self.D)
+        self.pv1 = np.array(self._atomicpropertyvector(edge[0]))
+        self.pv2 = np.array(self._atomicpropertyvector(edge[1]))
+        self.wpv1 = self.pv1 - self.w_hat
+        self.wpv2 = self.pv2 - self.w_hat
+        self.Bval = self.B[edge[0], edge[1]]
+        self.vdeg1 = self._vertexdegree(edge[0])
+        self.vdeg2 = self._vertexdegree(edge[1])
+        self.bond = self.matrixdescriptors.new_mol.GetBondBetweenAtoms(edge[0], edge[1])
+        self.ew = edge_wiener_index(self.G, edge)
+        self.hw = hyper_wiener_index(self.G, edge)
+
+    def ABCIndex(self):
+        if self.params.useabc == 'reg':
+            return [np.sqrt((self.du+self.dv-2)/(self.du*self.dv))]
+        elif self.params.useabs == 'gg':
+            # Convert RDKit molecule to NetworkX graph
+            if self.G.has_edge(self.u, self.v):
+                nodes = self.G.nodes()
+                du = sum(1 for x in nodes if nx.shortest_path_length(self.G, source=self.u, target=x) < nx.shortest_path_length(self.G, source=self.v, target=x))
+                dv = sum(1 for x in nodes if nx.shortest_path_length(self.G, source=self.v, target=x) < nx.shortest_path_length(self.G, source=self.u, target=x))
+                # To avoid division by zero
+                if du == 0 or dv == 0:
+                    return [0.0]
+                return [np.sqrt((du+dv-2)/(du*dv))]
+            else:
+                return [0.0]
+        else:
+            return []
+        
+    def BaryszBond(self,bo):
+        if self.params.getbarysz:
+            if bo == 0:
+                return [0]
+            else:
+                Zc = 6
+                return [(1/bo)*(Zc**2)/(self.atom1.GetAtomicNum() + self.atom2.GetAtomicNum())]
+        else:
+            return []
+
+    def BaryszAtom(self):
+        if self.params.getbarysz:
+            Zc = 6
+            return [1 - Zc/self.atom.GetAtomicNum()]
+        else:
+            return []
+
+    def ATSAtom(self):
+        if self.params.getats == 'ATS':
+            return [self.pv**2]
+        elif self.params.getats == 'AATS':
+            return [self.pv/self.Natoms]
+        elif self.params.getats == 'ATSD':
+            return [(self.pv-self.w_hat)**2]
+        elif self.params.getats == 'AATSD':
+            return [(self.pv-self.w_hat)**2/self.Natoms]
+        elif self.params.getats == 'AATSM':
+            return [(self.pv-self.w_hat)**2/(self.Natoms * self.moran)]
+        elif self.params.getats == 'AATSG':
+            return [(self.pv-self.w_hat)**2/(self.Natoms * self.geary * 2)]
+        else:
+            return []
+
+    def ATSBond(self):
+        if self.params.getats == 'ATS':
+            return [.5*self.pv1.dot(self.pv2)]
+        elif self.params.getats == 'AATS':
+            return [.5*(self.pv1+self.pv2)/self.totalints]
+        elif self.params.getats == 'ATSD': 
+            return [.5*self.wpv1.dot(self.wpv2)]
+        elif self.params.getats == 'AATSD':
+            return [.5*self.wpv1.dot(self.wpv2)/self.totalints]
+        elif self.params.getats == 'AATSM':
+            return [.5*self.pv1.dot(self.pv2)/(self.totalints * self.moran)]
+        elif self.params.getats == 'AATSG':  
+            return [.5*self.wpv1.dot(self.wpv2)/(2*self.totalints * self.geary)]
+        else:
+            return []
+    
+    def DetourMatrix(self,edge):
+        if self.params.getdetour:
+            return [self.Detour[edge[0], edge[1]]]
+        else:
+            return []
+    
+    def BurdenValue(self,edge):
+        if self.params.getburdenmat is not None and self.params.burdenweight is not None:
+            output = self.Bval
+            wtterm = 0
+            if self.params.burdenweight == 'reg':
+                return [output]
+            elif 'atom' in self.params.burdenweight:
+                wtterm += self.wtmat[edge[0]] * self.wtmat[edge[1]]
+                return [output * np.sqrt(wtterm)]
+            elif 'partialcharge' in self.params.burdenweight:
+                wtterm += self.chargemat[edge[0]] * self.chargemat[edge[1]]
+                return [output * np.sqrt(wtterm)]
+            elif 'polarizability' in self.params.burdenweight:
+                wtterm += self.polmat[edge[0]] * self.polmat[edge[1]]
+                return [output * np.sqrt(wtterm)]
+            elif 'ionizationpotential' in self.params.burdenweight:
+                wtterm += self.ipmat[edge[0]] * self.ipmat[edge[1]]
+                return [output * np.sqrt(wtterm)]
+            elif 'pauling' in self.params.burdenweight or 'sanderson' in self.params.burdenweight or 'allred' in self.params.burdenweight:
+                wtterm += self.enmat[edge[0]] * self.enmat[edge[1]]
+                return [output * np.sqrt(wtterm)]
+        else:
+            return []
+        
+    def PropsRelativetoCarbon(self):
+        if self.params.getpropsrelativetocarbon:
+            print('pvc',self.pvc,type(self.pvc))
+            return self.pvc
+        else:
+            return []
+ 
+    def VertexDistanceDegreeAtom(self):
+        if self.params.getvertexdistancedegree:
+            return [self.vdeg]
+        else:
+            return []
+        
+    def VertexDistanceDegreeBond(self):
+        if self.params.getvertexdistancedegree:
+            return [self.vdeg1*self.vdeg2]
+        else:
+            return []
+    
+    def BalabanBondFactor(self):
+        if self.params.getbalabanbondfactor:
+            return [1/np.sqrt(self.vdeg1*self.vdeg2)*(self.num_bonds/(self.num_rings+1))]
+        else:
+            return []
+
+    def SuperdenticIndex(self,ind):
+        if self.params.getsuperdentic:
+            pendentrow = self.pendent[ind,:]
+            nonzeros = pendentrow[pendentrow != 0]
+            return [np.prod(nonzeros)]
+        else:
+            return [] 
+        
+    def Eccentricity(self,ind):
+        if self.params.geteccentricity:
+            pv = self._eccentricity(ind)
+            return [pv,(1/self.Natoms) * np.abs(pv - self._avgeccentricity()),pv*self._valence(ind)]
+        else:
+            return []
+         
+    def Schultz(self,ind):
+        if self.params.getschultz:
+            mat = self.matrixdescriptors.adj_mat + self.D
+            result = np.matmul(mat,self.deg)
+            return [result[ind]]
+        else:
+            return []
+
+    def Gutman(self,edge):
+        if self.params.getgutman:
+            return [self.D[edge[0], edge[1]] * self.deg[edge[0]] * self.deg[edge[1]]]
+        else:
+            return []
+    
+    def Xui(self,node):
+        if self.params.getxui:
+            return [self.deg[node]* self.valence,
+                    self.deg[node] * self.valence**2]
+        else:
+            return []
+    
+    def Horary(self,edge):
+        if self.params.gethorary:
+            return [self.D[edge[0], edge[1]]/2]
+        else:
+            return []
+        
+    def Mohar(self,edge):
+        if self.params.getmohar is not None and isinstance(self.params.getmohar, str):
+            return [self.laplacian[edge[0], edge[1]]]
+        elif self.params.getmohar is not None and isinstance(self.params.getmohar, list):
+            return [self.laplacian[i][edge[0], edge[1]] for i in range(len(self.params.getmohar))]
+        else:
+            return []
+
+    def HPValue(self,edge):
+        if self.params.gethp:
+            return [self.pdmat[edge[0], edge[1]]/2]
+        else:
+            return []
+    
+    def CoreCount(self,node):
+        if self.params.getcorecount:
+            return [_atomic_property.get_core_count(self.matrixdescriptors.new_mol.GetAtomWithIdx(node))]
+        else:
+            return []
+        
+    def VEMAtom(self,ind):
+        if self.params.getvem:
+            atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
+            return [_atomic_property.get_eta_beta_sigma(atom)/2,
+                    _atomic_property.get_eta_beta_non_sigma(atom)/2,
+                    _atomic_property.get_eta_beta_sigma(atom) + _atomic_property.get_eta_beta_non_sigma(atom),
+                    _atomic_property.get_eta_beta_sigma(atom) - _atomic_property.get_eta_beta_non_sigma(atom),
+                    _atomic_property.get_eta_beta_delta(atom)]
+        else:
+            return []
+        
+    def VEMBond(self,edge):
+        if self.params.getvem:
+            sigma, pi = self._getbondcounts(edge)
+            # Check if the bond between atom1 and atom2 is aromatic
+            xij = self._bondepsigma(self.atom1, self.atom2)
+            yij = self._bondeppi(self.atom1, self.atom2, self.bond)
+            return [xij * sigma,yij*pi,xij*sigma - yij*pi]
+        else:
+            return []
+    
+    def EtaComposite(self,edge):
+        if self.params.getetacomposite:
+            g1 = _atomic_property.get_eta_gamma(self.atom1)
+            g2 = _atomic_property.get_eta_gamma(self.atom2)
+
+            
+            return [g1*g2/self.D[edge[0], edge[1]]]
+        else:
+            return []
+    
+    def EtaPsi(self):
+        if self.params.getetapsi:
+            psi = _atomic_property.get_core_count(self.atom)/_atomic_property.get_eta_epsilon(self.atom)
+            return [psi]
+        else:
+            return []
+    
+    def Gravity(self,edge):
+        if self.params.getgravity:
+            m1 = _atomic_property.get_mass(self.atom1)
+            m2 = _atomic_property.get_mass(self.atom2)
+            return [m1*m2/self.D[edge[0], edge[1]]]    
+        else:
+            return []
+    
+    def ZagrebAtom(self,ind):
+        if self.params.getzagreb is not None:
+            return [self.deg[ind] ** 2]
+        elif isinstance(self.params.getzagreb,int) and self.params.getzagreb > 2:
+            return [self.deg[ind] ** self.params.getzagreb]
+        else:
+            return []
+    
+    def ZagrebBond(self,edge):
+        if self.params.getzagreb:
+            return [self.deg[edge[0]] * self.deg[edge[1]],self.deg[edge[0]] + self.deg[edge[1]]]
+        elif isinstance(self.params.getzagreb,int) and self.params.getzagreb > 2:
+            deg = self._degreevector()
+            return [(self.deg[edge[0]] * self.deg[edge[1]])**(self.params.zagreb-1),(self.deg[edge[0]] + self.deg[edge[1]])**(self.params.zagreb-1)]
+        else:
+            return []
+        
+    def Harmonic(self,edge):
+        if self.params.getharmonic:
+            return [2/self.D[edge[0], edge[1]],2/(self.deg[edge[0]] + self.deg[edge[1]])]
+        else:
+            return []
+        
+    def HarmonicAtom(self,ind):
+        if self.params.getharmonic:
+            return [2/(self.deg[ind]**2),1/(self.deg[ind]**2)]
+        else:
+            return []
+    
+    def Sombor(self,edge):
+        if self.params.getsombor:
+            return [np.sqrt(self.D[edge[0], edge[1]]**2 + self.deg[edge[0]]**2 + self.deg[edge[1]]**2),
+                    np.sqrt(self.deg[edge[0]]**2 + self.deg[edge[1]]**2)]
+        else:
+            return []
+    
+    def SomborAtom(self,ind):
+        if self.params.getsombor:
+            return [np.sqrt(self.deg[ind]**2)]
+        else:
+            return []
+    
+    def Randic(self,edge):
+        if self.params.getrandic:
+            return [1/(self.D[edge[0], edge[1]]**(1/2) * self.deg[edge[0]]**(1/2) * self.deg[edge[1]]**(1/2)),
+                    self.deg[edge[0]]**(1/2) * self.deg[edge[1]]**(1/2)]
+        else:
+            return []
+    
+    def RandicAtom(self,ind):
+        if self.params.getrandic:
+            return [1/(self.deg[ind]**(1/2)),1/(self.deg[ind])]
+
+    def Nirmala(self,edge):
+        if self.params.getnirmala:
+            return [np.exp(np.sqrt(self.D[edge[0], edge[1]] * (self.deg[edge[0]] + self.deg[edge[1]]))),
+                    np.exp(np.sqrt(self.deg[edge[0]] + self.deg[edge[1]]))]
+        else:
+            return []
+        
+    def NirmalaAtom(self,ind):
+        if self.params.getnirmala:
+            return [np.exp(np.sqrt(self.deg[ind]))]
+        else:
+            return []
+    
+    def ESOS(self,edge):
+        if self.params.getsoss:
+            return [(self.deg[edge[0]] + self.deg[edge[1]])* np.sqrt(self.deg[edge[0]]**2 + self.deg[edge[1]]**2)]
+        else:
+            return []
+    
+    def ESOSAtom(self,ind):
+        if self.params.getsoss:
+            return [self.deg[ind] * np.sqrt(self.deg[ind]**2)]
+        else:
+            return []
+
+    def AugmentedGraphAttribute(self,edge):
+        if self.params.getaugmentedgraphattributes:
+            a = 2*np.sqrt(self.deg[edge[0]] * self.deg[edge[1]])/(self.deg[edge[0]] + self.deg[edge[1]])
+            b = self.deg[edge[0]]/self.deg[edge[1]] + self.deg[edge[1]]/self.deg[edge[0]]
+            return [a,1/a,b]
+        else:
+            return []
+    
+    def AugmentedGraphAttributeAtom(self,ind):
+        if self.params.getaugmentedgraphattributes:
+            a = np.sqrt(self.deg[ind])/(self.deg[ind])
+            b = self.deg[ind]
+            return [a,1/a]
+        else:
+            return []
+    
+    def Hyperbolic(self,edge):
+        if self.params.gethyperbolic:
+            return [np.exp(self.D[edge[0], edge[1]]/(self.deg[edge[0]] + self.deg[edge[1]])),
+                    np.exp(self.deg[edge[0]]/(self.deg[edge[0]] + self.deg[edge[1]])),
+                    np.exp(self.deg[edge[1]]/(self.deg[edge[0]] + self.deg[edge[1]])),
+                    4*(self.deg[edge[0]] * self.deg[edge[1]])/(self.deg[edge[0]] + self.deg[edge[1]])**2]
+        else:
+            return []
+    
+    def HyperbolicAtom(self,ind):
+        if self.params.gethyperbolic:
+            return [np.exp(self.deg[ind]/self.deg[ind])]
+        else:
+            return []
+
+    def AugZagreb(self,edge):
+        if self.params.getaugzagreb:
+            return [(self.deg[edge[0]] * self.deg[edge[1]])/(self.deg[edge[0]] + self.deg[edge[1]]-2)]
+        else:
+            return []
+    
+    def AugZagrebAtom(self,ind):
+        if self.params.getaugzagreb:
+            return [self.deg[ind]/(self.deg[ind]-2)]
+        else:
+            return []
+
+    def Klein(self,edge):
+        if self.params.getklein:
+            return [.5*(self.deg[edge[0]]**2 + self.deg[edge[1]]**2) + .5*(self.deg[edge[0]] + self.deg[edge[1]])]
+        else:
+            return []
+
+    def KleinAtom(self,ind):
+        if self.params.getklein:
+            return [.5*(self.deg[ind]**2) + .5*self.deg[ind]]
+        else:
+            return []  
+        
+    def HyperDegree(self,edge):
+        if self.params.gethyperwiener:
+            return [(self.deg[edge[0]] + self.deg[edge[1]])/(2**(self.deg[edge[0]] + self.deg[edge[1]])),
+                    (self.deg[edge[0]] * self.deg[edge[1]])/(2**(self.deg[edge[0]] + self.deg[edge[1]]))]
+        else:
+            return []
+    
+    def HyperDegreeAtom(self,ind):
+        if self.params.gethyperwiener:
+            return [self.deg[ind]/(2**self.deg[ind])]
+        else:
+            return []
+        
+    def HyperWiener(self,edge):
+        if self.params.gethyperwiener:
+            return [(self.D[edge[0], edge[1]])/(2**(self.D[edge[0], edge[1]])),
+                    (self.D[edge[0], edge[1]])/(2**(self.D[edge[0], edge[1]]))]
+        else:
+            return []
+    
+    def Wiener(self,edge):
+        if self.params.getwiener:
+            return [self.D[edge[0], edge[1]]]
+        else:
+            return []
+    
+    def HDSA(self):
+        if self.params.gethdsa:
+            charge = _atomic_property.get_gasteiger_charge(self.atom)
+            Sd = _atomic_property.get_intrinsic_state(self.atom)
+            Stot = 0
+            for atom in self.matrixdescriptors.new_mol.GetAtoms():
+                Stot += _atomic_property.get_intrinsic_state(self.atom)
+            return [charge*Sd**.5/Stot]
+        else:
+            return []
+
+    def ETSBond(self,edge):
+        if self.params.getets:
+            atom1 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[0])
+            atom2 = self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[1])
+            Ii = _atomic_property.get_intrinsic_state(atom1)
+            Ij = _atomic_property.get_intrinsic_state(atom2)
+            return [np.abs(Ii-Ij)/self.D[edge[0], edge[1]]]
+        else:
+            return []
+    
+    def ETSAtom(self,ind):
+        if self.params.getets:
+            Ii = _atomic_property.get_intrinsic_state(self.atom)
+
+            bonds = []
+            for bond in self.matrixdescriptors.new_mol.GetBonds():
+                if bond.GetBeginAtomIdx() == ind or bond.GetEndAtomIdx() == ind:
+                    bonds.append([bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()])
+
+            if len(bonds) == 0:
+                return [Ii]
+            else:
+                Ib = 0
+                for b in bonds:
+                    Ib += self.ETSBond(b)[0]
+                return [Ii+Ib]
+        else:
+            return []
+    
+    def InformationContent(self,ind):
+        total = sum(self.deg)
         if self.params.getinformationcontent is not None and self.params.getinformationcontent == 0:
-            pi = deg[ind]/total
+            pi = self.deg[ind]/total
             A = self.matrixdescriptors.new_mol.GetNumAtoms()
             B = sum(b.GetBondTypeAsDouble() for b in self.matrixdescriptors.new_mol.GetBonds())
             se = np.log2(pi) * pi
@@ -848,19 +917,76 @@ class MordredInformation(BaseFeaturizer):
         else:
             return []
 
+    def WeightedInformationContent(self,ind):
+        w = [self._getwt(self.params.IC_weight, i) for i in range(len(self.deg))]
+        total = np.array(w).dot(np.array(self.deg))
+        if self.params.getweightedinformationcontent is not None and self.params.getweightedinformationcontent == 0:
+            pi = self.deg[ind]/total
+            A = self.matrixdescriptors.new_mol.GetNumAtoms()
+            B = sum(b.GetBondTypeAsDouble() for b in self.matrixdescriptors.new_mol.GetBonds())
+            se = np.log2(pi) * pi
+            return [pi, se, A*se,se/np.log2(A),se/np.log2(B)]
+        elif self.params.getweightedinformationcontent > 0: #adapt this for weight
+            tree = BFSTree(self.matrixdescriptors.new_mol)
+            atoms = [
+                tree.get_code(i, self._order) for i in range(self.matrixdescriptors.new_mol.GetNumAtoms())
+            ]
+            Ags = [(k, sum(1 for _ in g)) for k, g in groupby(sorted(atoms))]
+            Nags = len(Ags)
+            pi = np.fromiter((ag for _, ag in Ags), "float", Nags)
+            A = self.matrixdescriptors.new_mol.GetNumAtoms()
+            B = sum(b.GetBondTypeAsDouble() for b in self.matrixdescriptors.new_mol.GetBonds())
+            se = np.log2(pi) * pi
+            return [pi, se, A*se,se/np.log2(A),se/np.log2(B)]
+        else:
+            return []
 
-    def EdgeWiener(self,edge):
-        G = self.mol_to_nx_graph(self.matrixdescriptors.new_mol)
+    def EdgeWiener(self):
         if self.params.getedgewiener:
-            return [edge_wiener_index(G, edge),hyper_wiener_index(G, edge)]
-        pass
+            return [self.ew,self.hw]
+    
+    def EdgeWienerByOrder(self,edge):
+        if self.params.getedgewienerbyorder > 1:
+            output = []
+            for ord in range(1,self.params.getedgewienerbyorder+1):
+                output += [edge_wiener_index_byorder(self.G, edge, order=ord)/self.ew,hyper_wiener_index_byorder(self.G, edge, order=ord)/self.hw]
+            return output
+        else:
+            return []
 
-    def VertexAdjacency(self,ind):
+    def VEWIAtom(self,ind):
+        if self.params.getvewi:
+            return [vertex_edge_wiener_for_vertex(self.G,ind)]
+        else:
+            return [] 
+    def VEWIBond(self,edge):
+        if self.params.getvewi:
+            return [vertex_edge_wiener_for_edge(self.G,edge)]
+        else:
+            return []
+
+    def VEWIAtomByOrder(self,ind):
+        if self.params.getvewibyorder > 1:
+            output = []
+            for ord in range(1,self.params.getvewibyorder+1):
+                output += [self.vewi_nodes[ind][ord-1]/vertex_edge_wiener_for_vertex(self.G,ind)]
+            return output
+        else:
+            return []
+
+    def VEWIBondByOrder(self,edge):
+        if self.params.getvewibyorder > 1:
+            output = []
+            for ord in range(1,self.params.getvewibyorder+1):
+                output += [self.vewi_edges[tuple(edge)][ord-1]/vertex_edge_wiener_for_edge(self.G,edge)]
+            return output
+        else:
+            return []
+
+    def VertexAdjacency(self):
         if self.params.getvertexadjacency:
-            mol = self.matrixdescriptors.new_mol
-            atom = mol.GetAtomWithIdx(ind)
             heavy_bond_count = 0
-            for bond in atom.GetBonds():
+            for bond in self.atom.GetBonds():
                 if bond.GetBeginAtom().GetAtomicNum() > 1 and bond.GetEndAtom().GetAtomicNum() > 1:
                     heavy_bond_count += 1
             return [1+ np.log2(heavy_bond_count)]
@@ -869,91 +995,59 @@ class MordredInformation(BaseFeaturizer):
     
     def TPSA(self,ind):
         if self.params.getTPSA: 
-            tpsas = get_tpsa_contributions(self.matrixdescriptors.new_mol)
-            return [tpsas[ind]]
+            return [self.tpsas[0][ind]]
         else:
             return []
         
     def LabuteASA(self,ind):
         if self.params.getASA:
-            vsa_contribs    = list(rdMolDescriptors._CalcLabuteASAContribs(self.matrixdescriptors.new_mol)[0])
-            return [vsa_contribs[ind]]
+            return [self.vsa_contribs[ind]]
         else:
             return []
             
     def LogS(self,ind):
         if self.params.LogS:
-            logS = compute_atomwise_logs(self.matrixdescriptors.new_mol)
-            return [logS[ind]]
+            
+            return [self.logS[ind]]
         else:
             return []
 
     def EState(self,ind):
         if self.params.getEstate == 'all': 
-            estate_indices  = EState.EStateIndices(self.matrixdescriptors.new_mol)
-            atom_vector = match_all_smarts(self.matrixdescriptors.new_mol)
-            return [estate_indices[ind]] + atom_vector
+            return [self.estate_indices[ind]] + self.atom_vector[ind]
         elif self.params.getEstate == 'vectoronly':
-            atom_vector = match_all_smarts(self.matrixdescriptors.new_mol)
-            return atom_vector
+            return self.atom_vector[ind]
         elif self.params.getEstate == 'indicesonly':
-            estate_indices  = EState.EStateIndices(self.matrixdescriptors.new_mol)
-            return [estate_indices[ind]]
+            return [self.estate_indices[ind]]
         else:
             return [] 
-
-    def _refcheck(self,edge,V,valences=[1,1],reference='C'):
-        try:
-            refatom = self.properties.element_encode[reference]
-        except:
-            refatom = self.properties.element_encode[reference.lower()]
-        if (V[edge[0]] == valences[0] and V[edge[1]] == valences[1]) or (V[edge[1]] == valences[0] and V[edge[0]] == valences[1]):
-            masses = [self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[0]).GetMass(),self.matrixdescriptors.new_mol.GetAtomWithIdx(edge[1]).GetMass()]
-            if masses[0] == masses[1]:
-                if masses[0] == refatom:
-                    return True
-
-        return False
-
-    def MolecularDistanceEdge(self,edge,valences=[1,1],reference='C'):
+    
+    def MolecularDistanceEdge(self,edge):
         if self.params.getmoleculardistanceedge:
-            D = Chem.GetAdjacencyMatrix(self.matrixdescriptors.new_mol, useBO=True, force=True)
-            V = D.sum(axis=0)
-            N = len(V)
-            _,distmat = self._graphdistmatrix()
-            refcheck = self._refcheck(edge,V,valences=valences,reference=reference)
+            refcheck = self._refcheck(edge,self.V,valences=self.params.MDEvalences,reference=self.params.MDEreference)
             if refcheck: 
-                return [distmat[edge[0], edge[1]]**(.5/N)]
+                return [self.D[edge[0], edge[1]]**(.5/self.Vlen)]
             else:
                 return [0]
         else:
             return []
 
-    def _topochargemats(self,dist=1):
-        A = self.matrixdescriptors.adj_mat
-        ords,D = self._graphdistmatrix(dist=dist)
-        D = np.array(D)
-        D_inv_square = np.linalg.inv(D**2)
-        M = np.matmul(A, D_inv_square)
-        return M,D_inv_square,ords,D
-
-    def TopoChargeBond(self,edge,dist=1):
+    def TopoChargeBond(self,edge):
         if self.params.gettopocharge:
-            M,D_inv_square,_,_ = self._topochargemats(dist=dist)
-            CT = M[edge[0], edge[1]] - M[edge[1], edge[0]]
-            return [D_inv_square[edge[0], edge[1]],M[edge[0], edge[1]],M[edge[1], edge[0]],CT]
+            CT = self.M[edge[0], edge[1]] - self.M[edge[1], edge[0]]
+            return [self.D_inv_square[edge[0], edge[1]],self.M[edge[0], edge[1]],self.M[edge[1], edge[0]],CT]
         else:
             return []
 
     def _TopoChargeAtomFunc(self,ind,dist=1):
-        M,D_inv_square,_,D = self._topochargemats(dist=dist)
+        D = np.array(self.D)
         locations = np.argwhere(D[ind, :] == dist)[0]
         result = dict()
         result['Dinv'] = 0
         result['CT'] = 0
         for location in locations:
-            result['Dinv'] += D_inv_square[ind, location]
-            result['CT'] += M[ind, location] - M[location, ind]
+            result['Dinv'] += self.D_inv_square[ind, location]
+            result['CT'] += self.M[ind, location] - self.M[location, ind]
         return result
                 
     def TopoChargeAtom(self,ind):
@@ -970,70 +1064,64 @@ class MordredInformation(BaseFeaturizer):
             return []
 
     def SMRandSLogP(self,ind):
-        
         if self.params.getSMR:
-            Li,Ri,logP,SMR = get_slogp_smr_contributions(self.matrixdescriptors.new_mol)
             output = [] 
-            if 'Li' in self.params.SLogP:
-                output.append(Li[ind])
-            if 'Ri' in self.params.SMR:
-                output.append(Ri[ind])
-            if 'logPregion' in self.params.SLogP:
-                output += logP[ind]
-            if 'SMRregion' in self.params.SMR:
-                output += SMR[ind]            
+            if 'Li' in self.params.getSMR:
+                output.append(self.Li[ind])
+            if 'Ri' in self.params.getSMR:
+                output.append(self.Ri[ind])
+            if 'logPregion' in self.params.getSMR:
+                output += self.logP[ind]
+            if 'SMRregion' in self.params.getSMR:
+                output += self.SMR[ind]    
+            return output        
         else:
             return []
 
-
     def Morse(self,edge):
         if self.params.getMoRSE == 'cos':
-            morse_vector, contribs = get_morse_descriptors(self.matrixdescriptors.new_mol)
-            return contribs[:,edge[0],edge[1]]
+            return self.contribs[:,edge[0],edge[1]]
         elif self.params.getMoRSE == 'sin':
-            morse_vector, contribs = get_morse_sinc_descriptors(self.matrixdescriptors.new_mol)
-            return contribs[:,edge[0],edge[1]]
+            return self.contribs[:,edge[0],edge[1]]
 
-
-    def _chiterm(self,ind,valence=False):
-        atom = self.matrixdescriptors.new_mol.GetAtomWithIdx(ind)
-        if valence:
-            return _atomic_property.get_valence_electrons(atom)
-        else:
-            return _atomic_property.get_sigma_electrons(atom) 
-        
-    def _chivector(self,valence=False):
-        chi = []
-        for atom in self.matrixdescriptors.new_mol.GetAtoms():
-            chi.append(self._chiterm.get_chi(atom.GetIdx(),valence=valence))
-        return chi 
-    
-    def _getgdistlocs(self,ind,dist):
-        ords,D = self._graphdistmatrix(dist=ord)
-        locations = np.argwhere(D[ind, :] == ord)[0]
-        return locations
-            
-
-
-
-    def ChiAtom(self,ind,valence=False):
-        if self.getchi == 0:
-            deltai = self._chiterm(ind,valence=valence)
-            return [1/np.sqrt(deltai)]
-        elif self.getchi >= 1:
-            deltai = self._chiterm(ind,valence=valence)
-            chi1 = 1/np.sqrt(deltai)
+    def ChiAtom(self,ind):
+        if self.params.getchi == 0:
+            return [1/np.sqrt(self.chis[ind])]
+        elif self.params.getchi >= 1:
+            chi1 = 1/np.sqrt(self.chis[ind])
             output = [chi1]
-            chivector = self._chivector(valence=valence)
-            for ord in range(1,self.getchi):
+            for ord in range(1,self.params.getchi):
                 locations = self._getgdistlocs(ind,ord)
                 chipaths = 0
                 for loc in locations:
-                    path = Chem.rdmolops.GetShortestPath(self.matrixdescriptors.new_mol, ind, loc)
+                    path = Chem.rdmolops.GetShortestPath(self.matrixdescriptors.new_mol, ind, int(loc))
                     intermediate_atoms = path[1:-1]  # Exclude ind and loc
                     chipath = chi1
                     for atom in intermediate_atoms:
-                        deltaj = 1/np.sqrt(chivector[atom])
+                        deltaj = 1/np.sqrt(self.chis[atom])
+                        chipath = chipath * deltaj
+                    chipaths += chipath
+                output.append(chipaths)    
+
+            return output
+        else:
+            return [] 
+    
+    def ChiAtomValence(self,ind):
+        if self.params.getchivalence == 0:
+            return [1/np.sqrt(self.chivalences[ind])]
+        elif self.params.getchivalence >= 1:
+            chi1 = 1/np.sqrt(self.chivalences[ind])
+            output = [chi1]
+            for ord in range(1,self.params.getchi):
+                locations = self._getgdistlocs(ind,ord)
+                chipaths = 0
+                for loc in locations:
+                    path = Chem.rdmolops.GetShortestPath(self.matrixdescriptors.new_mol, ind, int(loc))
+                    intermediate_atoms = path[1:-1]  # Exclude ind and loc
+                    chipath = chi1
+                    for atom in intermediate_atoms:
+                        deltaj = 1/np.sqrt(self.chis[atom])
                         chipath = chipath * deltaj
                     chipaths += chipath
                 output.append(chipaths)    
@@ -1042,22 +1130,39 @@ class MordredInformation(BaseFeaturizer):
         else:
             return [] 
         
-    def ChiBond(self,edge,order=1,valence=False):
+    def ChiBond(self,edge):
         if self.params.getchi is not None:
-            deltai = self._chiterm(edge[0],valence=valence)
-            deltaj = self._chiterm(edge[1],valence=valence)
+            deltai = self.chis[edge[0]]
+            deltaj = self.chis[edge[1]]
             chiij = 1/np.sqrt(deltai*deltaj)
             chi1 = 1/np.sqrt(deltai)
-            chivector = self._chivector(valence=valence)
-            bond = self.matrixdescriptors.new_mol.GetBondBetweenAtoms(edge[0], edge[1])
-            if bond is None:
+            if self.bond is None:
                 path = Chem.rdmolops.GetShortestPath(self.matrixdescriptors.new_mol, edge[0], edge[1])
                 intermediate_atoms = path[1:-1]  # Exclude edge[0] and edge[1]
             else:
                 intermediate_atoms = []
             chipath = chi1
             for atom in intermediate_atoms:
-                deltaj = 1/np.sqrt(chivector[atom])
+                deltaj = 1/np.sqrt(self.chis[atom])
+                chipath = chipath * deltaj
+            return [chiij,chipath]
+        else:
+            return []
+        
+    def ChiBondValence(self,edge): 
+        if self.params.getchivalence is not None:
+            deltai = self.chivalences[edge[0]]
+            deltaj = self.chivalences[edge[1]]
+            chiij = 1/np.sqrt(deltai*deltaj)
+            chi1 = 1/np.sqrt(deltai)
+            if self.bond is None:
+                path = Chem.rdmolops.GetShortestPath(self.matrixdescriptors.new_mol, edge[0], edge[1])
+                intermediate_atoms = path[1:-1]  # Exclude edge[0] and edge[1]
+            else:
+                intermediate_atoms = []
+            chipath = chi1
+            for atom in intermediate_atoms:
+                deltaj = 1/np.sqrt(self.chivalences[atom])
                 chipath = chipath * deltaj
             return [chiij,chipath]
         else:

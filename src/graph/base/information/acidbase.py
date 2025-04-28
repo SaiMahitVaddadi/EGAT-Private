@@ -1,10 +1,10 @@
 from ..base import BaseFeaturizer
 from dataclasses import dataclass
 """
-AcidBaseInformation(smiles, arguments)
-A class that extends `BaseFeaturizer` to provide information about acid and base sites
-in a molecular structure represented by SMILES notation. This class is designed to 
-check whether a given site in the molecule is an acid site, a base site, or neither.
+class AcidBaseInformation(smiles, arguments)
+    A class that extends `BaseFeaturizer` to provide information about acid and base sites
+    in a molecular structure represented by SMILES notation. This class is designed to 
+    check whether a given site in the molecule is an acid site, a base site, or neither.
 Parameters
 ----------
 smiles : str

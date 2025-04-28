@@ -1,13 +1,13 @@
 ╭───────────────────────────────────────────────────── <class 'EGAT.src.graph.base.base.BaseFeaturizer'> ─────────────────────────────────────────────────────╮
 │ ╭─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮ │
-│ │ <EGAT.src.graph.base.base.BaseFeaturizer object at 0x100a47c40>                                                                                         │ │
+│ │ <EGAT.src.graph.base.base.BaseFeaturizer object at 0x100aafb50>                                                                                         │ │
 │ ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
 │                                                                                                                                                             │
 │        acid_sites = [11]                                                                                                                                    │
 │         am_smiles = '[C:1]([C:2](=[O:3])[c:4]1[c:5]([H:16])[c:6]([H:17])[c:7]([C:10](=[O:11])[O:12][H:20])[c:8]([H:18])[c:9]1[H:19])([H:13])([H:14])[H:15]' │
 │        base_sites = [2, 10]                                                                                                                                 │
-│      electroninfo = <EGAT.src.utils.descriptors.egat.radicals.RDKElectronInfo object at 0x308f987c0>                                                        │
-│ matrixdescriptors = <EGAT.src.utils.descriptors.egat.molmatdesc.MolMatDesc object at 0x307af34f0>                                                           │
+│      electroninfo = <EGAT.src.utils.descriptors.egat.radicals.RDKElectronInfo object at 0x30ea6cf40>                                                        │
+│ matrixdescriptors = <EGAT.src.utils.descriptors.egat.molmatdesc.MolMatDesc object at 0x30bd8d8a0>                                                           │
 │            params = BaseReactionParams(getradical='RDKit', stereo_full=True, acidbase='BL')                                                                 │
 │      pauling_dict = {                                                                                                                                       │
 │                         'H': 2.2,                                                                                                                           │
@@ -113,8 +113,8 @@
 │                         'Md': 1.3,                                                                                                                          │
 │                         'No': 1.3                                                                                                                           │
 │                     }                                                                                                                                       │
-│        properties = <EGAT.src.utils.descriptors.egat.encodings.Encodings object at 0x100a47c10>                                                             │
+│        properties = <EGAT.src.utils.descriptors.egat.encodings.Encodings object at 0x17eb7ffd0>                                                             │
 │        ring_atoms = [[3, 4, 5, 6, 7, 8]]                                                                                                                    │
 │            smiles = 'CC(=O)C1=CC=C(C=C1)C(=O)O'                                                                                                             │
-│            stereo = <EGAT.src.utils.descriptors.egat.stereo.StereoChemistry object at 0x309443700>                                                          │
+│            stereo = <EGAT.src.utils.descriptors.egat.stereo.StereoChemistry object at 0x30ea4c100>                                                          │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯

@@ -186,10 +186,10 @@ def get_pendent_matrix(graph: nx.Graph, distance_matrix: np.ndarray):
     
     # Identify terminal vertices (degree == 1)
     terminal_nodes = [i for i, d in dict(graph.degree()).items() if d == 1]
-    
-    # Extract corresponding columns from the full distance matrix
-    pendent_matrix = distance_matrix[:, terminal_nodes]
-    
+    if len(terminal_nodes) == 0:
+        return [] 
+    else:
+        pendent_matrix = distance_matrix[:, list(terminal_nodes)]
     return pendent_matrix
 
 

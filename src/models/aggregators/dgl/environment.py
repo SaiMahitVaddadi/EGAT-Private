@@ -6,9 +6,15 @@ from dgl.nn.pytorch import GATConv
 
 
 class AggregatorFunctions(nn.Module):
-    def __init__(self,node_agg=None,edge_agg=None,mixing=None,node_feat_size: int = 0, edge_feat_size: int = 0):
+    def __init__(self,node_agg=None,edge_agg=None,mixing=None,node_feat_size: int = 0, edge_feat_size: int = 0,global_agg='sum'):
+        super().__init__()
+        self.setup(node_agg, edge_agg, mixing, node_feat_size, edge_feat_size,global_agg)
+
+
+    def setup(self, node_agg=None, edge_agg=None, mixing=None, node_feat_size: int = 0, edge_feat_size: int = 0,global_agg='sum'):
         self.node_agg = node_agg
         self.edge_agg = edge_agg
+        self.global_agg = global_agg
         self.mixing = mixing
         if mixing == 'linear':
             self.mixinglayer = nn.Linear(node_feat_size + edge_feat_size, node_feat_size + edge_feat_size)
@@ -119,19 +125,7 @@ class AggregatorFunctions(nn.Module):
         return graph.edata['f_env']
 
 
-
-
-class EnvironmentAggregator(AggregatorFunctions):
-    def __init__(self,node_agg=None,edge_agg=None,mixing=None,node_feat_size: int = 0, edge_feat_size: int = 0):
-        self.node_agg = node_agg
-        self.edge_agg = edge_agg
-        self.mixing = mixing
-        if mixing == 'linear':
-            self.mixinglayer = nn.Linear(node_feat_size + edge_feat_size, node_feat_size + edge_feat_size)
-        elif mixing == 'bilinear':
-            self.mixinglayer = nn.Bilinear(node_feat_size, edge_feat_size, node_feat_size + edge_feat_size)
-        
-    def reset_parameters(self):
+    def resetlayers(self):
         """
         Reinitialize learnable parameters.
         """
@@ -153,194 +147,94 @@ class EnvironmentAggregator(AggregatorFunctions):
             nn.init.xavier_uniform_(self.mixinglayer.weight)
             nn.init.zeros_(self.mixinglayer.bias)
 
-            
-    def aggregate(self, g):
-        """
-        Perform environment aggregation for all nodes in the graph
-        
-        Args:
-            g (DGLGraph): Input graph with node features 'h' and edge features 'e'
-            
-        Returns:
-            a_env (Tensor): Aggregated node features [num_nodes, node_dim + edge_dim]
-            graph_rep (Tensor): Global sum pooled representation [1, node_dim + edge_dim]
-        """
-
+    def nodeaggstatement(self,g):
         # Step 1: Aggregate neighboring node features (sum)
-        if self.node_agg is None: g.update_all(fn.copy_src('h', 'm'), fn.sum('m', 'h_env'))
-        elif self.node_agg == 'mean': g.update_all(fn.copy_src('h', 'm'), fn.mean('m', 'h_env'))
-        elif self.node_agg == 'max': g.update_all(fn.copy_src('h', 'm'), fn.max('m', 'h_env'))
-        elif self.node_agg == 'min': g.update_all(fn.copy_src('h', 'm'), fn.min('m', 'h_env'))
-        elif self.node_agg == 'mean': g.update_all(fn.copy_src('h', 'm'), fn.sum('m', 'h_env'))
+        if self.node_agg is None: g.update_all(fn.copy_u('h', 'm'), fn.sum('m', 'h_env'))
+        elif self.node_agg == 'mean': g.update_all(fn.copy_u('h', 'm'), fn.mean('m', 'h_env'))
+        elif self.node_agg == 'max': g.update_all(fn.copy_u('h', 'm'), fn.max('m', 'h_env'))
+        elif self.node_agg == 'min': g.update_all(fn.copy_u('h', 'm'), fn.min('m', 'h_env'))
+        elif self.node_agg == 'mean': g.update_all(fn.copy_u('h', 'm'), fn.sum('m', 'h_env'))
         elif self.node_agg == 'weighted_sum': g.ndata['h_env'] = self.weighted_sum_node(g)
         elif self.node_agg == 'learned_attn': g.ndata['h_env'] = self.learned_attn_node(g)
         elif self.node_agg == 'calced_attn': g.ndata['h_env'] = self.calced_attn_node(g)
         elif self.node_agg == 'norm': 
-            g.update_all(fn.copy_src('h', 'm'), fn.sum('m', 'h_env'))
+            g.update_all(fn.copy_u('h', 'm'), fn.sum('m', 'h_env'))
             g.ndata['h_env'] = g.ndata['h_env'] / torch.norm(g.ndata['h_env'], dim=1, keepdim=True)
         else: raise NotImplementedError("Node aggregation not implemented")
 
+    def edgeaggstatement(self,g):
         # Step 2: Aggregate neighboring edge features (sum)
-        if self.edge_agg is None: g.update_all(fn.copy_edge('e', 'm'), fn.sum('m', 'f_env'))
-        elif self.edge_agg == 'mean': g.update_all(fn.copy_edge('e', 'm'), fn.mean('m', 'f_env'))
-        elif self.edge_agg == 'max': g.update_all(fn.copy_edge('e', 'm'), fn.max('m', 'f_env'))
-        elif self.edge_agg == 'min': g.update_all(fn.copy_edge('e', 'm'), fn.min('m', 'f_env'))
-        elif self.edge_agg == 'mean': g.update_all(fn.copy_edge('e', 'm'), fn.sum('m', 'f_env'))
+        if self.edge_agg == None: g.update_all(fn.copy_e('e', 'm'), fn.sum('m', 'f_env'))
+        elif self.edge_agg == 'mean': g.update_all(fn.copy_e('e', 'm'), fn.mean('m', 'f_env'))
+        elif self.edge_agg == 'max': g.update_all(fn.copy_e('e', 'm'), fn.max('m', 'f_env'))
+        elif self.edge_agg == 'min': g.update_all(fn.copy_e('e', 'm'), fn.min('m', 'f_env'))
+        elif self.edge_agg == 'sum': g.update_all(fn.copy_e('e', 'm'), fn.sum('m', 'f_env'))
         elif self.edge_agg == 'weighted_sum': g.edata['f_env'] = self.weighted_sum_edge(g)
         elif self.edge_agg == 'learned_attn': g.edata['f_env'] = self.learned_attn_edge(g)
         elif self.edge_agg == 'calced_attn': g.edata['f_env'] = self.calced_attn_edge(g)
         elif self.edge_agg == 'norm':
-            g.update_all(fn.copy_edge('e', 'm'), fn.sum('m', 'f_env'))
-            g.edata['f_env'] = g.edata['f_env'] / torch.norm(g.edata['f_env'], dim=1, keepdim=True)
+            g.update_all(fn.copy_e('e', 'm'), fn.sum('m', 'f_env'))
+            g.edata['f_env'] = g.ndata['f_env'] / torch.norm(g.ndata['f_env'], dim=1, keepdim=True)
         else: raise NotImplementedError("Edge aggregation not implemented")
 
-
-
-        
+    def concatenvfeatures(self,g):
         # Step 3: Concatenate environment features
         h_env = g.ndata['h_env']
-        e_env = g.edata['f_env']
+        e_env = g.ndata['f_env']
         if self.mixing is None:
             a_env = torch.cat([h_env, e_env], dim=1)
         elif self.mixing == 'linear':
-            a_env = self.mixinglayer(a_env)
-        elif self.mixing == 'bilinear':
-            a_env = self.mixinglayer(h_env, e_env)
-
-        graph.ndata['a_env'] = a_env
-        # Step 4: Global sum pooling [ fix to do any type]
-        graph_rep = torch.sum(a_env, dim=0, keepdim=True)
-        
-        return a_env, graph_rep
-    
-    
-
-    def forward(self, g):
-        """
-        Perform aggregation for the given graph using the specified node and edge aggregation methods.
-
-        Args:
-            g (DGLGraph): Input graph with node features 'h' and edge features 'e'.
-
-        Returns:
-            a_env (Tensor): Aggregated node and edge features [num_nodes, node_dim + edge_dim].
-            graph_rep (Tensor): Global representation of the graph [1, node_dim + edge_dim].
-        """
-        # Perform aggregation
-        a_env, graph_rep = self.aggregate(g)
-
-    
-        return a_env, graph_rep
-
-
-class EnvironmentAggregatorwithGAT(AggregatorFunctions):
-    def __init__(self,node_agg=None,edge_agg=None,mixing=None,node_feat_size: int = 0, edge_feat_size: int = 0):
-        self.node_agg = node_agg
-        self.edge_agg = edge_agg
-        self.mixing = mixing
-        if mixing == 'linear':
-            self.mixinglayer = nn.Linear(node_feat_size + edge_feat_size, node_feat_size + edge_feat_size)
-        elif mixing == 'bilinear':
-            self.mixinglayer = nn.Bilinear(node_feat_size, edge_feat_size, node_feat_size + edge_feat_size)
-        
-        # GAT layer for node aggregation
-        self.gat = GATConv(node_feat_size, node_feat_size, num_heads=1, feat_drop=0.6, attn_drop=0.6, negative_slope=0.2, residual=False)
-        
-    def reset_parameters(self):
-        """
-        Reinitialize learnable parameters.
-        """
-        if self.node_agg == 'weighted_sum':
-            nn.init.xavier_uniform_(self.node_weights)
-        elif self.node_agg == 'learned_attn':
-            nn.init.xavier_uniform_(self.node_attn.weight)
-            nn.init.zeros_(self.node_attn.bias)
-        
-        if self.edge_agg == 'weighted_sum':
-            nn.init.xavier_uniform_(self.edge_weights)
-        elif self.edge_agg == 'learned_attn':
-            nn.init.xavier_uniform_(self.edge_attn.weight)
-            nn.init.zeros_(self.edge_attn.bias)
-        if self.mixing == 'linear':
-            nn.init.xavier_uniform_(self.mixinglayer.weight)
-            nn.init.zeros_(self.mixinglayer.bias)
-        elif self.mixing == 'bilinear':
-            nn.init.xavier_uniform_(self.mixinglayer.weight)
-            nn.init.zeros_(self.mixinglayer.bias)
-
-        
-    
-
-
-    def aggregate(self, g):
-        """
-        Perform environment aggregation for all nodes in the graph
-        
-        Args:
-            g (DGLGraph): Input graph with node features 'h' and edge features 'e'
-            
-        Returns:
-            a_env (Tensor): Aggregated node features [num_nodes, node_dim + edge_dim]
-            graph_rep (Tensor): Global sum pooled representation [1, node_dim + edge_dim]
-        """
-
-        # Step 1: Aggregate neighboring node features (sum)
-        if self.node_agg is None: g.update_all(fn.copy_src('h', 'm'), fn.sum('m', 'h_env'))
-        elif self.node_agg == 'mean': g.update_all(fn.copy_src('h', 'm'), fn.mean('m', 'h_env'))
-        elif self.node_agg == 'max': g.update_all(fn.copy_src('h', 'm'), fn.max('m', 'h_env'))
-        elif self.node_agg == 'min': g.update_all(fn.copy_src('h', 'm'), fn.min('m', 'h_env'))
-        elif self.node_agg == 'mean': g.update_all(fn.copy_src('h', 'm'), fn.sum('m', 'h_env'))
-        elif self.node_agg == 'weighted_sum': g.ndata['h_env'] = self.weighted_sum_node(g)
-        elif self.node_agg == 'learned_attn': g.ndata['h_env'] = self.learned_attn_node(g)
-        elif self.node_agg == 'calced_attn': g.ndata['h_env'] = self.calced_attn_node(g)
-        elif self.node_agg == 'norm': 
-            g.update_all(fn.copy_src('h', 'm'), fn.sum('m', 'h_env'))
-            g.ndata['h_env'] = g.ndata['h_env'] / torch.norm(g.ndata['h_env'], dim=1, keepdim=True)
-        else: raise NotImplementedError("Node aggregation not implemented")
-
-        # Step 2: Aggregate neighboring edge features (sum)
-        if self.edge_agg is None: g.update_all(fn.copy_edge('e', 'm'), fn.sum('m', 'f_env'))
-        elif self.edge_agg == 'mean': g.update_all(fn.copy_edge('e', 'm'), fn.mean('m', 'f_env'))
-        elif self.edge_agg == 'max': g.update_all(fn.copy_edge('e', 'm'), fn.max('m', 'f_env'))
-        elif self.edge_agg == 'min': g.update_all(fn.copy_edge('e', 'm'), fn.min('m', 'f_env'))
-        elif self.edge_agg == 'mean': g.update_all(fn.copy_edge('e', 'm'), fn.sum('m', 'f_env'))
-        elif self.edge_agg == 'weighted_sum': g.edata['f_env'] = self.weighted_sum_edge(g)
-        elif self.edge_agg == 'learned_attn': g.edata['f_env'] = self.learned_attn_edge(g)
-        elif self.edge_agg == 'calced_attn': g.edata['f_env'] = self.calced_attn_edge(g)
-        elif self.edge_agg == 'norm':
-            g.update_all(fn.copy_edge('e', 'm'), fn.sum('m', 'f_env'))
-            g.edata['f_env'] = g.edata['f_env'] / torch.norm(g.edata['f_env'], dim=1, keepdim=True)
-        else: raise NotImplementedError("Edge aggregation not implemented")
-
-
-
-        
-        # Step 3: Concatenate environment features
-        h_env = g.ndata['h_env']
-        e_env = g.edata['f_env']
-        if self.mixing is None:
             a_env = torch.cat([h_env, e_env], dim=1)
-        elif self.mixing == 'linear':
             a_env = self.mixinglayer(a_env)
         elif self.mixing == 'bilinear':
             a_env = self.mixinglayer(h_env, e_env)
 
         g.ndata['a_env'] = a_env
+        return a_env
+    
+    def globalaggstatement(self,a_env):
+        # Step 4: Global sum pooling [add the weighted pooling and the attention pooling for the GAT]
+        if self.global_agg == 'sum':
+            graph_rep = torch.sum(a_env, dim=0, keepdim=True)
+        elif self.global_agg == 'mean':
+            graph_rep = torch.mean(a_env, dim=0, keepdim=True)
+        elif self.global_agg == 'max':
+            graph_rep = torch.max(a_env, dim=0, keepdim=True).values
+        elif self.global_agg == 'min':
+            graph_rep = torch.min(a_env, dim=0, keepdim=True).values
+        elif self.global_agg == 'norm':
+            graph_rep = torch.norm(a_env, dim=0, keepdim=True)
+        elif self.global_agg == 'std':
+            graph_rep = torch.std(a_env, dim=0, keepdim=True)
+        else: raise NotImplementedError("Global aggregation not implemented")
+        return graph_rep
+
+
+class EnvironmentAggregator(AggregatorFunctions):
+    def __init__(self,node_agg=None,edge_agg=None,mixing=None,node_feat_size: int = 0, edge_feat_size: int = 0,global_agg='sum'):
+        super().__init__()
+        self.setup(node_agg, edge_agg, mixing, node_feat_size, edge_feat_size,global_agg)
         
-        # Step 4: use GAT on a_env
-        a_env = self.gat(g, a_env)
+    def reset_parameters(self):
+        self.resetlayers()
 
-        #Step 5: Use your favoite pooling method
-        pooling_type = 'sum'  # Change to 'mean', 'max', etc., as needed
-
-        if pooling_type == 'sum':
-            graph_rep = dgl.readout_nodes(g, 'a_env', op='sum')  # Sum pooling
-        elif pooling_type == 'mean':
-            graph_rep = dgl.readout_nodes(g, 'a_env', op='mean')  # Mean pooling
-        elif pooling_type == 'max':
-            graph_rep = dgl.readout_nodes(g, 'a_env', op='max')  # Max pooling
-        else:
-            raise NotImplementedError(f"Pooling type '{pooling_type}' not implemented")        
+            
+    def aggregate(self, g):
+        """
+        Perform environment aggregation for all nodes in the graph
+        
+        Args:
+            g (DGLGraph): Input graph with node features 'h' and edge features 'e'
+            
+        Returns:
+            a_env (Tensor): Aggregated node features [num_nodes, node_dim + edge_dim]
+            graph_rep (Tensor): Global sum pooled representation [1, node_dim + edge_dim]
+        """
+        self.nodeaggstatement(g)
+        self.edgeaggstatement(g)
+        a_env = self.concatenvfeatures(g)
+        # Step 4: Global sum pooling [ fix to do any type]
+        graph_rep = self.globalaggstatement(a_env)
         return a_env, graph_rep
     
     
@@ -362,5 +256,83 @@ class EnvironmentAggregatorwithGAT(AggregatorFunctions):
     
         return a_env, graph_rep
 
+class EnvironmentAggregatorwithGAT(AggregatorFunctions):
+    def __init__(self,node_agg=None,edge_agg=None,mixing=None,node_feat_size: int = 0, edge_feat_size: int = 0,global_agg='sum'):
+        super().__init__()
+        self.setup(node_agg, edge_agg, mixing, node_feat_size, edge_feat_size,global_agg)
+        # GAT layer for node aggregation
+        self.gat = GATConv(node_feat_size+edge_feat_size, node_feat_size+edge_feat_size, num_heads=1, feat_drop=0.6, attn_drop=0.6, negative_slope=0.2, residual=False)
+        
+    def reset_parameters(self):
+        """
+        Reinitialize learnable parameters.
+        """
+        self.resetlayers()
+        self.gat.reset_parameters()
+                
+    def aggregate(self, g):
+        """
+        Perform environment aggregation for all nodes in the graph
+        
+        Args:
+            g (DGLGraph): Input graph with node features 'h' and edge features 'e'
+            
+        Returns:
+            a_env (Tensor): Aggregated node features [num_nodes, node_dim + edge_dim]
+            graph_rep (Tensor): Global sum pooled representation [1, node_dim + edge_dim]
+        """
 
+        # Step 1: Aggregate neighboring node features (sum)
+        self.nodeaggstatement(g)
+        # Step 2: Aggregate neighboring edge features (sum)
+        self.edgeaggstatement(g)
+        # Step 3: Concatenate environment features
+        a_env = self.concatenvfeatures(g)  
+        g = dgl.add_self_loop(g)
+        a_env = self.gat(g, a_env)
+        #Step 5: Use your favoite pooling method
+        graph_rep = self.globalaggstatement(a_env)        
+        return a_env, graph_rep
+    
+    
 
+    def forward(self, g):
+        """
+        Perform aggregation for the given graph using the specified node and edge aggregation methods.
+
+        Args:
+            g (DGLGraph): Input graph with node features 'h' and edge features 'e'.
+
+        Returns:
+            a_env (Tensor): Aggregated node and edge features [num_nodes, node_dim + edge_dim].
+            graph_rep (Tensor): Global representation of the graph [1, node_dim + edge_dim].
+        """
+        # Perform aggregation
+        a_env, graph_rep = self.aggregate(g)
+
+    
+        return a_env, graph_rep
+if __name__ == '__main__':
+    # Create a sample graph
+    import dgl
+    import torch
+
+    # Create a sample graph
+    g = dgl.graph(([0, 1, 2], [1, 2, 3]))
+    g.ndata['h'] = torch.randn(4, 8)  # Node features
+    g.edata['e'] = torch.randn(3, 4)  # Edge features
+
+    # Initialize the aggregator
+    aggregator = EnvironmentAggregator(node_agg='mean', edge_agg='sum', mixing='linear', node_feat_size=8, edge_feat_size=4)
+    aggregator.reset_parameters()
+
+    # Forward pass
+    a_env, graph_rep = aggregator(g)
+    print(a_env, graph_rep)
+
+    # Initialize the aggregator with GAT
+    aggregator_gat = EnvironmentAggregatorwithGAT(node_agg='mean', edge_agg='mean', mixing='linear', node_feat_size=8, edge_feat_size=4)
+    aggregator_gat.reset_parameters()
+    # Forward pass
+    a_env_gat, graph_rep_gat = aggregator_gat(g)
+    print(a_env_gat, graph_rep_gat)

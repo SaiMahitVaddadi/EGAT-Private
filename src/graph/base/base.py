@@ -1,4 +1,5 @@
 from ...utils.descriptors.egat.encodings import Encodings
+from ...utils.descriptors.egat.properties import Properties
 from ...utils.descriptors.egat.molmatdesc import MolMatDesc
 from ...utils.descriptors.egat.radicals import RDKElectronInfo,YARPElectronInfo
 from ...utils.descriptors.egat.stereo import StereoChemistry
@@ -22,6 +23,7 @@ class BaseFeaturizer(object):
         self.smiles = smiles
         self.params = arguments
         self.properties = Encodings()
+        self.props = Properties()
         self.CreateAtomMapping()
         self.MatrixDescriptors()
         self.Rings()
@@ -166,3 +168,21 @@ class BaseFeaturizer(object):
                     self.edges_v.append(j)
 
 
+    def GrabConformer(self,id=1):
+        if id == 1: 
+            self.conformer = self.matrixdescriptors.new_mol
+        else:
+            self.conformer = self.matrixdescriptors.new_mol.GetConformer(conf_id=id)
+        
+            
+    
+
+    def GrabGeometry(self,id=1):
+        mol = self.conformer
+        self.positions = {}
+        for atom in mol.GetAtoms():
+            pos = mol.GetConformer().GetAtomPosition(atom.GetIdx())
+            ind = atom.GetIdx()
+            self.positions[ind] = [pos.x, pos.y, pos.z]
+        
+        

@@ -3,7 +3,6 @@ import torch.nn as nn
 import dgl
 import dgl.function as fn
 
-
 class WeightedSumAggregator(nn.Module):
     def __init__(self, node_feat_size: int, edge_feat_size: int):
         super().__init__()
@@ -21,11 +20,11 @@ class WeightedSumAggregator(nn.Module):
     def forward(self, graph):
         
         # Weighted node aggregation
-        weighted_nodes = graph.ndata['x'] * self.node_weights  # [N, d_node] ⊙ [d_node]
+        weighted_nodes = graph.ndata['h'] * self.node_weights  # [N, d_node] ⊙ [d_node]
         global_node_feature = weighted_nodes.sum(dim=0)        # [d_node]
         
         # Weighted edge aggregation
-        weighted_edges = graph.edata['x'] * self.edge_weights  # [E, d_edge] ⊙ [d_edge]
+        weighted_edges = graph.edata['e'] * self.edge_weights  # [E, d_edge] ⊙ [d_edge]
         global_edge_feature = weighted_edges.sum(dim=0)        # [d_edge]
         return global_node_feature, global_edge_feature
 
@@ -45,11 +44,11 @@ class WeightedMeanAggregator(nn.Module):
 
     def forward(self, graph):
         # Weighted node aggregation
-        weighted_nodes = graph.ndata['x'] * self.node_weights  # [N, d_node] ⊙ [d_node]
+        weighted_nodes = graph.ndata['h'] * self.node_weights  # [N, d_node] ⊙ [d_node]
         global_node_feature = weighted_nodes.mean(dim=0)       # [d_node]
         
         # Weighted edge aggregation
-        weighted_edges = graph.edata['x'] * self.edge_weights  # [E, d_edge] ⊙ [d_edge]
+        weighted_edges = graph.edata['e'] * self.edge_weights  # [E, d_edge] ⊙ [d_edge]
         global_edge_feature = weighted_edges.mean(dim=0)       # [d_edge]
         
         return global_node_feature, global_edge_feature
@@ -57,13 +56,16 @@ class WeightedMeanAggregator(nn.Module):
 class BasicPooledAggregator(nn.Module):
     def __init__(self, node_feat_size: int, edge_feat_size: int):
         super().__init__()
-        
-        self.aggregators ['sum','mean','max','min','std']
+        self.aggregators = ['sum','mean','max','min','std']
     
     
     def _dglfcn(self,graph,aggregator='sum'):
-        global_node_feature = getattr(graph.ndata['x'],aggregator)(dim=0)
-        global_edge_feature = getattr(graph.edata['x'],aggregator)(dim=0)
+        try:
+            global_node_feature,_ = getattr(graph.ndata['h'],aggregator)(dim=0)
+            global_edge_feature,_ = getattr(graph.edata['e'],aggregator)(dim=0)
+        except:
+            global_node_feature = getattr(graph.ndata['h'],aggregator)(dim=0)
+            global_edge_feature = getattr(graph.edata['e'],aggregator)(dim=0)
         return global_node_feature, global_edge_feature
 
     def forward(self,graph):
@@ -81,14 +83,18 @@ class LearnedPooledAggregator(nn.Module):
     def __init__(self, node_feat_size: int, edge_feat_size: int):
         super().__init__()
         
-        self.aggregators ['sum','mean','max','min','std']
+        self.aggregators = ['sum','mean','max','min','std']
     
     
     def _dglfcn(self,graph,aggregator='sum'):
-        global_node_feature = getattr(graph.ndata['x'],aggregator)(dim=0)
-        global_edge_feature = getattr(graph.edata['x'],aggregator)(dim=0)
+        try:
+            global_node_feature,_ = getattr(graph.ndata['h'],aggregator)(dim=0)
+            global_edge_feature,_ = getattr(graph.edata['e'],aggregator)(dim=0)
+        except:
+            global_node_feature = getattr(graph.ndata['h'],aggregator)(dim=0)
+            global_edge_feature = getattr(graph.edata['e'],aggregator)(dim=0)
         return global_node_feature, global_edge_feature
-
+    
     def forward(self,graph):
         node_features,edge_features = [],[] 
         for aggregator in self.aggregators:
@@ -123,7 +129,7 @@ class LearnedPooledAggregatorwithWeightedFeatures(nn.Module):
         self.edge_weights_std = nn.Parameter(torch.randn(edge_feat_size))
         self.node_weights_sum = nn.Parameter(torch.randn(node_feat_size))  # [d_node]
         self.edge_weights_sum = nn.Parameter(torch.randn(edge_feat_size))  # [d_edge]
-        self.aggregators ['sum','mean','max','min','std']
+        self.aggregators = ['sum','mean','max','min','std']
     
     def reset_parameters(self):
         """
@@ -141,15 +147,25 @@ class LearnedPooledAggregatorwithWeightedFeatures(nn.Module):
         nn.init.xavier_uniform_(self.edge_weights_sum)
     
     def _dglfcn(self,graph,aggregator='sum'):
-        global_node_feature = getattr(graph.ndata['x'],aggregator)(dim=0)
-        global_edge_feature = getattr(graph.edata['x'],aggregator)(dim=0)
+        try:
+            global_node_feature,_ = getattr(graph.ndata['h'],aggregator)(dim=0)
+            global_edge_feature,_ = getattr(graph.edata['e'],aggregator)(dim=0)
+        except:
+            global_node_feature = getattr(graph.ndata['h'],aggregator)(dim=0)
+            global_edge_feature = getattr(graph.edata['e'],aggregator)(dim=0)
         return global_node_feature, global_edge_feature
     
     def _dglweightedfcn(self,graph,aggregator='sum'):
-        weighted_nodes = graph.ndata['x'] * getattr(self,f'node_weights_{aggregator}')  # [N, d_node] ⊙ [d_node]
-        global_node_feature = getattr(weighted_nodes,aggregator)(dim=0)
-        weighted_edges = graph.edata['x'] * getattr(self,f'edge_weights_{aggregator}')
-        global_edge_feature = getattr(weighted_edges,aggregator)(dim=0)
+        weighted_nodes = graph.ndata['h'] * getattr(self,f'node_weights_{aggregator}')  # [N, d_node] ⊙ [d_node]
+        weighted_edges = graph.edata['e'] * getattr(self,f'edge_weights_{aggregator}')
+        graph.ndata['h_w'] = weighted_nodes
+        graph.edata['e_w'] = weighted_edges
+        try:
+            global_node_feature,_ = getattr(graph.ndata['h_w'],aggregator)(dim=0)
+            global_edge_feature,_ = getattr(graph.edata['e_w'],aggregator)(dim=0)
+        except:
+            global_node_feature = getattr(graph.ndata['h_w'],aggregator)(dim=0)
+            global_edge_feature = getattr(graph.edata['e_w'],aggregator)(dim=0)
         return global_node_feature, global_edge_feature
 
 
@@ -174,4 +190,45 @@ class LearnedPooledAggregatorwithWeightedFeatures(nn.Module):
 
         return global_node_feature, global_edge_feature
 
-        
+
+if __name__ == '__main__':
+    # Create a sample graph
+    import dgl
+    import torch
+
+    # Create a sample graph
+    g = dgl.graph(([0, 1, 2], [1, 2, 3]))
+    g.ndata['h'] = torch.randn(4, 8)  # Node features
+    g.edata['e'] = torch.randn(3, 4)  # Edge features
+
+    # Initialize the aggregator
+    aggregator = WeightedSumAggregator(node_feat_size=8, edge_feat_size=4)
+    # Forward pass
+    global_node_feature, global_edge_feature = aggregator(g)
+    print("Global Node Feature:", global_node_feature)
+    print("Global Edge Feature:", global_edge_feature)
+    
+
+    aggregator = WeightedMeanAggregator(node_feat_size=8, edge_feat_size=4)
+    # Forward pass
+    global_node_feature, global_edge_feature = aggregator(g)
+
+    print("Global Node Feature:", global_node_feature)
+    print("Global Edge Feature:", global_edge_feature)
+    aggregator = BasicPooledAggregator(node_feat_size=8, edge_feat_size=4)
+    # Forward pass
+    global_node_feature, global_edge_feature = aggregator(g)
+    print("Global Node Feature:", global_node_feature)
+    print("Global Edge Feature:", global_edge_feature)
+    aggregator = LearnedPooledAggregator(node_feat_size=8, edge_feat_size=4)
+    # Forward pass
+    global_node_feature, global_edge_feature = aggregator(g)
+    print("Global Node Feature:", global_node_feature)
+    print("Global Edge Feature:", global_edge_feature)
+    aggregator = LearnedPooledAggregatorwithWeightedFeatures(node_feat_size=8, edge_feat_size=4)
+    # Forward pass
+    global_node_feature, global_edge_feature = aggregator(g)
+    print("Global Node Feature:", global_node_feature)
+    print("Global Edge Feature:", global_edge_feature)
+    
+

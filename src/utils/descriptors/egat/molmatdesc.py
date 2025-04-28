@@ -302,19 +302,19 @@ class MolMatDesc:
         """
         electronegativity_dict, symbolsindict = self.readenegtable()
         bonds = self.new_mol.GetBonds()
-        polarity_info = []
+        num_atoms = self.new_mol.GetNumAtoms()
+        polarity_info = np.zeros((num_atoms, num_atoms))
         for bond in bonds:
-            begin_atom = bond.GetBeginAtom()
-            end_atom = bond.GetEndAtom()
-            begin_symbol = begin_atom.GetSymbol()
-            end_symbol = end_atom.GetSymbol()
+            begin_idx = bond.GetBeginAtomIdx()
+            end_idx = bond.GetEndAtomIdx()
+            begin_symbol = bond.GetBeginAtom().GetSymbol()
+            end_symbol = bond.GetEndAtom().GetSymbol()
             if begin_symbol in symbolsindict and end_symbol in symbolsindict:
                 begin_en = electronegativity_dict[begin_symbol]
                 end_en = electronegativity_dict[end_symbol]
                 en_difference = abs(begin_en - end_en)
-                polarity_info.append(((begin_symbol, end_symbol), en_difference))
-            else:
-                polarity_info.append(((begin_symbol, end_symbol), 0))
+                polarity_info[begin_idx, end_idx] = en_difference
+                polarity_info[end_idx, begin_idx] = en_difference  # Ensure symmetry
         self.polarity_pauling = polarity_info
     
     def GenerateRandom3DGeometry(self):
