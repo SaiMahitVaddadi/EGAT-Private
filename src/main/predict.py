@@ -1,6 +1,6 @@
 import torch,logging,os,sys,hydra,omegaconf,shutil,importlib
 from torch import nn
-from .setup import Setup
+from .ml.setup import Setup
 from ..dataset.Loader import EGATDataLoader
 from .scaler import Scaler
 import numpy as np 

@@ -11,14 +11,14 @@ class HydrogenBondInformation(BaseFeaturizer):
         if self.params.check_hbond:
             hbond_info = []
             if self.matrixdescriptors.element[ind] in ['O', 'N', 'F', 'Cl', 'Br', 'I']:
-                hbond_info.append([1, 0])  # Donor
+                hbond_info = [1, 0,0]  # Donor
             elif self.matrixdescriptors.element[ind] == 'H':
                 for neighbor in range(len(self.matrixdescriptors.element)):
                     if self.matrixdescriptors.adj_mat[ind][neighbor] > 0 and self.matrixdescriptors.element[neighbor] in ['O', 'N', 'F', 'Cl', 'Br', 'I']:
-                        hbond_info.append([0, 1])  # Acceptor
+                        hbond_info = [0, 1,0]  # Acceptor
                     break
             else:
-                hbond_info.append([0, 0])  # Neither
+                hbond_info = [0, 0,1]  # Neither
             return hbond_info
         else:
             return []

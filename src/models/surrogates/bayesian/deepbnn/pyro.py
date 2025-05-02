@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-import pyro
+import models.surrogates.bayesian.deepbnn.pyro as pyro
 import pyro.distributions as dist
 from pyro.nn import PyroModule, PyroSample
 
@@ -20,8 +20,20 @@ class BayesianLinear(PyroModule):
     def forward(self, x):
         return x @ self.weight.T + self.bias
 
+# Define a Bayesian Nonlinear Layer with Pyro
+class BayesianNonlinear(PyroModule):
+    def __init__(self, in_features, out_features, nonlinearity=nn.ReLU):
+        super().__init__()
+        self.linear = BayesianLinear(in_features, out_features)
+        self.nonlinearity = nonlinearity()
+
+    def forward(self, x):
+        x = self.linear(x)
+        return self.nonlinearity(x)
+
+
 # Example Usage in a Model
-class BNN(PyroModule):
+class BNNLinear(PyroModule):
     def __init__(self, input_dim=10, hidden_dim=5, output_dim=1):
         super().__init__()
         self.fc1 = BayesianLinear(input_dim, hidden_dim)
@@ -32,20 +44,13 @@ class BNN(PyroModule):
         x = self.relu(self.fc1(x))
         return self.fc2(x)
 
-# Define Guide (Variational Distribution)
-def guide(x, y):
-    pyro.module("bnn", model)  # Automatically register variational parameters
+class BNNNonlinear(PyroModule):
+    def __init__(self, input_dim=10, hidden_dim=5, output_dim=1, nonlinearity=nn.ReLU):
+        super().__init__()
+        self.fc1 = BayesianNonlinear(input_dim, hidden_dim, nonlinearity)
+        self.fc2 = BayesianLinear(hidden_dim, output_dim)
 
-# Training with SVI
-from pyro.infer import SVI, Trace_ELBO
-from pyro.optim import Adam
+    def forward(self, x):
+        x = self.fc1(x)
+        return self.fc2(x)
 
-model = BNN()
-optimizer = Adam({"lr": 0.01})
-svi = SVI(model.model, model.guide, optimizer, loss=Trace_ELBO())
-
-# Training loop
-for epoch in range(1000):
-    loss = svi.step(x_train, y_train)
-    if epoch % 100 == 0:
-        print(f"Epoch {epoch}, Loss: {loss}")

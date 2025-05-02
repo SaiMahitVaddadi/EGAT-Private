@@ -73,23 +73,23 @@ class GlobalBondInformation(RandomWalk,DijkstraFeaturizer,MolecularAStar):
                 return [1]
             else:
                 if self.params.getshortestpath == 'unwt':
-                    self.SPDFunc(edge)
+                    return self.SPDFunc(edge)
                 elif self.params.getshortestpath == 'wtbymass':
-                    self.WtSPDByMass(edge)
+                    return self.WtSPDByMass(edge)
                 elif self.params.getshortestpath == 'wtbybo':
-                    self.WtSPDByBO(edge)
+                    return self.WtSPDByBO(edge)
                 elif self.params.getshortestpath == 'wtbyvalence':
-                    self.WTSPDByVE(edge)
+                    return self.WTSPDByVE(edge)
                 elif self.params.getshortestpath == 'wtbyhyb':
-                    self.WTSPDByHYB(edge)
+                    return self.WTSPDByHYB(edge)
                 elif self.params.getshortestpath == 'wtbyhybve':
-                    self.WTSPDByHYBVE(edge)
+                    return self.WTSPDByHYBVE(edge)
                 elif self.params.getshortestpath == 'wtbycoulomb':
-                    self.WTSPDbyCM(edge)
+                    return self.WTSPDbyCM(edge)
                 elif self.params.getshortestpath == 'wtbyall':
-                    self.WtSPDByAll(edge)
+                    return self.WtSPDByAll(edge)
                 else:
-                    self.SPDFunc(edge)
+                    return self.SPDFunc(edge)
         else:
             return []
         

@@ -21,6 +21,7 @@ class Encodings(Properties):
         self.atomstereo()
         self.stereodescriptor()
         self.globalbond()
+        self.functionalgroup()
 
     def element(self):
         """

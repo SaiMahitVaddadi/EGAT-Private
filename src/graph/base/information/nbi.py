@@ -1,6 +1,16 @@
 from ..base import BaseFeaturizer
+from dataclasses import dataclass
 
-
+@dataclass
+class NonBondedParams:
+    addhbonds: bool = True
+    addcho: bool = True
+    adddihydrogenbonds: bool = True
+    addcationpi: bool = True
+    addpipistack: bool = True
+    addhalogenbonds: bool = True
+    addmetallophilic: bool = True
+    addelectrostatic: bool = True
 
 class NonBondedInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
@@ -108,93 +118,90 @@ class NonBondedInformation(BaseFeaturizer):
 
 
     def ElectronegativityDifference(self, edge):
-        en_atom1 = self.pauling_dict.get(self.matrixdescriptors.element[edge[0]], 0)
-        en_atom2 = self.pauling_dict.get(self.matrixdescriptors.element[edge[1]], 0)
+        en_atom1 = self.pauling_dict.get(self.matrixdescriptors.element[edge[0,1]], 0)
+        en_atom2 = self.pauling_dict.get(self.matrixdescriptors.element[edge[1,0]], 0)
         return abs(en_atom1 - en_atom2)
     
     
     
     def DefaultNBInteraction(self,edge):
         bond_feature = []
-        if self.params.addmissingbonds == 'hbonds':
-            bond_feature += [0]
+        if self.params.addhbonds:
+            bond_feature += [0,1]
         
         if self.params.addcho:            
-            bond_feature += [0]
+            bond_feature += [0,1]
 
         if self.params.adddihydrogenbonds:
-            bond_feature += [0]
+            bond_feature += [0,1]
 
         if self.params.addcationpi:
-            bond_feature += [0]
+            bond_feature += [0,1]
 
         if self.params.addpipistack:
-            bond_feature += [0]
+            bond_feature += [0,1]
 
         if self.params.addhalogenbonds:
-            bond_feature += [0]
+            bond_feature += [0,1]
         
         if self.params.addmetallophilic:
-            bond_feature += [0]
+            bond_feature += [0,1]
 
         if self.params.addelectrostatic:
-            bond_feature += [0,0]
+            bond_feature += [0,0,1]
         
-        if self.params.addeneg:
-            bond_feature += [self.ElectronegativityDifference(edge)]
         return bond_feature
     
     def NBIInteraction(self,i,j):
         bond_feature = []
-        if [i,j] in self.hbond_edges:
-            bond_feature += [1]
-        else:
-            bond_feature += [0]
+        if self.params.addhbonds:
+            if [i,j] in self.hbond_edges:
+                bond_feature += [1,0]
+            else:
+                bond_feature += [0,1]
 
         if self.params.addcho:
             if [i,j] in self.ch_o_edges:
-                bond_feature += [1]
+                bond_feature += [1,0]
             else:
-                bond_feature += [0]
+                bond_feature += [0,1]
 
         if self.params.adddihydrogenbonds:
             if [i,j] in self.dihydrogen_edges:
-                bond_feature += [1]
+                bond_feature += [1,0]
             else:
-                bond_feature += [0]
+                bond_feature += [0,1]
 
         if self.params.addcationpi:
             if [i,j] in self.cation_pi_edges:
-                bond_feature += [1]
+                bond_feature += [1,0]
             else:
-                bond_feature += [0]
+                bond_feature += [0,1]
 
         if self.params.addpipistack:
             if [i,j] in self.pi_pi_edges:
-                bond_feature += [1]
+                bond_feature += [1,0]
             else:
-                bond_feature += [0]
+                bond_feature += [0,1]
 
         if self.params.addhalogenbonds:
             if [i,j] in self.halogen_bond_edges:
-                bond_feature += [1]
+                bond_feature += [1,0]
             else:
-                bond_feature += [0]
+                bond_feature += [0,1]
         
         if self.params.addmetallophilic:
             if [i,j] in self.metallophilic_edges:
-                bond_feature += [1]
+                bond_feature += [1,0]
             else:
-                bond_feature += [0]
+                bond_feature += [0,1]
 
         if self.params.addelectrostatic:
             if [i,j] in self.electrostatic_edges['attract']:
-                bond_feature += [0,1]
+                bond_feature += [0,1,0]
             elif [i,j] in self.electrostatic_edges['repel']:
-                bond_feature += [1,0]
+                bond_feature += [1,0,0]
             else:
-                bond_feature += [0,0]
+                bond_feature += [0,0,1]
 
-        if self.params.addeneg:
-            bond_feature += [self.ElectronegativityDifference([i,j])]
         return bond_feature

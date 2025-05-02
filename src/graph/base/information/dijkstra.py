@@ -10,11 +10,6 @@ class DijkstraFeaturizer(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
 
-    def GrabConformer(self,id=1):
-        if id == 1: return self.matrixdescriptors.new_mol.GetConformer()
-        else:
-            return self.matrixdescriptors.new_mol.GetConformer(conf_id=id)
-    
 
 
     def is_rotatable(self,bond):
@@ -35,7 +30,7 @@ class DijkstraFeaturizer(BaseFeaturizer):
 
     def get_weighted_graph_with_stereo(self,id=1):
         G = nx.Graph()
-        conf = self.GrabConformer(id)
+        conf = self.conformer
         if isinstance(conf,Chem.rdchem.Mol): conf = conf.GetConformer()
         mol = self.matrixdescriptors.new_mol
 

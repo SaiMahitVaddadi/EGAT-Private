@@ -3,6 +3,7 @@ from .Molecule import MoleculeFeaturizer
 from ..base.information import BondGeometryInformation,AtomGeometryInformation,SterimolFeaturizer
 from tqdm import tqdm
 
+# Write a function that grabs the geometry as a vector for each atom. 
 class MoleculeGeometryCommands(GeomFeaturizer,MoleculeFeaturizer,BondGeometryInformation,AtomGeometryInformation,SterimolFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
@@ -28,6 +29,7 @@ class MoleculeGeometryCommands(GeomFeaturizer,MoleculeFeaturizer,BondGeometryInf
         if self.params.conformer.nconfs == 1: 
             self.ConformerCalcs()
             self.StermiolMatrices()
+            self.RunMordred3D()
         self.SetupStep()
 
         self.geomaddonfcns_atom = [self.AtomCoordination,self.DistanceToCenterOfMass,self.StericHindrance,self.AtomicSolventAccessibility,
@@ -35,7 +37,7 @@ class MoleculeGeometryCommands(GeomFeaturizer,MoleculeFeaturizer,BondGeometryInf
                      self.AtomSterimolFeatures,self.GetBuriedVolume,self.GeomMomentDescriptors,self.SterimolMomentDescriptors,self.SterGeomMomentDescriptors,
                      self.SolidAngleCoverage]
         
-        self.geomaddonfcns_bond = [self.BondLength,self.BondAngle,self.DihedralAngle,self.BondSterimolFeatures]
+        self.geomaddonfcns_bond = [self.BondLength,self.BondAngle,self.DihedralAngle,self.BondSterimolFeatures,self.Morse]
 
     def __exceptionfunction(self,fcn,ind,e):
         print('==========================ERROR ALERT==========================')
@@ -67,11 +69,11 @@ class MoleculeGeometryCommands(GeomFeaturizer,MoleculeFeaturizer,BondGeometryInf
         if self.params.getradical == 'YARP':
             if len(self.electroninfo.yarpecule.bond_mats) == 1: 
                 atom_feature = self._atomaddons(atom_feature,ind)
-                atom_feature = [0 if x is None or x is float('inf') or x != x else x for x in atom_feature]
+                atom_feature = self._checkforbadvalues(atom_feature)
             else:
                 for i in range(len(self.electroninfo.yarpecule.bond_mats)): 
                     self.atom_features_dict[i] = self._atomaddons(self.atom_features_dict[i],ind)
-                    self.atom_features_dict[i] = [0 if x is None or x is float('inf') or x != x else x for x in self.atom_features_dict[i]]
+                    self.atom_features_dict[i] = self._checkforbadvalues(self.atom_features_dict[i])
         else:
             atom_feature = self._atomaddons(atom_feature,ind)
         return atom_feature
@@ -91,22 +93,29 @@ class MoleculeGeometryCommands(GeomFeaturizer,MoleculeFeaturizer,BondGeometryInf
         for conf_id in conf_ids:
             self.ConformerCalcs(conf_id)
             self.StermiolMatrices(conf_id)
+            self.RunMordred3D(conf_id)
             if not self._yarpcase():
                 atom_feature = self._atomaddonswithconf(atom_feature, ind, conf_id)
-                self.atom_feature_confs[conf_id] = [0 if x is None or x is float('inf') or x != x else x for x in atom_feature]
+                self.atom_feature_confs[conf_id] = self._checkforbadvalues(atom_feature)
             else:
                 for i in range(len(self.electroninfo.yarpecule.bond_mats)):
-                    self.atom_feature_confs[j] = self._atomaddonswithconf(self.atom_features_dict[j], ind, conf_id)
-                    self.atom_feature_confs[j] = [0 if x is None or x is float('inf') or x != x else x for x in self.atom_feature_confs[j]]
+                    self.atom_feature_confs[j] = self._atomaddonswithconf(self.atom_features_dict[i], ind, conf_id)
+                    self.atom_feature_confs[j] = self._checkforbadvalues(self.atom_feature_confs[j])
                     j += 1
         return atom_feature
 
     def Edge(self,ind):
-        edge = sorted([self.edges_u[ind],self.edges_v[ind]])
-        return edge
+        try:
+            edge = sorted([self.edges_u[ind],self.edges_v[ind]])
+            return edge
+        except:
+            return None
     
-    def _runbondfcn(self,bond_feature,ind,conf=None):
-        edge = self.Edge(ind)
+    def _runbondfcn(self,bond_feature,ind,conf=None,edge=None):
+        if self.Edge(ind) == None:
+            edge = edge
+        else:
+            edge = self.Edge(ind)
         for fcn in tqdm(self.geomaddonfcns_bond,total=len(self.geomaddonfcns_bond), desc="Processing bond functions"):
             try:
                 if conf is None: bond_feature += fcn(edge)
@@ -115,42 +124,49 @@ class MoleculeGeometryCommands(GeomFeaturizer,MoleculeFeaturizer,BondGeometryInf
                 self.__exceptionfunction(fcn,edge,e)
         return bond_feature
     
-    def _bondaddons(self,bond_feature,ind):
-        return self._runbondfcn(bond_feature,ind)
+    def _bondaddons(self,bond_feature,ind,edge=None):
+        print(f"Processing bond {ind} with edge {edge} in this function")
+        if edge == None:
+            return self._runbondfcn(bond_feature,ind)
+        else:
+            return self._runbondfcn(bond_feature,ind,edge=edge)
     
-    def _bondaddonswithconf(self,bond_feature,ind,conf=0):
-        return self._runbondfcn(bond_feature,ind,conf)
+    def _bondaddonswithconf(self,bond_feature,ind,conf=0,edge=None):
+        if edge == None:
+            return self._runbondfcn(bond_feature,ind,conf)
+        else:
+            return self._runbondfcn(bond_feature,ind,conf,edge)
     
-    def _bondonegeomcase(self,ind):
+    def _bondonegeomcase(self,ind,edge=None):
         if self.params.getradical == 'YARP':
             if len(self.electroninfo.yarpecule.bond_mats) == 1:
                 bond_feature = self.BondFeatureVector(ind)
-                bond_feature = self._bondaddons(bond_feature,ind)
-                bond_feature = [0 if x is None or x is float('inf') or x != x else x for x in bond_feature]
+                bond_feature = self._bondaddons(bond_feature,ind,edge=edge)
+                bond_feature = self._checkforbadvalues(bond_feature)
             else:
                 for i in range(len(self.electroninfo.yarpecule.bond_mats)):
-                    self.bond_features_dict[i] = self._bondaddons(self.bond_features_dict[i],ind)
-                    self.bond_features_dict[i] = [0 if x is None or x is float('inf') or x != x else x for x in self.bond_features_dict[i]]
+                    self.bond_features_dict[i] = self._bondaddons(self.bond_features_dict[i],ind,edge=edge)
+                    self.bond_features_dict[i] = self._checkforbadvalues(self.bond_features_dict[i])
         else:
             bond_feature = self.BondFeatureVector(ind)
             bond_feature = self._bondaddons(bond_feature,ind)
-            bond_feature = [0 if x is None or x is float('inf') or x != x else x for x in bond_feature]
+            bond_feature = self._checkforbadvalues(bond_feature)
         return bond_feature
     
-    def _bondmultigeomcase(self,ind):
+    def _bondmultigeomcase(self,ind,edge=None):
         conf_ids = [conf.GetId() for conf in self.matrixdescriptors.new_mol.GetConformers()]
         j= 0 
         for conf_id in conf_ids:
             self.ConformerCalcs(conf_id)
             self.StermiolMatrices(conf_id)
             if not self._yarpcase():
-                bond_feature = self._bondaddonswithconf(self.BondFeatureVector(ind), ind, conf_id)
-                bond_feature = [0 if x is None or x is float('inf') or x != x else x for x in bond_feature]
+                bond_feature = self._bondaddonswithconf(self.BondFeatureVector(ind), ind, conf_id,edge=edge)
+                bond_feature = self._checkforbadvalues(bond_feature)
                 self.bond_feature_confs[conf_id] = bond_feature
             else:
                 for i in range(len(self.electroninfo.yarpecule.bond_mats)):
-                    self.bond_feature_confs[j] = self._bondaddonswithconf(self.bond_features_dict[j], ind, conf_id)
-                    self.bond_feature_confs[j] = [0 if x is None or x is float('inf') or x != x else x for x in self.bond_feature_confs[j]]
+                    self.bond_feature_confs[j] = self._bondaddonswithconf(self.bond_features_dict[i], ind, conf_id,edge=edge)
+                    self.bond_feature_confs[j] = self._checkforbadvalues(self.bond_feature_confs[j])
                     j += 1
         return bond_feature
     
@@ -225,7 +241,31 @@ class MoleculeFeaturizerwithGeometry(MoleculeGeometryCommands):
         self.bond_feature_confs_list = []
         for ind in range(len(self.edges_u)):
             self._handleyarpcasesforbonds(ind)
+
+    def ObtainAtomGeometry(self,ind,id=0):
+        self.GrabGeometry(id)
+        return self.positions[ind]
     
+    def ObtainAtomGeometryVector(self,id=0):
+        atom_geom = [] 
+        for ind in range(len(self.matrixdescriptors.element)):
+            atom_geom.append(self.ObtainAtomGeometry(ind,id))
+        return atom_geom
+    
+
+    def GenerateAtomGeometryVector(self):
+        self.atom_geometry_features = []
+        self.atom_geometry_feature_confs_list = []
+        if self._yarpcase():
+            for i in range(len(self.electroninfo.yarpecule.bond_mats)):
+                for j in range(self.params.conformer.nconfs):
+                    self.atom_geometry_feature_confs_list.append(self.ObtainAtomGeometryVector(j))
+        else:
+            self.atom_geometry_features = self.ObtainAtomGeometryVector()
+
+
+
     def run(self):
         self.GenerateAtomFeatureVector()
         self.GenerateBondFeatureVector()
+        self.GenerateAtomGeometryVector()

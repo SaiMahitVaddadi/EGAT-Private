@@ -1,6 +1,7 @@
-import torch,logging,os,sys,hydra,omegaconf,shutil,importlib
+import torch,os
 from torch import nn
-from .setup import Setup
+from .ml.setup import MLSetup
+from .ml.utils import bn_momentum_adjust
 from ..loader.Loader import EGATDataLoader
 from .scaler import Scaler
 import numpy as np 
@@ -46,17 +47,8 @@ class Params:
     weightsandbiases: bool = False
     save_style: str = 'best'
 
-    
 
-
-
-
-def bn_momentum_adjust(m, momentum):
-    if isinstance(m, torch.nn.BatchNorm2d) or isinstance(m, torch.nn.BatchNorm1d):
-        m.momentum = momentum
-    return m
-
-class Train(Setup):
+class Train(MLSetup):
     def __init__(self, arguments):
         super().__init__(arguments)
         self.params = arguments

@@ -1,5 +1,5 @@
 import torch
-import pyro
+import models.surrogates.bayesian.deepbnn.pyro as pyro
 import pyro.distributions as dist
 from pyro.infer import SVI, Trace_ELBO
 from pyro.optim import Adam

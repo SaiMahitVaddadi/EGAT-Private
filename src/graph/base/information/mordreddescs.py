@@ -76,6 +76,9 @@ class MordredParams:
     getvewi: bool = False  # Whether to calculate vertex-edge Wiener index
     getvewibyorder: int = None  # Options: 2, 3, ..., None
 
+    getMoRSEweights: str = 'mass'  # Weights for MoRSE descriptors
+    getMoRSEbins: int = 10  # Number of bins for MoRSE descriptors
+
 
 
 class BaseMordredFunctions(BaseFeaturizer):
@@ -430,12 +433,13 @@ class MordredInformation(BaseMordredFunctions):
         self.vewi_edges = vertex_edge_distance_histogram_for_edges(self.G)
         self.vewi_nodes = vertex_edge_distance_histogram_for_vertices(self.G)
         
-    def RunMordred3D(self):
+    def RunMordred3D(self,id=0):
         if self.params.getMoRSE == 'cos': 
-            self.morse_vector, self.contribs = get_morse_descriptors(self.matrixdescriptors.new_mol)
+            self.morse_vector, self.contribs = get_morse_descriptors(self.matrixdescriptors.new_mol,id=id,weights=self.params.getMoRSEweights,num_bins=self.params.getMoRSEbins)
         elif self.params.getMoRSE == 'sinc':
-            self.morse_vector, self.contribs = get_morse_sinc_descriptors(self.matrixdescriptors.new_mol)
-    
+            self.morse_vector, self.contribs = get_morse_sinc_descriptors(self.matrixdescriptors.new_mol,weights=self.params.getMoRSEweights,num_bins=self.params.getMoRSEbins)
+        
+
     def RunAtomVector(self,ind):
         self.pv = np.array(self._atomicpropertyvector(ind))
         self.pvc = np.array(self._atomicpropertyvectorwrtcarbon(ind))
@@ -501,18 +505,18 @@ class MordredInformation(BaseMordredFunctions):
 
     def ATSAtom(self):
         if self.params.getats == 'ATS':
-            return [self.pv**2]
+            return [self.pv.dot(self.pv)]
         elif self.params.getats == 'AATS':
-            return [self.pv/self.Natoms]
+            return [self.pv.dot(self.pv)/self.Natoms]
         elif self.params.getats == 'ATSD':
-            return [(self.pv-self.w_hat)**2]
+            return [(self.pv-self.w_hat).dot((self.pv-self.w_hat))]
         elif self.params.getats == 'AATSD':
-            return [(self.pv-self.w_hat)**2/self.Natoms]
+            return [(self.pv-self.w_hat).dot((self.pv-self.w_hat))/self.Natoms]
         elif self.params.getats == 'AATSM':
-            return [(self.pv-self.w_hat)**2/(self.Natoms * self.moran)]
+            return [(self.pv-self.w_hat).dot((self.pv-self.w_hat))/(self.Natoms * self.moran)]
         elif self.params.getats == 'AATSG':
-            return [(self.pv-self.w_hat)**2/(self.Natoms * self.geary * 2)]
-        else:
+            return [(self.pv-self.w_hat).dot((self.pv-self.w_hat))/(self.Natoms * self.geary * 2)]
+        else: 
             return []
 
     def ATSBond(self):
@@ -978,7 +982,10 @@ class MordredInformation(BaseMordredFunctions):
         if self.params.getvewibyorder > 1:
             output = []
             for ord in range(1,self.params.getvewibyorder+1):
-                output += [self.vewi_edges[tuple(edge)][ord-1]/vertex_edge_wiener_for_edge(self.G,edge)]
+                try:
+                    output += [self.vewi_edges[tuple(edge)][ord-1]/vertex_edge_wiener_for_edge(self.G,edge)]
+                except:
+                    output += [1]
             return output
         else:
             return []
@@ -1080,9 +1087,9 @@ class MordredInformation(BaseMordredFunctions):
 
     def Morse(self,edge):
         if self.params.getMoRSE == 'cos':
-            return self.contribs[:,edge[0],edge[1]]
+            return list(self.contribs[:,edge[0],edge[1]])
         elif self.params.getMoRSE == 'sin':
-            return self.contribs[:,edge[0],edge[1]]
+            return list(self.contribs[:,edge[0],edge[1]])
 
     def ChiAtom(self,ind):
         if self.params.getchi == 0:

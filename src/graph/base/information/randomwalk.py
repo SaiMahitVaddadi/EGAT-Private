@@ -43,7 +43,7 @@ class PathDistanceMetrics(BaseFeaturizer):
             all_paths['path'] = []
             all_paths['length'] = []    
             for path in nx.all_simple_paths(graph, source=start_atom, target=end_atom, cutoff=max_length):
-                atoms = [self.matrixdescriptors.new_mol.GetAtomWithIdx(idx) for idx in path]
+                atoms = [self.matrixdescriptors.new_mol.GetAtomWithIdx(int(idx)) for idx in path]
                 bonds = []
                 for i in range(len(path) - 1):
                     bond = self.matrixdescriptors.new_mol.GetBondBetweenAtoms(path[i], path[i + 1])
@@ -178,7 +178,7 @@ class PathDistanceMetrics(BaseFeaturizer):
             coulomb_matrix = np.zeros((num_atoms, num_atoms))
 
             for i in range(num_atoms):
-                atom_i = mol.GetAtomWithIdx(i)
+                atom_i = mol.GetAtomWithIdx(int(i))
                 Z_i = atom_i.GetAtomicNum()
                 pos_i = np.array(mol.GetConformer(conf_id=id).GetAtomPosition(i))
 
@@ -186,7 +186,7 @@ class PathDistanceMetrics(BaseFeaturizer):
                     if i == j:
                         coulomb_matrix[i, j] = 0.5 * Z_i ** 2.4  # Diagonal elements
                     else:
-                        atom_j = mol.GetAtomWithIdx(j)
+                        atom_j = mol.GetAtomWithIdx(int(j))
                         Z_j = atom_j.GetAtomicNum()
                         pos_j = np.array(mol.GetConformer(conf_id=id).GetAtomPosition(j))
                         distance = np.linalg.norm(pos_i - pos_j)
@@ -478,16 +478,16 @@ class CommuteTimes(WeightedAdjacencyMatrix):
         return any(u in ring and v in ring for ring in ring_info)
 
     def _same_aromatic(self, u, v):
-        atom_u = self.matrixdescriptors.new_mol.GetAtomWithIdx(u)
-        atom_v = self.matrixdescriptors.new_mol.GetAtomWithIdx(v)
+        atom_u = self.matrixdescriptors.new_mol.GetAtomWithIdx(int(u))
+        atom_v = self.matrixdescriptors.new_mol.GetAtomWithIdx(int(v))
 
         shortest_path = nx.shortest_path(self.G, source=u, target=v)
-        atoms_in_path = [self.matrixdescriptors.new_mol.GetAtomWithIdx(idx) for idx in shortest_path]
+        atoms_in_path = [self.matrixdescriptors.new_mol.GetAtomWithIdx(int(idx)) for idx in shortest_path]
         return all(atom.GetIsAromatic() for atom in atoms_in_path)
 
     
     def _topological_overlap(self, u, v):
-        common_neighbors = self._get_common_neighbors(edge[0],edge[1])
+        common_neighbors = self._get_common_neighbors(u,v)
         neighbors_u = list(self.G.neighbors(u))
         neighbors_v = list(self.G.neighbors(v))
         return len(common_neighbors) / (len(neighbors_u) + len(neighbors_v) - len(common_neighbors))
@@ -522,7 +522,7 @@ class SubgraphFunctions(WeightedAdjacencyMatrix):
   
     def _get_k_hop_subgraph(self, center):
         nodes_within_k = [
-            node for node, dist in nx.single_source_shortest_path_length(self.G, center, cutoff=self.hop_radius).items()
+            node for node, dist in nx.single_source_shortest_path_length(self.G, center, cutoff=self.params.hop_radius).items()
         ]
         subgraph = self.G.subgraph(nodes_within_k)
         neighbors = list(self.G.neighbors(center))
@@ -629,7 +629,7 @@ class RandomWalk(CommuteTimes,SubgraphFunctions):
             path = [current_atom]
             
             for _ in range(steps):
-                neighbors = [neighbor.GetIdx() for neighbor in mol.GetAtomWithIdx(current_atom).GetNeighbors()]
+                neighbors = [neighbor.GetIdx() for neighbor in mol.GetAtomWithIdx(int(current_atom)).GetNeighbors()]
             
                 if not neighbors:
                     break

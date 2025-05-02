@@ -35,9 +35,15 @@ class BondGeometryInformation(BaseFeaturizer):
     def BondLength(self,edge,id=1):
         if self.params.getbondlength:
             mol = self.conformer
-            bond = mol.GetBondBetweenAtoms(edge[0], edge[1])
-            atom1 = bond.GetBeginAtomIdx()
-            atom2 = bond.GetEndAtomIdx()
+
+            
+            try:
+                bond = mol.GetBondBetweenAtoms(edge[0], edge[1])
+                atom1 = bond.GetBeginAtomIdx()
+                atom2 = bond.GetEndAtomIdx()
+            except:
+                atom1 = edge[0]
+                atom2 = edge[1]
             pos1 = mol.GetConformer().GetAtomPosition(atom1)
             pos2 = mol.GetConformer().GetAtomPosition(atom2)
             bond_length = pos1.Distance(pos2)

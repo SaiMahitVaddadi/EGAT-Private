@@ -4,7 +4,7 @@ import dgl
 import dgl.function as fn
 from dgl.nn.pytorch import GATConv
 class BondAggregator:
-    def __init__(self,use_nn=False,node_feat_size: int = 0, edge_feat_size: int = 0,node_agg='mean',edge_agg='mean'):
+    def __init__(self,node_feat_size: int = 0, edge_feat_size: int = 0,node_agg='mean',edge_agg='mean',use_nn=False):
         self.use_nn = use_nn
         self.node_agg = node_agg
         self.edge_agg = edge_agg

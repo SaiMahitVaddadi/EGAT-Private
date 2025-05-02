@@ -109,6 +109,25 @@ class MolMatDesc:
         self.new_mol = Chem.EditableMol(Chem.Mol())
         self.smiles = AM_smiles 
 
+    def LoadObject(self,AM_smiles):
+        """
+        Load the molecule object from a SMILES string.
+        
+        Parameters:
+        AM_smiles (str): Atom-mapped SMILES string of the molecule.
+        """
+        if any(['.sdf','.mol','.mol2']) in AM_smiles:
+            self.mol = Chem.MolFromMolFile(AM_smiles, sanitize=False)
+            _ = Chem.MolToSmiles(self.mol)
+            self.cule = yp.yarpecule(_)
+        elif 'xyz' in AM_smiles:
+            self.mol = Chem.MolFromXYZFile(AM_smiles, sanitize=False)
+            _ = Chem.MolToSmiles(self.mol)
+            self.cule = yp.yarpecule(_)
+        else:
+            self.mol = Chem.MolFromSmiles(AM_smiles, sanitize=False)
+            self.cule = yp.yarpecule(AM_smiles)
+
     def AddHydrogens(self):
         """
         Add hydrogens to the molecule. Uses RDKit but if it fails, uses YARP.

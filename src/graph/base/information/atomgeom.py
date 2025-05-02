@@ -68,6 +68,9 @@ class AtomGeometryInformation(BaseFeaturizer):
         super().__init__(smiles, arguments)
         
     def ConformerCalcs(self,id=1):
+        from icecream import ic
+        ic(self.GrabConformer)
+        ic(self.GrabGeometry)
         self.GrabConformer(id)
         self.GrabGeometry(id)
         self.CalcASA(id)

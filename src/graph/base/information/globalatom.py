@@ -21,6 +21,8 @@ class GlobalAtomParams:
     getspectralradius: bool = False
     getdegreeentropy: bool = False
     getlocalbertzct: bool = False
+    getcoulomb: bool = False
+    getpagerank: bool = False
 
 class GlobalAtomInformation(RandomWalk):
     def __init__(self, smiles, arguments):
@@ -66,6 +68,8 @@ class GlobalAtomInformation(RandomWalk):
     
     def GetAssortativity(self,ind):
         if self.params.getassortativity:
+            from icecream import ic
+            ic(self.Assortativity(ind))
             return [self.Assortativity(ind)]
         else:
             return []
@@ -87,3 +91,62 @@ class GlobalAtomInformation(RandomWalk):
             return [self.LocalBertzCT(ind)]
         else:
             return []
+        
+    def GetCoulombValue(self, atom_index):
+        if self.params.getcoulomb: 
+            """
+            Calculate the Coulomb value for a given atom in the molecule.
+            """
+            
+            positions = list(self.positions.values())
+            charges = [atom.GetAtomicNum() for atom in self.conformer.GetAtoms()]
+            
+            coulomb_value = 0.0
+            for i, pos_i in enumerate(positions):
+                if i == atom_index:
+                    continue
+                distance = np.linalg.norm(np.array(positions[atom_index]) - np.array(pos_i))
+                if distance > 0:
+                    coulomb_value += charges[atom_index] * charges[i] / distance
+            
+            return [coulomb_value]
+        else:
+            return []
+    
+
+    def GetCoulombValueForBond(self, edge):
+        if self.params.getcoulomb: 
+            """
+            Calculate the Coulomb value for a given bond in the molecule.
+            """
+            
+            positions = list(self.positions.values())
+            charges = [atom.GetAtomicNum() for atom in self.conformer.GetAtoms()]
+            
+            atom1_index, atom2_index = edge
+            
+            distance = np.linalg.norm(np.array(positions[atom1_index]) - np.array(positions[atom2_index]))
+            if distance > 0:
+                coulomb_value = charges[atom1_index] * charges[atom2_index] / distance
+            else:
+                coulomb_value = 0.0
+            
+            return [coulomb_value]
+        else:
+            return []
+
+    def GetPageRank(self, ind):
+        if self.params.getpagerank:
+            """
+            Calculate the PageRank value for a given atom or bond in the molecule.
+            """
+            pagerank = nx.pagerank(self.G)
+            
+            if isinstance(ind, int):  # Atom (node)
+                return [pagerank.get(ind, 0.0)]
+            else:
+                return [0]
+        else:
+            return []
+    
+    

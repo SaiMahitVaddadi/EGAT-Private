@@ -81,12 +81,16 @@ def vertex_edge_wiener_for_vertex(G, vertex):
 # Group vertex distances from each edge by distance value
 def vertex_edge_distance_histogram_for_edges(G):
     vewi_dist_edge = {}
+    
     for edge in G.edges:
         dist_count = defaultdict(int)
         for v in G.nodes:
             d = vertex_edge_distance(G, edge, v)
             dist_count[d] += 1
         vewi_dist_edge[edge] = dict(dist_count)
+
+    
+
     return vewi_dist_edge
 
 # Group edge distances from each vertex by distance value

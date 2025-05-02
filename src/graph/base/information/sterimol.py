@@ -100,13 +100,25 @@ class SterimolFeaturizer(BaseFeaturizer):
                 bond_atom2 = bonds[0].GetEndAtomIdx()
                 sterimols, direction = self.local_sterimol(bond_atom1, bond_atom2,id,local_cutoff=self.params.local_cutoff,use_vdw=self.params.use_vdw)
                 sterimol_params[tuple([bond_atom1,bond_atom2])] = sterimols
-        
+            
+        for atom1 in mol.GetAtoms():
+            for atom2 in mol.GetAtoms():
+                if atom1.GetIdx() < atom2.GetIdx():
+                    sterimols, direction = self.local_sterimol(atom1.GetIdx(), atom2.GetIdx(),id,local_cutoff=self.params.local_cutoff,use_vdw=self.params.use_vdw)
+                    if tuple([atom1.GetIdx(), atom2.GetIdx()]) not in list(sterimol_params.keys()):
+                        sterimols, direction = self.local_sterimol(atom1.GetIdx(), atom2.GetIdx(), id, local_cutoff=self.params.local_cutoff, use_vdw=self.params.use_vdw)
+                        sterimol_params[tuple([atom1.GetIdx(), atom2.GetIdx()])] = sterimols
+
         self.sterimoldata = sterimol_params
     
 
     def BondSterimolFeatures(self,edge,id=1):
         if self.params.getsterimol:
-            return self.sterimoldata[tuple(edge)]
+            try:
+                return self.sterimoldata[tuple(edge)]
+            except:
+                from icecream import ic
+                ic(self.sterimoldata)
         else:
             return []
   

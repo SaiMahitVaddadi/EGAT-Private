@@ -1,49 +1,40 @@
-import torch.nn.functional as F
-import torch
-from torch.nn import Linear, Dropout
 import torch.nn as nn
 import dgl
-import json
-from ...layers.egat.dgl import EGATConvDGL,EGATConvResidDGL, EGATConvResidSADGL, EGATConvSADGL
-from ..propertynet import PropertyNet
-from dataclasses import dataclass
-from typing import Optional, Union, List
-from ..aggregators.dgl.attentive import AttentiveAggregator, CalcAttentiveAggregator,CalcAttentiveAggregatorMLP
-from ..aggregators.dgl.weighted import WeightedSumAggregator, WeightedMeanAggregator
-from ..aggregators.dgl.cluster import ClusterPooling
-from ..aggregators.dgl.diffpool import DiffPool
-from ..aggregators.dgl.edgepool import EdgePool,EdgePoolLayerwAttention
-from ..aggregators.dgl.environment import EnvironmentAggregator,EnvironmentAggregatorwithGAT
-from ..aggregators.dgl.sag import SAGPool,SAGPoolwAttention
+from .blocks.aggblock import AggregationBlock
+from .blocks.egatblock import EGATBlock
+from .blocks.predictionblock import PredictionBlock
 
-'''
-TO-DO:
 
-- Fully custom activation functions
-- Fully custom end convolution layers
-- Fully custom softmax layers
+class EGATModel(EGATBlock, AggregationBlock, PredictionBlock):
+    def __init__(self, cfg, num_node_feats=17, num_edge_feats=14, addononlength=None, activation=None, endconvolution=None, softmax=None):
+        super().__init__()
+        self.params = cfg
+        self.inputnodes = num_node_feats
+        self.inputedges = num_edge_feats
+        self.addonlength = addononlength
+        self.activ = getattr(nn, activation) if activation is not None else None
+        self.endconv = getattr(nn, endconvolution) if endconvolution is not None else None
+        self.smax = nn.softmax(dim=1) if softmax is not None else None
 
-'''
-@dataclass
-class ModelParams:
-    model: str
-    hidden_dim: int
-    num_heads: int
-    Resid: Optional[bool] = None
-    ResidBias: Optional[bool] = None
-    MessagePassing: Optional[bool] = False
-    egatlayers: Optional[int] = 2
-    Aggregate: Optional[str] = 'Concat'
-    MixingLayer: Optional[bool] = False
-    addons: Optional[bool] = None
-    model_type: Optional[str] = 'default'
-    targets: Optional[Union[str, List[str]]] = None
-    dropout: Optional[float] = None
-    NN_hidden_dim: Optional[Union[int, List[int]]] = 256
-    cascading: Optional[bool] = False
-    graph: Optional[str] = 'reaction'
-    getattentionmaps: Optional[bool] = False
-    getembeddings: Optional[int] = 0
+        layer = self.SelectLayerDGL()
+        self.InitializeEGAT(layer)
+        self.InitializeAggregation()
+        
+        if '1MLP' in self.params.model:
+            self.Initialize1MLP()
+        elif '3MLP' in self.params.model:
+            if 'Droupout' in self.params.model:
+                if isinstance(self.params.targets, str):
+                    self.Initialize3MLP1OUTDropout()
+                else:
+                    self.Initialize3MLPNOUTDropout()
+            else:
+                if isinstance(self.params.targets, str):
+                    self.Initialize3MLP1OUT()
+                else:
+                    self.Initialize3MLPNOUT()
+
+
 
 
 class EGATModel(nn.Module):
@@ -76,61 +67,7 @@ class EGATModel(nn.Module):
                     self.Initialize3MLPNOUT()
             
 
-    def SelectLayerDGL(self):
-        if self.params.Resid is not None: 
-            if not self.params.SA:
-                func = EGATConvResidDGL
-            else:
-                func = EGATConvResidSADGL
-        else:
-            if not self.params.SA:
-                func = EGATConvDGL
-            else:
-                func = EGATConvSADGL
-        
-        return func 
-    
-    def InitializeEGAT(self,layer=EGATConvDGL):
-        self.egat1 = layer(in_node_feats=self.inputnodes,in_edge_feats=self.inputedges,out_node_feats=self.params.hidden_dim,out_edge_feats=self.params.hidden_dim,num_heads=self.params.num_heads,edgeresid=self.params.Resid,bias=self.params.ResidBias)
-
-        if self.params.MessagePassing:
-            self.egat2 = layer(in_node_feats=self.params.hidden_dim*self.params.num_heads,in_edge_feats=self.params.hidden_dim*self.params.num_heads,out_node_feats=self.params.hidden_dim,out_edge_feats=self.params.hidden_dim,num_heads=self.params.num_heads,edgeresid=self.params.Resid,bias=self.params.ResidBias)
-        else:
-            self.egat2 = nn.ModuleList()
-            # Intermediate GAT layers
-            for _ in range(1, self.params.egatlayers):
-                self.egat2.append(layer(in_node_feats=self.params.hidden_dim*self.params.num_heads,in_edge_feats=self.params.hidden_dim*self.params.num_heads,out_node_feats=self.params.hidden_dim,out_edge_feats=self.params.hidden_dim,num_heads=self.params.num_heads,edgeresid=self.params.Resid,bias=self.params.ResidBias))
-        
-    def InitializeAggregation(self):
-        # BLOCK1: message-passing blocks
-        if self.params.Aggregate == 'Concat':
-            self.agg_N_feats = nn.Sequential(nn.Linear(2*self.params.hidden_dim*self.params.num_heads, 2*self.params.hidden_dim*self.params.num_heads, bias=True), nn.GELU())
-            self.agg_E_feats = nn.Sequential(nn.Linear(2*self.params.hidden_dim*self.params.num_heads, 2*self.params.hidden_dim*self.params.num_heads, bias=True), nn.GELU())
-        elif self.params.Aggregate == 'Mixing':
-            self.agg_N_feats = nn.Sequential(nn.Bilinear(self.params.hidden_dim*self.params.num_heads, self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads, bias=True), nn.GELU())
-            self.agg_E_feats = nn.Sequential(nn.Bilinear(self.params.hidden_dim*self.params.num_heads, self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads, bias=True), nn.GELU())
-        else:
-            # BLOCK2: aggregate reactant and product nodes features
-            self.agg_N_feats = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads, self.params.hidden_dim*self.params.num_heads, bias=True), nn.GELU())
-            self.agg_E_feats = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads, self.params.hidden_dim*self.params.num_heads, bias=True), nn.GELU())
-
-    def MixingLayer(self):  
-        if self.params.MixingLayer == 'Bilinear' or self.params.MixingLayer == True:
-            if self.params.Aggregate == 'Concat':
-                self.Mixing_Layer = nn.Sequential(nn.Bilinear(self.params.hidden_dim*self.params.num_heads*2,self.params.hidden_dim*self.params.num_heads*2,self.params.hidden_dim*self.params.num_heads*4,bias=True),nn.GELU())
-            else:
-                self.Mixing_Layer = nn.Sequential(nn.Bilinear(self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads*2,bias=True),nn.GELU())
-         
-            if self.params.addons is not None:
-                self.Mixing_Layer_RDkit = nn.Sequential(nn.Bilinear(self.hidden_dim*self.num_heads*2,self.addonlen,self.hidden_dim*self.num_heads*2,bias=True),nn.GELU())
-        elif self.params.MixingLayer == 'Linear':
-            if self.params.Aggregate == 'Concat':
-                self.Mixing_Layer = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads*2,self.params.hidden_dim*self.params.num_heads*4,bias=True),nn.GELU())
-            else:
-                self.Mixing_Layer = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads*2,bias=True),nn.GELU())
             
-            if self.params.addons is not None:
-                self.Mixing_Layer_RDkit = nn.Sequential(nn.Linear(self.hidden_dim*self.num_heads*2,self.addonlen,bias=True),nn.GELU())
     
     def Initialize1MLP(self):
         #BLOCK3: final MLP layers
@@ -284,76 +221,7 @@ class EGATModel(nn.Module):
             self.agg_func = CalcAttentiveAggregator(self.inputnodes,self.inputedges)
         
 
-    def LayerOne(self, graphR, graphP=None):
-        Rnode_feats, Redge_feats = self.egat1(graphR, graphR.ndata['x'], graphR.edata['x'])
-        Rnode_feats = Rnode_feats.view(graphR.number_of_nodes(),self.params.hidden_dim * self.params.num_heads)
-        Redge_feats = Redge_feats.view(graphR.number_of_edges(),self.params.hidden_dim * self.params.num_heads)
-
-        if self.params.graph == 'reaction':
-            Pnode_feats, Pedge_feats = self.egat1(graphP, graphP.ndata['x'], graphP.edata['x'])
-            Pnode_feats = Pnode_feats.view(graphP.number_of_nodes(),self.params.hidden_dim * self.params.num_heads)
-            Pedge_feats = Pedge_feats.view(graphP.number_of_edges(),self.params.hidden_dim * self.params.num_heads)
-        else:
-            Pnode_feats, Pedge_feats = None, None
-
-        return Rnode_feats, Redge_feats, Pnode_feats, Pedge_feats
     
-
-    def LayerTwoNoMP(self, graphR, graphP=None):
-        Rnode_feats, Redge_feats = self.egat2(graphR, graphR.ndata['x'], graphR.edata['x'])
-        Rnode_feats = Rnode_feats.view(graphR.number_of_nodes(),self.params.hidden_dim * self.params.num_heads)
-        Redge_feats = Redge_feats.view(graphR.number_of_edges(),self.params.hidden_dim * self.params.num_heads)
-        if self.params.graph == 'reaction':
-            Pnode_feats, Pedge_feats = self.egat2(graphP, graphP.ndata['x'], graphP.edata['x'])
-            Pnode_feats = Pnode_feats.view(graphP.number_of_nodes(),self.params.hidden_dim * self.params.num_heads)
-            Pedge_feats = Pedge_feats.view(graphP.number_of_edges(),self.params.hidden_dim * self.params.num_heads)
-        else:
-            Pnode_feats, Pedge_feats = None, None
-
-        return Rnode_feats, Redge_feats, Pnode_feats, Pedge_feats
-
-    def GetAttentionMaps(self,graph,i):
-        if self.getattentionmaps and i == self.egatlayers:
-            R_attn_scores = self.egat2.edge_attn
-            if self.params.num_heads > 1:R_attn_scores = torch.norm(R_attn_scores,dim=1)
-            graph.edata['norm_attn'] = R_attn_scores
-            if self.SA:
-                R_self_attn = self.egat2.self_attn
-                if self.params.num_heads > 1:R_self_attn = torch.norm(R_self_attn,dim=1)
-                graph.ndata['norm_attn'] = R_self_attn
-        
-            # Initialize a square matrix with zeros
-            matrix_size = graph.number_of_nodes()
-            R_combined_matrix = torch.zeros(matrix_size, matrix_size)
-            # Fill the off-diagonal with edge attention scores
-            src, dst = graph.edges()
-            R_combined_matrix[src, dst] = graph.edata['norm_attn'].view(-1)
-
-            if self.SA:
-                # Fill the diagonal with node self-attention scores
-                R_combined_matrix.fill_diagonal_(graph.ndata['norm_attn'].view(-1))
-            return R_combined_matrix
-        else:
-            return None
-
-
-    def LayerTwoMP(self, graphR, graphP=None):
-        for i in range(self.egatlayers-1):
-                Rnode_feats, Redge_feats = self.egat2(graphR, Rnode_feats, Redge_feats)
-                Rnode_feats = Rnode_feats.view(graphR.number_of_nodes(),self.params.hidden_dim * self.params.num_heads)
-                Redge_feats = Redge_feats.view(graphR.number_of_edges(),self.params.hidden_dim * self.params.num_heads)
-                
-                R_combined_matrix = self.GetAttentionMaps(graphR,i)
-                if self.params.graph == 'reaction':
-                    Pnode_feats, Pedge_feats = self.egat2(graphP, Pnode_feats, Pedge_feats)
-                    Pnode_feats = Pnode_feats.view(graphP.number_of_nodes(),self.params.hidden_dim * self.params.num_heads)
-                    Pedge_feats = Pedge_feats.view(graphP.number_of_edges(),self.params.hidden_dim * self.params.num_heads)
-                    P_combined_matrix = self.GetAttentionMaps(graphP,i)
-                else:
-                    Pnode_feats, Pedge_feats,P_combined_matrix = None, None,None
-
-        return Rnode_feats, Redge_feats, Pnode_feats, Pedge_feats,R_combined_matrix,P_combined_matrix
-
 
     def SumAgg(self,individual_graphs):
         G_node_feats,G_edge_feats = [],[]

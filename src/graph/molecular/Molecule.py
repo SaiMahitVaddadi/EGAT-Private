@@ -4,8 +4,8 @@ from ...utils.descriptors.egat.properties import Properties
 from ...utils.descriptors.egat.radicals import YARPElectronInfo
 from dataclasses import dataclass
 from tqdm import tqdm
-
-
+import numpy as np
+from icecream import ic
 @dataclass
 class MoleculeFeaturizerParams:
     removeelementinfo: bool = False
@@ -62,6 +62,8 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
         for func in tqdm(features, desc="Processing atom features"):
             try:
                 vec += self._runfunc(func, ind, atom_map_number, yarpid)
+                debug = False
+                if debug: print(f"Function {func.__name__} executed successfully for atom index {ind}, with result: {self._runfunc(func, ind, atom_map_number, yarpid)}")
             except Exception as e:
                 print('==========================ERROR ALERT==========================')
                 print(f"Error in function {func.__name__} for atom index {ind}: {e}")
@@ -171,7 +173,7 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
 
         atom_feature = []
         atom_feature = self._iterateatomfeatures(self.atomfuncs,atom_feature,ind,atom_map_number,yarpid)
-        atom_feature = [0 if x is None or x is float('inf') or x != x else x for x in atom_feature]
+        atom_feature = self._checkforbadvalues(atom_feature)
         return atom_feature
     
     def DipoleEncoder(self,edge):
@@ -195,7 +197,7 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
             return func(bo)
         else:
             return func(edge)
-        
+            
     def _iteratebondfeatures(self,features,vec,edge,bo):
         for func in tqdm(features, desc="Processing bond features"):
             try:
@@ -217,6 +219,14 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
             return self.bond_resonance[tuple(edge)]
         else:
             return []
+
+    def _checkforbadvalues(self,vector):
+        for i,x in enumerate(vector):
+            if x is None or x == np.nan:
+                vector[i] = 0
+            elif x == float('inf') or x == np.inf:
+                vector[i] = 0
+        return vector
 
     def BondFeatureVector(self,ind,yarpid=0):
         bond_feature = []
@@ -275,7 +285,7 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
             self.ChiBondValence,
             self.BondResonance]
         bond_feature = self._iteratebondfeatures(self.bondfuncs,bond_feature,edge,bo)
-        bond_feature = [0 if x is None or x is float('inf') or x != x else x for x in bond_feature]
+        bond_feature = self._checkforbadvalues(bond_feature)
         return bond_feature
     
     def GenerateAtomFeatureVector(self,yarpid=0):
@@ -298,6 +308,7 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
         if len(self.electroninfo.yarpecule.bond_mats) == 1:
             self.GenerateAtomFeatureVector()
             self.GenerateBondFeatureVector()
+            self.bond_mats = 1
         else:
             self.atom_features_dict = {}
             self.bond_features_dict = {}
@@ -306,6 +317,7 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
                 self.GenerateBondFeatureVector(i)
                 self.atom_features_dict[i] = self.atom_features
                 self.bond_features_dict[i] = self.bond_features
+            self.bond_mats = len(self.electroninfo.yarpecule.bond_mats)
 
     def run(self):
         if self.params.getradical == 'YARP':
@@ -313,4 +325,5 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
         else:
             self.GenerateAtomFeatureVector()
             self.GenerateBondFeatureVector()
+            self.bond_mats = 1
 

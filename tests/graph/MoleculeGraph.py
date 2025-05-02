@@ -3,9 +3,8 @@ sys.path.append("/Users/svaddadi/Documents/GitHub/")
 import EGAT
 from EGAT import src
 from EGAT.src.graph.molecular.Molecule import MoleculeFeaturizer
-from EGAT.src.graph.base.base import BaseFeaturizer,BaseReactionParams
-from EGAT.src.graph.base.component import BaseReactionComponentFeaturizer
 from EGAT.src.graph.molecular.MoleculeGeometry import MoleculeFeaturizerwithGeometry
+from EGAT.src.graph.molecular.MoleculeGlobal import MoleculeFeaturizerwithPadding
 from EGAT.src.params.graph import GraphParams
 
 from rich import inspect
@@ -172,27 +171,71 @@ params.getdihedral = None
 params.getbondmidpoint = True
 params.getmomentdescriptors = ['geometric','sterimol']
 params.getsolidanglecoverage = True 
+params.getMoRSEweights= 'mass'  # Weights for MoRSE descriptors
+params.getMoRSEbins = 10  # Number of bins for MoRSE descriptors
 graph = MoleculeFeaturizerwithGeometry('CCCCC',params)
 graph.run()
 get_dir_to_txt_file(graph,'MoleculeGeometry.txt')
-'''
-getsterimol: bool = False
-    local_cutoff: float = 4.0
-    use_vdw: bool = False
-    removecoordinationinfo: bool = False
-    getdistancetocenterofmass: bool = False
-    getsterichindrance: bool = False
-    getasa: bool = False
-    getgaussiancurvature: bool = False
-    getmolecularshapeindex: bool = False
-    getdistancetoconvexhull: bool = False
-    getvdw: bool = False
-    getvdwstrain: bool = False
-    getburiedvolume: bool = False
-    getbondlength: bool = False
-    getatomdistance: bool = False
-    getbondangle: str = None
-    getdihedral: str = None
-    getbondmidpoint: bool = False
-'''
+
+
+params.getclusteringcoeff = True
+params.getclosenesscentrality = True
+params.getdegreecentrality = True
+params.getgraphdensity = True
+params.getavgdegneighbors = True
+params.getnodeclustering = True
+params.getassortativity = True
+params.getspectralradius = True
+params.getdegreeentropy = True
+params.getlocalbertzct = True
+params.getcoulomb = True
+params.getpagerank = True
+params.getglobal = True
+params.getshortestpath = 'all'
+params.bias_walk = 'random'
+params.num_walks = 10
+params.getuniquewalks = True
+params.getrandomwalk = True
+params.getshortestpathcount = True
+params.getcommonneighbors = 'all'
+params.getglobaljaccard = True
+params.getglobaladamicadar = True
+params.getprefattachment = True
+params.getkatz = True
+params.getEigenvectorCentrality = True
+params.getBetweennessCentralityCorrelation = True
+params.getMinCutValue = True
+params.getMaximumFlow = True
+params.getLaplacianEigenvectorSimilarity = True
+params.getFiedlerVectorSimilarity = True
+params.getBetweennessCentralityOfPathways = True
+params.getRingsInSharedPath = True
+params.getfirstpassagetime = True
+params.geteffectiveresistance = True
+params.getSameAromaticSequence = True
+params.getTopoOverlap = True
+params.getEdgeClustering = True
+params.getFormanCurve = True
+params.global_fingerprint_type = 'Morgan'
+params.global_similarity_metric = 'Tanimoto'
+params.getLocalAtomicEnvironmentSimilarity = True
+params.getsamefg = True
+params.ct_method = 'spectral'
+params.addhbonds = True
+params.addcho = True
+params.adddihydrogenbonds = True
+params.addcationpi = True
+params.addpipistack = True
+params.addhalogenbonds = True
+params.addmetallophilic = True
+params.addelectrostatic = True
+params.check_hbond = True
+params.wt_adj_mat_by = None  # Options: 'bond_order', 'atomic_mass', 'valence', 'hybridization', 'coulomb', 'all'
+params.rw_weight_by = None  # Options: 'atomic_mass', 'bond_order', 'hyb', 'valence', 'coulomb', 'all'
+params.sp_box_size = None  # For periodic boundary conditions
+params.hop_radius = 1  # For k-hop subgraph extraction
+params.getrandomwalkcommutetime  = True
+graph = MoleculeFeaturizerwithPadding('CCCCC',params)
+graph.run()
+get_dir_to_txt_file(graph,'MoleculeGlobalFeats.txt')
 

@@ -5,7 +5,7 @@ from drfp import DrfpEncoder
 from rxnfp.transformer_fingerprints import (
     RXNBERTFingerprintGenerator, get_default_model_and_tokenizer, generate_fingerprints
 )
-
+from rdkit import Chem
 
 
 
@@ -24,8 +24,9 @@ class ReactionFingerprint:
         """
         fps = []
         for smi in smiles:
+            mol = Chem.MolFromSmiles(smi)
             if mol is not None:
-                fps.append(self.fpfunc(smi, fpname=fpname, n_folded_length=n_folded_length, min_radius=min_radius, radius=radius, rings=rings, mapping=mapping, atom_index_mapping=atom_index_mapping, root_central_atom=root_central_atom, include_hydrogens=include_hydrogens, show_progress_bar=show_progress_bar))
+                fps.append(self.fpfunc(mol, fpname=fpname, n_folded_length=n_folded_length, min_radius=min_radius, radius=radius, rings=rings, mapping=mapping, atom_index_mapping=atom_index_mapping, root_central_atom=root_central_atom, include_hydrogens=include_hydrogens, show_progress_bar=show_progress_bar))
         return fps
 
 
