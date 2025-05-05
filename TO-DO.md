@@ -1,30 +1,55 @@
 # TO-DO - Tomorrow:
-### Testing Torch Setups: 
+
+## To Test and Fix:
+- Reaction Global.
+- Dataset Setups.
+- Dataset Commands.
+- Dataset. 
+- Dataloader.
+- ML Model Setups. 
+
+
+### Codes to Modify: 
 - Cleanup the Training and Prediction codes.
 - Expand for the multi geometry and multi bond matrix case.  
 - Expand for the multi component case. 
+- Write a new Generate.py command.
 
+## Possible Sprints:
 - LLM Block:
-    - Write it up for molfeat. 
-    - Write it up for huggingface. 
-    - Add in the past finetuning codes. 
+    - Write up an adapter for molfeat and huggingface and the IBM model. 
+    - Add in the past finetuning codes from ChemLLM. 
     - Write the LLM Model.
     - Write the GNN+LLM model. 
 
-- Training and Prediction:
-    - Write out the skeleton code for the imbalanced learning.
-    - Write out the skeleton code for the data augmentation. 
-    - Write out the skeleton code for the few-shot learning. 
-    - Write out the skeleton code for the symbolic regressor. 
+- Biologic Block:
+    - Write up an adapter for huggingface.
+    - Write up an adapter for ProteinMPNN. 
+    - Write up and adapter from pdb ID or pdb file to Protein Sequence. 
 
-- 2D and 3D Similarity: Write out the skeleton code that does so. 
-    
-- Write a new Generate.py command.
+- Imbalanced Learning: 
+    - Basic Process: 
+        1) Create Four Datasets: Train, Imb-Train, Test, Val.
+        2) Load them into a dataloader. 
+        3) Train on Train, Test, Val for x epochs. 
+    - Write out skeleton code for undersampling by masking the dataset and creating a new dataloader from it. 
+    - Write out skeleton code for oversampling 
+    - Write out skeleton code for data augmentation.
+
+- Few-shot learning:
+    - Write out the skeleton code that does so.
+    - Use 2D and 3D molecular similarity. Clean up the REINVENT code that does so. 
+
+- Symbolic Regression:
+    - Write out the skeleton code. 
+
+- Active Learning: 
+    - Write out skeleton code. 
+
+
+
 
 ### Testing the Graphs:
-- Reaction
-- Reaction Geometry
-- Reaction Global
 https://github.com/AntixK/PyTorch-VAE
 https://github.com/eriklindernoren/PyTorch-GAN
 https://github.com/RobinMagnet/pyFM
@@ -48,6 +73,6 @@ https://github.com/zarekxu/QuadraLib
 
 
 
-daBoost Regression: While AdaBoost is widely known for its application in classification problems, it can be adapted for regression by modifying the algorithm’s loss function and the way weak models are combined. It can capture non-linear relationships between the input features and the target variable by leveraging the capabilities of the weak regression models. It has been used in various regression tasks, such as predicting housing prices, stock market prices, and demand forecasting.
+AdaBoost Regression: While AdaBoost is widely known for its application in classification problems, it can be adapted for regression by modifying the algorithm’s loss function and the way weak models are combined. It can capture non-linear relationships between the input features and the target variable by leveraging the capabilities of the weak regression models. It has been used in various regression tasks, such as predicting housing prices, stock market prices, and demand forecasting.
 Extra Trees Regression: short for Extremely Randomized Trees Regression, is an ensemble learning method used for regression tasks. It is a variation of the Random Forest algorithm that introduces additional randomness during the construction of individual decision trees. In Extra Trees Regression, multiple decision trees are trained on different random subsets of the training data and random subsets of features. During the tree construction process, instead of finding the best-split point based on a criterion like Gini impurity or information gain, Extra Trees randomly selects split points without considering the optimal threshold. This randomization helps to reduce overfitting and increase the diversity among the trees.
 

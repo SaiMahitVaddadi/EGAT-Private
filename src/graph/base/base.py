@@ -59,7 +59,7 @@ class BaseFeaturizer(object):
         self.matrixdescriptors = MolMatDesc(self.am_smiles)
         self.matrixdescriptors.run()
         
-    def DistanceMatrix(self):
+    def ReactiveGraphSepMat(self):
         self.gs = graph_seps(self.matrixdescriptors.adj_mat)
         self.gs[self.gs < 0] = 100
 

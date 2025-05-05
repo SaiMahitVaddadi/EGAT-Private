@@ -8,7 +8,10 @@ def edge_distance(graph, edge1, edge2):
     u2, v2 = edge2
     
     # Find the shortest distance between any vertex of edge1 and any vertex of edge2
-    return nx.shortest_path_length(graph, source=u1, target=u2)  # Shortest path between u1 and u2
+    try:
+        return nx.shortest_path_length(graph, source=u1, target=u2)  # Shortest path between u1 and u2
+    except nx.NetworkXNoPath:
+        return 0
 
 # Function to calculate the Edge Wiener index for a given edge
 def edge_wiener_index(graph, edge):
@@ -65,7 +68,10 @@ def hyper_wiener_index_byorder(graph, edge,order=1):
 
 def vertex_edge_distance(G, edge, vertex):
     # Edge is a tuple (u, v), vertex is an int
-    return min(nx.shortest_path_length(G, source=vertex, target=u) for u in edge)
+    try:
+        return min(nx.shortest_path_length(G, source=vertex, target=u) for u in edge)
+    except nx.NetworkXNoPath:
+        return 0
 
 # Vertex-Edge Wiener Index for a given edge
 def vertex_edge_wiener_for_edge(G, edge):

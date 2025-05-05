@@ -1,12 +1,9 @@
-
 from ..base.component import BaseReactionComponentFeaturizer
-from ..base.information import ReactiveAtomInformation,ReactiveBondInformation,ReactiveAtomGeometryInformation,ReactiveBondGeometryInformation,GlobalReactionBondInformation,ReactiveAtomChangeInformation
+from ..base.information import ReactiveAtomInformation,ReactiveBondInformation,GlobalReactionBondInformation,ReactiveAtomChangeInformation
 from ..molecular.Molecule import MoleculeFeaturizer
 from ..base.reaction import BaseReactionFeaturizer
 from .helper import ReactionHelper
-
-
-
+from tqdm import tqdm
 
 class ReactionParams:
     oldbondencode: bool = False
@@ -16,47 +13,90 @@ class ReactionComponentFeaturizer(BaseReactionComponentFeaturizer,MoleculeFeatur
     def __init__(self, smiles, arguments):
         super(BaseReactionComponentFeaturizer, self).__init__(smiles, arguments)
         super(MoleculeFeaturizer, self).__init__(smiles, arguments)
-    
 
-class ReactionFeaturizer(BaseReactionFeaturizer,ReactionHelper,ReactiveAtomInformation,ReactiveBondInformation,ReactiveAtomChangeInformation):
+class ReactionFeaturizer(ReactiveAtomInformation,ReactiveBondInformation,ReactiveAtomChangeInformation):
     def __init__(self,reaction_smiles,arguments,denotation='>>'):
-        super(BaseReactionFeaturizer, self).__init__(reaction_smiles, arguments,denotation,ReactionComponentFeaturizer)
+        self.reaction = reaction_smiles
+        self.params = arguments
+        self.basefeaturizer = MoleculeFeaturizer
+        self.denotation = denotation
+        self.SetupFeaturizer()
+        self.CreateMolecularVectors()
+        self.GrabNetworkXFunctions()
+        self.GrabReactiveAtomInformation()
+        self.GetAllEdges()
     
-    def AddOptionalInfo(self,mainattr,ind,edge=None,object=None):
-        for attr in dir(mainattr):
-            if callable(getattr(mainattr, attr)) and not attr.startswith("__"):
-                bond_info_func = getattr(mainattr, attr)
-                if edge is not None:
-                    self.AddBondFunction(edge,ind,bond_info_func)
-                else:
-                    self.AddAtomFunction(ind,object,bond_info_func)
+    def CreateMolecularVectors(self):
+        self.reactant.run()
+        self.product.run()
+        self.reqs_mat = [self.NeighboringReactives]
+
+    def GetAllEdges(self):
+        edges = [len(self.reactant.edges_u),len(self.product.edges_u)]
+        self.edges = max(edges)
+
 
     def BondFeatureVector(self,ind):
-        edge = sorted([self.reactant.edges_u[ind],self.reactant.edges_v[ind]])
-        if self.params.oldbondencode: RBtype,PBtype = self.OldBondChangeInfo(edge)
-        else: RBtype,PBtype = self.BondChangeInfo(edge)    
-        self.reactant.bond_features[ind] += RBtype
-        self.product.bond_features[ind] += PBtype
-        self.AddOptionalInfo(ReactiveBondInformation,ind,edge)
+        funcs = [self.BondChangeInformation,self.DistanceFromReactingBond,self.BondOrderChange,self.BondNeighborhoodChange,self.ShortestPathChangeAcrossBond,self.BondParticipationDegree,self.BRICSBondRoleChange]
+        params = ['removebondchangeinfo','adddisttoreactingbonds','getbondorderchange','getbondneighborhoodchange','getshortestpathchangeacrossbond','getbondparticipationdegree','getbricsbondrolechange']
+        reactant_atom_features,reactant_bond_features,product_atom_features,product_bond_features,reactant_case,product_case = self.grabfeatures()
+        for i, func in enumerate(tqdm(funcs, desc="Processing Bond Features")):
+            self.obtainbondfcn(ind, reactant_bond_features, product_bond_features, reactant_case, product_case, Rmat=self.reactant.matrixdescriptors.adj_mat, Pmat=self.product.matrixdescriptors.adj_mat, removeparams=params[i], func=func)
 
         
+    def AtomFeatureVector(self,ind):
+        funcs = [
+            self.DistanceFromReactingAtom,
+            self.NeighboringReactives,
+            self.ChangeInAtomicHybridization,
+            self.DegreeCentralityOfChangingAtoms,
+            self.ClosenessCentralityOfChangingAtoms,
+            self.BetweennessCentralityOfChangingAtoms,
+            self.EigenvectorCentralityOfChangingAtoms,
+            self.KatzCentralityOfChangingAtoms,
+            self.PageRankCentralityOfChangingAtoms,
+            self.KCoreNumberOfChangingAtoms,
+            self.HarmonicCentralityOfChangingAtoms,
+            self.LocalBridgingOfChangingAtoms,
+            self.TriangleCountOfChangingAtoms,
+            self.LocalAtomFeaturesOfChangingAtoms,
+            self.AtomicValencyChange,
+            self.OxidationOrReduction,
+            self.LocalBondOrderSumChange,
+            self.AtomicNeighborhoodChangeRatio
+        ]
+        params = ['removebondchangeinfo','addneighboringreactives','gethybridizationchange',
+                  'getclosenesscentrality','getdegreecentrality',
+                'getbetweennesscentrality',
+                'geteigenvectorcentrality',
+                'getkatzcentrality',
+                'getpagerankcentrality',
+                'getkcorenumber',
+                'getharmoniccentrality',
+                'getlocalbridging',
+                'gettrianglecount',
+                'getlocalatomfeatures',
+                'getvalencychange',
+                'getoxidationreduction',
+                'getbondordersumchange',
+                'getneighborhoodchangeratio']
+        reactant_atom_features,reactant_bond_features,product_atom_features,product_bond_features,reactant_case,product_case = self.grabfeatures()
+        for i, func in enumerate(tqdm(funcs, desc="Processing Atom Features")):
+            self.obtainatomfcn(ind, reactant_atom_features, product_atom_features, reactant_case, product_case, Rmat=self.reactant.matrixdescriptors.adj_mat, Pmat=self.product.matrixdescriptors.adj_mat, removeparams=params[i], func=func)
 
-    def AtomFeatureVector(self,ind,object):
-        object.atom_features[ind] += self.DistanceFromReactingAtom(ind,object.gs)
-        if self.params.addneighboringreactives: object.atom_features[ind] += self.NeighboringReactives(object.matrixdescriptors.adj_mat,ind)
-        self.AddOptionalInfo(ReactiveAtomChangeInformation,ind,object)
 
 
     def GenerateBondFeatureVector(self):
-        for ind in range(len(self.reactant.edges_u)):
-            self.BondFeatureVector(ind)
+        for ind in range(self.edges):
+            try:
+                self.BondFeatureVector(ind)
+            except:
+                continue
 
             
     def GenerateAtomFeatureVector(self):
-        for ind,atom_feature in enumerate(self.reactant.atom_features):
-            self.AtomFeatureVector(ind,self.reactant)
-        for ind,atom_feature in enumerate(self.product.atom_features):
-            self.AtomFeatureVector(ind,self.product)
+        for ind in range(len(self.reactant.matrixdescriptors.element)):
+            self.AtomFeatureVector(ind)
 
     def run(self):
         self.GenerateAtomFeatureVector()

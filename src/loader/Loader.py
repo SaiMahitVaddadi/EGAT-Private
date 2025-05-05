@@ -125,7 +125,10 @@ class DataLoaderCommands:
 
     def createdatsets(self):
         for split in self.splits:
-            self.egatdataset[split] = self.datasetfunction(root=self.params.root,split=split, class_choice=self.params.class_choice, exclude=self.excluded,randomize=self.params.randomize,fold=self.params.fold,foldtype=self.params.foldtype,size=self.params.size,target=self.params.target,additional=self.params.additionals,hasaddons=self.params.addons,molecular=self.params.graph)
+            if self.split == 'test':
+                self.egatdataset[split] = self.datasetfunction(root=self.params.root,split=split, class_choice=self.params.test_class_choice, exclude=self.excluded,randomize=self.params.randomize,fold=self.params.fold,foldtype=self.params.foldtype,size=self.params.size,target=self.params.target,additional=self.params.additionals,hasaddons=self.params.addons,molecular=self.params.graph,test=True)
+            else:
+                self.egatdataset[split] = self.datasetfunction(root=self.params.root,split=split, class_choice=self.params.class_choice, exclude=self.excluded,randomize=self.params.randomize,fold=self.params.fold,foldtype=self.params.foldtype,size=self.params.size,target=self.params.target,additional=self.params.additionals,hasaddons=self.params.addons,molecular=self.params.graph)
 
     def addimbalanceddataset(self):
         if self.params.imblearn is not None:
@@ -172,3 +175,39 @@ class EGATDataLoader(DataLoaderCommands):
         self.createdatsets()
         self.addimbalanceddataset()
         self.createdataloader()
+
+
+if __name__ == "__main__":
+    # Example usage of the EGATDataLoader
+    params = DataLoaderParams(
+        data_path="/path/to/data",
+        exclude="exclude_file.txt",
+        test_only=False,
+        root="/path/to/root",
+        class_choice="classA",
+        randomize=True,
+        fold=1,
+        foldtype="typeA",
+        size=1000,
+        target="target_property",
+        additionals=["feature1", "feature2"],
+        addons=True,
+        graph="molecular",
+        fingerprint=False,
+        imblearn=True,
+        batch_size=64,
+        dataset="json"
+    )
+
+    # Initialize the data loader
+    data_loader = EGATDataLoader(params)
+
+    # Call the data loader to prepare datasets and dataloaders
+    data_loader()
+
+    # Access the dataloaders
+    for split, loader in data_loader.egatloader.items():
+        print(f"DataLoader for {split}:")
+        for batch in loader:
+            print(batch)
+            break  # Print only the first batch for demonstration

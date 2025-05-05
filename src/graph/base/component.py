@@ -8,16 +8,11 @@ from rxnmapper import RXNMapper
 
 class BaseReactionComponentFeaturizer(BaseFeaturizer):
     def __init__(self, smiles, arguments):
-        self.smiles = smiles
-        self.params = arguments
-        self.properties = Encodings()
+        super().__init__(smiles, arguments)
+        self.ReactiveGraphSepMat()
         if not self.IsAtomMapped(): self.CreateAtomMapping()
         else: self.am_smiles = self.smiles
-        self.MatrixDescriptors()
-        self.Rings()
-        self.DistanceMatrix()
-        self.InitializeAddons()
-
+        
     def IsAtomMapped(self):
         molecule = Chem.MolFromSmiles(self.smiles)
         for atom in molecule.GetAtoms():

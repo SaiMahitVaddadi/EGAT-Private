@@ -153,7 +153,7 @@ class BaseMordredFunctions(BaseFeaturizer):
             for j in range(num_atoms):
                 if i != j:
                     path_length = Chem.rdmolops.GetShortestPath(mol, i, j)
-                    dist_matrix[i, j] = len(path_length) - 1
+                    dist_matrix[i, j] = abs(len(path_length))
                 else:
                     dist_matrix[i, j] = 0
         return dist_matrix 
@@ -367,8 +367,12 @@ class BaseMordredFunctions(BaseFeaturizer):
     def _topochargemats(self):
         self.A = self.matrixdescriptors.adj_mat
         D = np.array(self.D)
-        self.D_inv_square = np.linalg.inv(D**2)
-        self.M = np.matmul(self.A, self.D_inv_square)
+        try:
+            self.D_inv_square = np.linalg.inv(D**2)
+            self.M = np.matmul(self.A, self.D_inv_square)
+        except: 
+            self.D_inv_square = np.linalg.pinv(D**2)
+            self.M = np.matmul(self.A, self.D_inv_square)
     
     def _chiterm(self,atom,valence=False):
         if valence:
@@ -953,7 +957,10 @@ class MordredInformation(BaseMordredFunctions):
         if self.params.getedgewienerbyorder > 1:
             output = []
             for ord in range(1,self.params.getedgewienerbyorder+1):
-                output += [edge_wiener_index_byorder(self.G, edge, order=ord)/self.ew,hyper_wiener_index_byorder(self.G, edge, order=ord)/self.hw]
+                try: 
+                    output += [edge_wiener_index_byorder(self.G, edge, order=ord)/self.ew,hyper_wiener_index_byorder(self.G, edge, order=ord)/self.hw]
+                except:
+                    output += [0,0]
             return output
         else:
             return []
@@ -972,8 +979,12 @@ class MordredInformation(BaseMordredFunctions):
     def VEWIAtomByOrder(self,ind):
         if self.params.getvewibyorder > 1:
             output = []
-            for ord in range(1,self.params.getvewibyorder+1):
-                output += [self.vewi_nodes[ind][ord-1]/vertex_edge_wiener_for_vertex(self.G,ind)]
+            for order in range(1,self.params.getvewibyorder+1):
+                try:
+                    res = self.vewi_nodes[ind][order-1]/vertex_edge_wiener_for_vertex(self.G,ind)
+                except:
+                    res = 0
+                output += [res]
             return output
         else:
             return []
@@ -1059,13 +1070,19 @@ class MordredInformation(BaseMordredFunctions):
                 
     def TopoChargeAtom(self,ind):
         if self.params.gettopocharge == 1:
-            result = self._TopoChargeAtomFunc(ind)
-            return [result['Dinv'],result['CT']]
+            try:
+                result = self._TopoChargeAtomFunc(ind)
+                return [result['Dinv'],result['CT']]
+            except:
+                return [0,0]
         elif self.params.gettopocharge > 1:
             output = [] 
             for i in range(1,self.params.gettopocharge):
-                result = self._TopoChargeAtomFunc(ind,dist=i)
-                output += [result['Dinv'],result['CT']]
+                try: 
+                    result = self._TopoChargeAtomFunc(ind,dist=i)
+                    output += [result['Dinv'],result['CT']]
+                except:
+                    output += [0,0]
             return output
         else:
             return []
@@ -1093,47 +1110,70 @@ class MordredInformation(BaseMordredFunctions):
 
     def ChiAtom(self,ind):
         if self.params.getchi == 0:
-            return [1/np.sqrt(self.chis[ind])]
+            try:
+                return [1/np.sqrt(self.chis[ind])]
+            except:
+                return [0]
         elif self.params.getchi >= 1:
-            chi1 = 1/np.sqrt(self.chis[ind])
-            output = [chi1]
-            for ord in range(1,self.params.getchi):
-                locations = self._getgdistlocs(ind,ord)
-                chipaths = 0
-                for loc in locations:
-                    path = Chem.rdmolops.GetShortestPath(self.matrixdescriptors.new_mol, ind, int(loc))
-                    intermediate_atoms = path[1:-1]  # Exclude ind and loc
-                    chipath = chi1
-                    for atom in intermediate_atoms:
-                        deltaj = 1/np.sqrt(self.chis[atom])
-                        chipath = chipath * deltaj
-                    chipaths += chipath
-                output.append(chipaths)    
-
-            return output
+            try:
+                chi1 = 1/np.sqrt(self.chis[ind])
+                output = [chi1]
+                for ord in range(1,self.params.getchi):
+                    try:
+                        locations = self._getgdistlocs(ind,ord)
+                        chipaths = 0
+                        for loc in locations:
+                            try:
+                                path = Chem.rdmolops.GetShortestPath(self.matrixdescriptors.new_mol, ind, int(loc))
+                                intermediate_atoms = path[1:-1]  # Exclude ind and loc
+                                chipath = chi1
+                                for atom in intermediate_atoms:
+                                    deltaj = 1/np.sqrt(self.chis[atom])
+                                    chipath = chipath * deltaj
+                            except:
+                                chipath = 0
+                            chipaths += chipath
+                        output.append(chipaths)    
+                    except:
+                        chipaths = 0
+                return output
+            except:
+                return [0] * self.params.getchi
         else:
             return [] 
     
     def ChiAtomValence(self,ind):
         if self.params.getchivalence == 0:
-            return [1/np.sqrt(self.chivalences[ind])]
+            try:
+                return [1/np.sqrt(self.chivalences[ind])]
+            except:
+                return [0]
         elif self.params.getchivalence >= 1:
-            chi1 = 1/np.sqrt(self.chivalences[ind])
-            output = [chi1]
-            for ord in range(1,self.params.getchi):
-                locations = self._getgdistlocs(ind,ord)
-                chipaths = 0
-                for loc in locations:
-                    path = Chem.rdmolops.GetShortestPath(self.matrixdescriptors.new_mol, ind, int(loc))
-                    intermediate_atoms = path[1:-1]  # Exclude ind and loc
-                    chipath = chi1
-                    for atom in intermediate_atoms:
-                        deltaj = 1/np.sqrt(self.chis[atom])
-                        chipath = chipath * deltaj
-                    chipaths += chipath
-                output.append(chipaths)    
+            try:
+                chi1 = 1/np.sqrt(self.chivalences[ind])
+                output = [chi1]
+                for ord in range(1,self.params.getchi):
+                    try:
+                        locations = self._getgdistlocs(ind,ord)
+                        chipaths = 0
+                        for loc in locations:
+                            try:
+                                path = Chem.rdmolops.GetShortestPath(self.matrixdescriptors.new_mol, ind, int(loc))
+                                intermediate_atoms = path[1:-1]  # Exclude ind and loc
+                                chipath = chi1
+                                for atom in intermediate_atoms:
+                                    deltaj = 1/np.sqrt(self.chis[atom])
+                                    chipath = chipath * deltaj
+                            except:
+                                chipath = 0
+                            chipaths += chipath
+                    except:
+                        chipaths = 0
+                    output.append(chipaths)    
 
-            return output
+                return output
+            except:
+                return [0] * self.params.getchivalence
         else:
             return [] 
         

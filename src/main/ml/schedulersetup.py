@@ -26,4 +26,18 @@ class ScheduleSetup:
             scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=self.params.max_lr, steps_per_epoch=self.params.steps_per_epoch, epochs=self.params.epochs)
         elif self.params.scheduler == 'multiplicative':
             scheduler = torch.optim.lr_scheduler.MultiplicativeLR(optimizer, lr_lambda=self.params.lr_lambda)
+        elif self.params.scheduler == 'warmup_linear_decay':
+            def lr_lambda(epoch):
+                if epoch < self.params.warmup_steps:
+                    return epoch / self.params.warmup_steps
+                else:
+                    return max(0.0, (self.params.epochs - epoch) / (self.params.epochs - self.params.warmup_steps))
+            scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda)
         return scheduler
+    
+    def get_learning_rate(self, scheduler):
+        if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
+            # Retrieve learning rate from the optimizer's parameter groups
+            return scheduler.optimizer.param_groups[0]['lr']
+        else:
+            return scheduler.optimizer.param_groups[0]['lr']

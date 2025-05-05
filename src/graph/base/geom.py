@@ -10,8 +10,11 @@ class GeomFeaturizer(BaseFeaturizer,object):
     def GenerateConformers(self):
         # Fix for each 3D Geometry Tools That's There
         self.conformers = ConformerGeneratorEGAT(self.matrixdescriptors,self.params.conformer)
-
-        confgenerator = getattr(self.conformers,f'Generatewith{self.params.conformer.generator}',None)
+        try:
+            confgenerator = getattr(self.conformers,f'Generatewith{self.params.conformer.generator}',None)
+        except:
+            self.params.conformer.generator = 'RDKit'
+            confgenerator = getattr(self.conformers,f'Generatewith{self.params.conformer.generator}',None)
 
         if self.params.conformer.generator == 'RDKit':
             confgenerator(self.params.conformer.seed)

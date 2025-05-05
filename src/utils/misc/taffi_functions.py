@@ -16,7 +16,7 @@ from numba import jit
 import warnings
 warnings.filterwarnings("ignore")
 
-@jit(nopython=True)
+
 def Table_generator(Elements,Geometry,File=None,scale_factor=1.2):
 
     # Initialize UFF bond radii (Rappe et al. JACS 1992)
@@ -142,7 +142,7 @@ def Table_generator(Elements,Geometry,File=None,scale_factor=1.2):
 #          bond_mat:  an NxN matrix holding the bond orders between all atoms in the adj_mat
 #          bonding_pref (optinal): optional list of (index, bond_number) tuples that sets the target bond number of the indexed atoms  
 #
-@jit(nopython=True)
+
 def find_lewis(elements,adj_mat_0,bonding_pref=[],q_tot=0,fixed_bonds=[],fc_0=None,keep_lone=[],return_pref=False,verbose=False,b_mat_only=False,return_FC=False,octet_opt=True,check_lewis_flag=False):
     
     # Initialize the preferred lone electron dictionary the first time this function is called
@@ -863,7 +863,7 @@ def find_lewis(elements,adj_mat_0,bonding_pref=[],q_tot=0,fixed_bonds=[],fc_0=No
 #          bond_mat:  an NxN matrix holding the bond orders between all atoms in the adj_mat
 #          bonding_pref (optinal): optional list of (index, bond_number) tuples that sets the target bond number of the indexed atoms  
 #
-@jit(nopython=True)
+
 def frag_find_lewis(elements,adj_mat_0,bonding_pref=[],fixed_bonds=[],q_tot=0,fc_0=None,keep_lone=[],return_pref=False,return_FC=False,octet_opt=True,check_lewis_flag=False):
 
     from itertools import combinations    
@@ -1568,7 +1568,7 @@ def frag_find_lewis(elements,adj_mat_0,bonding_pref=[],fixed_bonds=[],q_tot=0,fc
 #
 # Returns     Bool value depending on if idx is a ring atom 
 #
-@jit(nopython=True)
+
 def ring_atom(adj_mat,idx,start=None,ring_size=10,counter=0,avoid_set=None,in_ring=None):
 
     # Consistency/Termination checks
@@ -1621,7 +1621,7 @@ def ring_atom(adj_mat,idx,start=None,ring_size=10,counter=0,avoid_set=None,in_ri
 #
 # Returns     Sorted inputs
 #
-@jit(nopython=True)
+
 def canon_geo(elements,adj_mat,geo=None,bond_mat=None,dup=[],change_group_seq=True):
     
     # Initialize mass_dict (used for identifying the dihedral among a coincident set that will be explicitly scanned)
@@ -1714,7 +1714,7 @@ def canon_geo(elements,adj_mat,geo=None,bond_mat=None,dup=[],change_group_seq=Tr
 #
 # Returns     hash value of given atom
 #
-@jit(nopython=True)
+
 def atom_hash(ind,A,M,alpha=100.0,beta=0.1,gens=10):    
     if gens <= 0:
         return rec_sum(ind,A,M,beta,gens=0)
@@ -1722,7 +1722,7 @@ def atom_hash(ind,A,M,alpha=100.0,beta=0.1,gens=10):
         return alpha * sum(A[ind]) + rec_sum(ind,A,M,beta,gens)
 
 # recursive function for summing up the masses at each generation of connections. 
-@jit(nopython=True)
+
 def rec_sum(ind,A,M,beta,gens,avoid_list=[]):
     if gens != 0:
         tmp = M[ind]*beta
@@ -1869,7 +1869,7 @@ def ring_path(adj_list,ring,path=None):
         raise Exception("wrong path, didn't recover ring") # This never gets printed, it is just used to trigger the except at a higher level of recursion. 
         
 # Convenience function for converting between adjacency matrix and adjacency list (actually a list of sets for convenience)
-@jit(nopython=True)
+
 def adjmat_to_adjlist(adj_mat):
     return [ set(np.where(_ == 1)[0]) for _ in adj_mat ]
         
@@ -1993,7 +1993,7 @@ def is_frag_ethenone(i,adj_mat,elements):
         return False
 
 # Returns a matrix of graphical separations for all nodes in a graph defined by the inputted adjacency matrix 
-@jit
+
 def graph_seps(adj_mat_0):
 
     # Create a new name for the object holding A**(N), initialized with A**(1)

@@ -7,7 +7,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 import json
 import numpy as np
-import pymongo
 from astartes.molecules import train_val_test_split_molecules
 from copy import deepcopy
 import pandas as pd 

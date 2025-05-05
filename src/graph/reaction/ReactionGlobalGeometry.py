@@ -1,17 +1,17 @@
 
 from ..base.component import BaseReactionComponentFeaturizer
-from ..base.information import ReactiveAtomInformation,ReactiveBondInformation,ReactiveAtomGeometryInformation,ReactiveBondGeometryInformation,GlobalReactionBondInformation,ReactiveAtomChangeInformation
-from ..molecular.MoleculeGlobalGeometry import MoleculeFeaturizerwithPaddingandGeometry
+from ..base.information import ReactiveAtomInformation,ReactiveBondInformation,GlobalReactionBondInformation,ReactiveAtomChangeInformation
 from ..base.reaction import BaseReactionFeaturizer
+from ..molecular.MoleculeGlobal import MoleculeFeaturizerwithPadding
 from .helper import ReactionHelper
 from .Reaction import ReactionFeaturizer
 
-class ReactionComponentFeaturizer(BaseReactionComponentFeaturizer,MoleculeFeaturizerwithPaddingandGeometry):
+class ReactionComponentFeaturizer(BaseReactionComponentFeaturizer,MoleculeFeaturizerwithPadding):
     def __init__(self, smiles, arguments):
         super(BaseReactionComponentFeaturizer, self).__init__(smiles, arguments)
         super(MoleculeFeaturizerwithPaddingandGeometry, self).__init__(smiles, arguments)
     
-class ReactionFeaturizerwithPaddingandGeometry(BaseReactionFeaturizer,ReactionFeaturizer,ReactionHelper,ReactiveAtomInformation,ReactiveBondInformation,ReactiveAtomChangeInformation,GlobalReactionBondInformation,ReactiveAtomGeometryInformation,ReactiveBondGeometryInformation):
+class ReactionFeaturizerwithPaddingandGeometry(ReactionFeaturizer,GlobalReactionBondInformation):
     def __init__(self,reaction_smiles,arguments,denotation='>>'):
         super(BaseReactionFeaturizer, self).__init__(reaction_smiles, arguments,denotation,ReactionComponentFeaturizer)
     

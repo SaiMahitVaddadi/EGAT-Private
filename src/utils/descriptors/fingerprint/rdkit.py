@@ -7,7 +7,7 @@ import pickle
 from dockstring import load_target
 from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors
-from .....addons.scscore import SCScorer
+from .....addons.scscore.scscore.standalone_model_numpy import SCScorer
 from .....addons.HamDiv.diversity import diversity_all, HamDiv
 from .....addons.molcomplexity.molecular_complexity.complexity import molecular_complexity
 

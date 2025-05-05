@@ -145,11 +145,8 @@ params.getvewibyorder = 3
 params.getedgewienerbyorder = 3
 params.IC_weight = 'mass'
 params.getresonance = True
-graph = MoleculeFeaturizer('CCCCC',params)
-graph.run()
-get_dir_to_txt_file(graph,'Molecule.txt')
 
-params.conformer.generator = 1
+params.conformer.generator = 'RDKit'
 params.conformer.nconfs = 1
 params.getsterimol = True
 params.local_cutoff = 4.0
@@ -239,3 +236,15 @@ graph = MoleculeFeaturizerwithPadding('CCCCC',params)
 graph.run()
 get_dir_to_txt_file(graph,'MoleculeGlobalFeats.txt')
 
+# Define a perfectly atom-mapped reaction SMILES with hydrogens explicitly mapped, including hydrogens in CH3
+reaction_smiles = "[H:8][C:1]([H:9])([H:10])[C:2](=[O:3])[O:4][H:5].[O:6][H:7]>>[H:8][C:1]([H:9])([H:10])[C:2](=[O:3])[O:6][H:7]"
+
+# Create an instance of BaseReactionFeaturizer
+reaction_featurizer = BaseReactionFeaturizer(reaction_smiles, params)
+inspect(reaction_featurizer, methods=True)
+from EGAT.src.graph.reaction.helper import ReactionHelper
+reaction_helper = ReactionHelper(reaction_smiles, params,BaseFeaturizer)
+inspect(reaction_helper, methods=True)
+from EGAT.src.graph.reaction.Reaction import ReactionFeaturizer 
+reaction_featurizer = ReactionFeaturizer(reaction_smiles, params)
+reaction_featurizer.reactant

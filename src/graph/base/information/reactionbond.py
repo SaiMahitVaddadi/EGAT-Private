@@ -46,21 +46,32 @@ class ReactiveBondInformation(BaseReactionFeaturizer):
             PBtype = self.reactant.properties.old_bond_encode['T2']
         return RBtype,PBtype
     
-    def DistanceFromReactingBond(self,edge):
+    def BondChangeInformation(self,edge,prod=False):
+        if not self.params.removebondchangeinfo:
+            if self.params.oldbondencode: RBtype,PBtype = self.OldBondChangeInfo(edge)
+            else: RBtype,PBtype = self.BondChangeInfo(edge)
+            if not prod: return RBtype
+            else: return PBtype
+
+    def DistanceFromReactingBond(self,edge,prod=False):
         if self.params.adddisttoreactingbonds:
-            if len(self.reactionpropeties.bond.reactive) > 0:
-                dis = min([self.reactant.gs[edge[0]][rb[0]] + self.reactant.gs[edge[1]][rb[1]] for rb in self.reactionpropeties.bond.reactive])
+            if len(self.reactive_atoms) > 0:
+                if not prod:
+                    dis = min([self.Rgs[edge[0]][indr]  + self.Rgs[edge[1]][indr] for indr in self.reactive_atoms])
+                else:
+                    dis = min([self.Pgs[edge[0]][indr]  + self.Pgs[edge[1]][indr] for indr in self.reactive_atoms])
             else:
-                dis = 0
+                dis = 0 
             return [dis]
         else:
             return []
                     
     
-    def BondOrderChange(self, edge):
+    def BondOrderChange(self, edge,prod=False):
         BO_R = self.reactant.matrixdescriptors.bond_mat[edge[0], edge[1]]
         BO_P = self.product.matrixdescriptors.bond_mat[edge[0], edge[1]]
-        return [BO_P - BO_R]
+        if not prod: return [BO_P - BO_R]
+        else: return [BO_R - BO_P]
 
     def BondNeighborhoodChange(self, edge):
         neighbors_R = set(self.reactant.matrixdescriptors.adj_mat[edge[0]].nonzero()[0]).union(
@@ -74,38 +85,22 @@ class ReactiveBondInformation(BaseReactionFeaturizer):
         else:
             return [0]
 
-    def ShortestPathChangeAcrossBond(self, edge):
-        reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
-        product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
-        sp_R = nx.shortest_path_length(reactant_graph, source=edge[0], target=edge[1])
-        sp_P = nx.shortest_path_length(product_graph, source=edge[0], target=edge[1])
-        return [sp_P - sp_R]
+    def ShortestPathChangeAcrossBond(self, edge,prod=False):
+        sp_R = nx.shortest_path_length(self.reactant_graph, source=edge[0], target=edge[1])
+        sp_P = nx.shortest_path_length(self.product_graph, source=edge[0], target=edge[1])
+        if not prod: return [sp_P - sp_R]
+        else: return [sp_R - sp_P]
 
-    def BondParticipationDegree(self, edge):
-        reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
-        product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
-        degree_R = reactant_graph.degree(edge[0]) + reactant_graph.degree(edge[1])
-        degree_P = product_graph.degree(edge[0]) + product_graph.degree(edge[1])
-        return [degree_P - degree_R]
+    def BondParticipationDegree(self, edge,prod=False):
+        degree_R = self.reactant_graph.degree(edge[0]) + self.reactant_graph.degree(edge[1])
+        degree_P = self.product_graph.degree(edge[0]) + self.product_graph.degree(edge[1])
+        if not prod: return [degree_P - degree_R]
+        else: return [degree_R - degree_P]
 
-    def BondConnectivityPathDifference(self, edge):
-        reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
-        product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
-        connectivity_R = nx.all_pairs_shortest_path_length(reactant_graph)
-        connectivity_P = nx.all_pairs_shortest_path_length(product_graph)
-        diff = 0
-        for node in connectivity_R:
-            for target, length in connectivity_R[node].items():
-                if target in connectivity_P[node]:
-                    diff += abs(length - connectivity_P[node][target])
-                else:
-                    diff += length
-        return [diff]
-
-    def BRICSBondRoleChange(self, edge):
-        if self.params.getbrics:
-            role_R = self.reactant.brics[edge[0]] if edge[0] in self.reactant.brics else None
-            role_P = self.product.brics[edge[0]] if edge[0] in self.product.brics else None
+    def BRICSBondRoleChange(self, edge,prod=False):
+        if self.params.getbricsbondrolechange:
+            role_R = (self.reactant.brics[edge[0]], self.reactant.brics[edge[1]]) if edge[0] in self.reactant.brics and edge[1] in self.reactant.brics else None
+            role_P = (self.product.brics[edge[0]], self.product.brics[edge[1]]) if edge[0] in self.product.brics and edge[1] in self.product.brics else None
             if role_R == role_P:
                 return [0]
             else:
@@ -113,31 +108,4 @@ class ReactiveBondInformation(BaseReactionFeaturizer):
         else:
             return []
 
-    def BRICSBondFormationLikelihood(self, edge):
-        if self.params.getbrics:
-            mol = Chem.MolFromSmiles(self.smiles)
-            brics_bonds = list(BRICS.FindBRICSBonds(mol))
-            bond_breaks = [(bond[0][0], bond[0][1]) for bond in brics_bonds]
-            if edge in bond_breaks or (edge[1], edge[0]) in bond_breaks:
-                return [1]
-            else:
-                return [0]
-        else:
-            return []
-
-    def BRICSFragmentationConsistency(self, edge):
-        if self.params.getbrics:
-            mol = Chem.MolFromSmiles(self.smiles)
-            brics_bonds = list(BRICS.FindBRICSBonds(mol))
-            bond_breaks = [(bond[0][0], bond[0][1]) for bond in brics_bonds]
-            reactant_bonds = set(self.reactant.brics)
-            product_bonds = set(self.product.brics)
-            common_bonds = reactant_bonds.intersection(product_bonds)
-            total_bonds = reactant_bonds.union(product_bonds)
-            if len(total_bonds) > 0:
-                return [len(common_bonds) / len(total_bonds)]
-            else:
-                return [0]
-        else:
-            return []
     

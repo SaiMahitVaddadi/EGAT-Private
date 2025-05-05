@@ -61,6 +61,9 @@ class EGAT:
     def configurate(self):
         pass
 
+    def generate(self):
+        pass
+
     def train(self):
         self.train.TrainingProtocol()
 
