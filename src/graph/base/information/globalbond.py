@@ -328,10 +328,13 @@ class GlobalBondInformation(RandomWalk,DijkstraFeaturizer,MolecularAStar):
 
     def AromaticSequence(self, edge):
         if self.params.getSameAromaticSequence:
-            seq = self.SameAromaticSequence(edge)
-            if seq:
-                return [1]
-            else:
+            try:
+                seq = self.SameAromaticSequence(edge)
+                if seq:
+                    return [1]
+                else:
+                    return [0]
+            except:
                 return [0]
         else:
             return []

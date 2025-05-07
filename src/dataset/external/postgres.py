@@ -3,8 +3,8 @@ from tqdm import tqdm
 from commands import ExternalSaveCommands
 from pyspark.sql import SparkSession
 class PostgresQLCommands(ExternalSaveCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
 
     def create_spark_session(app_name="PostgresQLApplication", master="local[*]"):
         """
@@ -175,8 +175,8 @@ class PostgresQLCommands(ExternalSaveCommands):
 
         
 class GraphPostgresQLDataset(PostgresQLCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadPostgresQLDataFrame()
         self.GetAllIndices()
     
@@ -194,8 +194,8 @@ class GraphPostgresQLDataset(PostgresQLCommands):
                 return None
             
 class FingerprintPostgresQLDataset(PostgresQLCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadPostgresQLDataFrame()
         self.GetAllIndices()
     
@@ -213,8 +213,8 @@ class FingerprintPostgresQLDataset(PostgresQLCommands):
                 return None
 
 class PostgresQLSaver(PostgresQLCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.SaveInfoToPostgresQL()
 
 

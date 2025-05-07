@@ -3,8 +3,8 @@ from tqdm import tqdm
 from commands import ExternalSaveCommands
 from pyspark.sql import SparkSession
 class SparkCommands(ExternalSaveCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
 
     def create_spark_session(app_name="SparkApplication", master="local[*]"):
         """
@@ -142,8 +142,8 @@ class SparkCommands(ExternalSaveCommands):
 
         
 class GraphSparkDataset(SparkCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadSparkDataFrame()
         self.GetAllIndices()
     
@@ -161,8 +161,8 @@ class GraphSparkDataset(SparkCommands):
                 return None
             
 class FingerprintSparkDataset(SparkCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadSparkDataFrame()
         self.GetAllIndices()
     
@@ -180,8 +180,8 @@ class FingerprintSparkDataset(SparkCommands):
                 return None
 
 class SparkSaver(SparkCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.SaveInfoToSpark()
 
 

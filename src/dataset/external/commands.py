@@ -4,8 +4,8 @@ import traceback
 from tqdm import tqdm
 
 class ExternalSaveCommands(DatasetCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
     
     def savesplittoinfo(self,rxn):
         if 'split' in self.data.columns:

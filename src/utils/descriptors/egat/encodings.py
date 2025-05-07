@@ -13,6 +13,7 @@ class Encodings(Properties):
         self.bondorder()
         self.bondstereo()
         self.bondrotation()
+        self.hybridization()
         self.hybridization_full()
         self.old_bond_encoding()
         self.bondordernew()
@@ -48,7 +49,7 @@ class Encodings(Properties):
             Key: Chem.HybridizationType
             Value: list [int, int, int, int]
         """
-        self.atom_hybrid_encode = {Chem.HybridizationType.S: [0,0,0,1], Chem.HybridizationType.SP: [0,0,1,0], Chem.HybridizationType.SP2: [0,1,0,0], 
+        self.atom_hybrid_encode_old = {Chem.HybridizationType.S: [0,0,0,1], Chem.HybridizationType.SP: [0,0,1,0], Chem.HybridizationType.SP2: [0,1,0,0], 
                                    Chem.HybridizationType.SP3: [1,0,0,0]}
 
     def hybridization_full(self):

@@ -6,8 +6,8 @@ from ..base.commands import DatasetCommands
 import pandas as pd
 
 class SQLCommands(ExternalSaveCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
 
     def setupsqlserver(self):
         conn = mysql.connector.connect(
@@ -185,8 +185,8 @@ class SQLCommands(ExternalSaveCommands):
 
 
 class GraphSQLDataset(SQLCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadSQLDataFrame()
         self.GetAllIndices()
 
@@ -205,8 +205,8 @@ class GraphSQLDataset(SQLCommands):
 
 
 class FingerprintSQLDataset(SQLCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadSQLDataFrame()
         self.GetAllIndices()
 
@@ -225,6 +225,6 @@ class FingerprintSQLDataset(SQLCommands):
 
 
 class SQLSaver(SQLCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.SaveInfoToSQLite()

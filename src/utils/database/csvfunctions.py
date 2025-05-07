@@ -42,33 +42,65 @@ class DenoteInputData:
         self.data = data 
         self.params = params
 
-    def GetSplit(self):
+    def GetSplit(self,split=None):
         """
         Filter the data based on the split type.
         """
         if self.params.fold is not None:
-            self.data = self.data[self.data.fold == self.params.fold]
-        if self.params.split in ['train', 'test', 'val']:
-            self.data = self.data[self.data.split == self.params.split]
-        elif self.params.split == 'traintest':
-            self.data = self.data[self.data.split.isin(['train', 'test'])]
-        elif self.params.split == 'trainval':
-            self.data = self.data[self.data.split.isin(['train', 'val'])]
-        elif self.params.split == 'testval':
-            self.data = self.data[self.data.split.isin(['test', 'val'])]
+            coltolook = f'fold{self.params.fold}_split'
+        else:
+            coltolook = 'split'
+        
+        if split in ['train', 'test', 'val']:
+            self.data = self.data[self.data[coltolook] == split]
+        elif split == 'traintest':
+            self.data = self.data[self.data[coltolook].isin(['train', 'test'])]
+        elif split == 'trainval':
+            self.data = self.data[self.data[coltolook].isin(['train', 'val'])]
+        elif split == 'testval':
+            self.data = self.data[self.data[coltolook].isin(['test', 'val'])]
         else:
             self.data = self.data
     
-    def GetDenotation(self):
+    def _obtaindenotationstrcase(self,class_choice,notcase=False,coltolook = 'rxntype'):
+        if notcase:
+            self.data = self.data[~self.data[coltolook].str.contains(class_choice, case=False)]
+        else:
+            self.data = self.data[self.data[coltolook].str.contains(class_choice, case=False)]
+    
+    def _obtaindenotationlist(self,class_choice,notcase=False,coltolook = 'rxntype'):
+        if notcase:
+            self.data = self.data[~self.data[coltolook].isin(class_choice)]
+        else:
+            self.data = self.data[self.data[coltolook].isin(class_choice)]
+
+    def _obtaindenotationdict(self,class_choice,notcase=False):
+        for key, value in class_choice.items():
+            if isinstance(value, str):
+                if isinstance(notcase,dict):
+                    self._obtaindenotationstrcase(value, notcase.get(key, False),coltolook=f'rxntype_{key}')
+                else:
+                    self._obtaindenotationstrcase(value, notcase,coltolook=f'rxntype_{key}')
+            elif isinstance(value, list):
+                if isinstance(notcase,dict):
+                    self._obtaindenotationlist(value, notcase.get(key, False),coltolook=f'rxntype_{key}')
+                else:
+                    self._obtaindenotationlist(value, notcase,coltolook=f'rxntype_{key}')
+
+    def GetDenotation(self,class_choice=None,notcase=False):
         """
         Filter the data based on the denotation type.
         """
-        if isinstance(self.params.denoteby, list):
-            self.data = self.data[self.data.rxntype.isin(self.params.denoteby)]
-        elif isinstance(self.params.denoteby, str):
-            self.data = self.data[self.data.rxntype == self.params.denoteby]
-        else:
+        if class_choice is None:
             self.data = self.data
+        if isinstance(class_choice, str):
+            self._obtaindenotationstrcase(class_choice, notcase)
+        elif isinstance(class_choice, list):
+            self._obtaindenotationlist(class_choice, notcase)
+        elif isinstance(class_choice, dict):
+            self._obtaindenotationdict(class_choice, notcase)
+        else:
+            raise ValueError("Invalid denotation type provided.")
     
     @staticmethod
     def getctype(smi: str, molecular: bool = False) -> str:
@@ -88,8 +120,8 @@ class DenoteInputData:
             smi = smi.split('>>')
             return f"R{len(smi[0].split('.'))}P{len(smi[1].split('.'))}"
 
-    def GrabData(self):
-        self.GetDenotation()
-        self.GetSplit()
+    def GrabData(self,split=None,class_choice=None):
+        self.GetDenotation(class_choice)
+        self.GetSplit(split)
 
 

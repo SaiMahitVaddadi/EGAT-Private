@@ -7,8 +7,8 @@ from ..base.commands import DatasetCommands
 import pandas as pd
 
 class JSONCommands(ExternalSaveCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.json_folder = self.params.json_folder
         os.makedirs(self.json_folder, exist_ok=True)
 
@@ -103,8 +103,8 @@ class JSONCommands(ExternalSaveCommands):
 
 
 class GraphJSONDataset(JSONCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.GetAllIndices()
     
     def __getitem__(self, index):
@@ -121,8 +121,8 @@ class GraphJSONDataset(JSONCommands):
                 return None
             
 class FingerprintJSONDataset(JSONCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.GetAllIndices()
     
     def __getitem__(self, index):
@@ -139,6 +139,6 @@ class FingerprintJSONDataset(JSONCommands):
                 return None
 
 class JSONSaver(JSONCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.SaveInfoToJSON()

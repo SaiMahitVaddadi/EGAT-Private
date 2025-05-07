@@ -45,12 +45,20 @@ class Splitter:
         if self.params.split_type == 'random':
             train_df, temp_df = train_test_split(df.index.tolist(), test_size=1-self.params.train_size, random_state=self.params.random_state)
             val_df, test_df = train_test_split(temp_df, test_size=.5, random_state=self.params.random_state)
-            return train_df, val_df, test_df
+            df['split'] = 'train'
+            df.loc[val_df, 'split'] = 'val'
+            df.loc[test_df, 'split'] = 'test'
+            return df
         else:
             
             train,val,test = train_val_test_split_molecules(molecules=df[self.params.smiles].values,y=df.loc[self.params.target].values,train_size=self.params.train_size,val_size = (1-self.params.train_size)/2, test_size = (1-self.params.train_size)/2,
                                                         sampler=self.params.split_type,hopts=self.params.astartes.hopts,fingerprint=self.params.astartes.fingerprint,fprints_hopts=self.params.astartes.fingerprint_args)
-            return train,val,test
+            
+            
+            df['split'] = 'train'
+            df.loc[val, 'split'] = 'val'
+            df.loc[test, 'split'] = 'test'
+            return df
                                                  
                                                     
     def xfold(self,df):
@@ -64,4 +72,14 @@ class Splitter:
             train_df = train_val_df.iloc[train_index]
             val_df = train_val_df.iloc[val_index]
             splits.append((train_df, val_df, test_df))
-        return splits
+        for fold, (train_df, val_df, _) in enumerate(splits):
+            train_indices = train_df.index
+            val_indices = val_df.index
+            test_indices = test_df.index
+
+            df[f'fold{fold}_split'] = 'none'
+            df.loc[train_indices, f'fold{fold}_split'] = 'train'
+            df.loc[val_indices, f'fold{fold}_split'] = 'val'
+            df.loc[test_indices, f'fold{fold}_split'] = 'test'
+        return df
+

@@ -7,8 +7,8 @@ from ..base.commands import DatasetCommands
 import pandas as pd
 
 class TOMLCommands(ExternalSaveCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.toml_folder = self.params.toml_folder
         os.makedirs(self.toml_folder, exist_ok=True)
 
@@ -103,8 +103,8 @@ class TOMLCommands(ExternalSaveCommands):
 
 
 class GraphTOMLDataset(TOMLCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.GetAllIndices()
     
     def __getitem__(self, index):
@@ -121,8 +121,8 @@ class GraphTOMLDataset(TOMLCommands):
                 return None
             
 class FingerprintTOMLDataset(TOMLCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.GetAllIndices()
     
     def __getitem__(self, index):
@@ -139,6 +139,6 @@ class FingerprintTOMLDataset(TOMLCommands):
                 return None
 
 class TOMLSaver(TOMLCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.SaveInfoToTOML()

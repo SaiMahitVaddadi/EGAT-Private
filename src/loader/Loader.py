@@ -13,8 +13,8 @@ from ..dataset.external.pandas import GraphPandasDataset,FingerprintPandasDatase
 from ..dataset.external.spark import GraphSparkDataset,FingerprintSparkDataset
 from ..dataset.external.polars import GraphParquetDataset,FingerprintParquetDataset
 from ..dataset.external.postgres import GraphPostgresQLDataset,FingerprintPostgresQLDataset
-from ..dataset.collate.molecule import MolecularCollator
-from ..dataset.collate.reaction import ReactionCollator
+from ..dataset.collate.molecule import MolecularCollator,MolecularFingerprintCollator
+from ..dataset.collate.reaction import ReactionCollator,ReactionFingerprintCollator
 
 @dataclass
 class DataLoaderParams:
@@ -35,19 +35,42 @@ class DataLoaderParams:
     imblearn: bool = False  # Added to handle imbalanced datasets
     batch_size: int = 32
 
-
+# - Add the not argument for class_choice like class_choice_not
+# - Add the test_class_choice and test_class_choice_not
 class DataLoaderCommands:
     def __init__(self,arguments):
         self.params = arguments
 
+
+    def setupsplits(self,splits):
+        if self.params.combine_loader is None:
+            if self.params.test_only:
+                splits = ['train','test']
+            else:
+                splits = ['train','val','test']
+        elif self.params.combine_loader == 'trainval':
+            if self.params.test_only:
+                splits = ['trainval','test']
+            else:
+                splits = ['trainval']
+        elif self.params.combine_loader == 'all':
+            if self.params.test_only:
+                splits = ['trainval']
+            else:
+                splits = ['all']
+        elif self.params.combine_loader == 'valtest':
+            splits = ['train','valtest']
+        elif self.params.combine_loader == 'traintest':
+            if self.params.test_only:
+                splits = ['train']
+            else:
+                splits = ['traintest','val']
+        return splits
+
     def setuploader(self):
         self.egatdataset = dict()
-        self.egatdataloader = dict()
-        if self.params.test_only:
-            splits = ['train','test']
-        else:
-            splits = ['train','val','test']
-        self.splits = splits
+        self.egatdataloader = dict()    
+        self.splits = self.setupsplits([])
 
     def excludedata(self):
         ### Get the files to exclude. If not, just set it blank. 
@@ -125,39 +148,49 @@ class DataLoaderCommands:
 
     def createdatsets(self):
         for split in self.splits:
-            if self.split == 'test':
-                self.egatdataset[split] = self.datasetfunction(root=self.params.root,split=split, class_choice=self.params.test_class_choice, exclude=self.excluded,randomize=self.params.randomize,fold=self.params.fold,foldtype=self.params.foldtype,size=self.params.size,target=self.params.target,additional=self.params.additionals,hasaddons=self.params.addons,molecular=self.params.graph,test=True)
-            else:
-                self.egatdataset[split] = self.datasetfunction(root=self.params.root,split=split, class_choice=self.params.class_choice, exclude=self.excluded,randomize=self.params.randomize,fold=self.params.fold,foldtype=self.params.foldtype,size=self.params.size,target=self.params.target,additional=self.params.additionals,hasaddons=self.params.addons,molecular=self.params.graph)
-
+            self.egatdataset[split] = self.datasetfunction(self.params,split)
+            
     def addimbalanceddataset(self):
         if self.params.imblearn is not None:
             self.egatdataset['augtrain'] = self.egatdataset['train']
             self.splits.append('augtrain')
         
     def grabcollatefunction(self):
-        if self.params.addons is not None: #Check if we need RDKit Global Features. If we do, load them.
-            if self.params.additional is not None: # Check if there are added features. If we do, load them.
-                if self.params.graph == 'molecular': # Check if we only need molecular features. If we do, only load R features. 
-                    self.collator = MolecularCollator.allprops
-                elif self.params.graph == 'reaction':
-                    self.collator = ReactionCollator.allprops
+        if self.params.fingerprint == False: # Check if we need to use the graph dataset or the fingerprint dataset.
+            if self.params.addons is not None: #Check if we need RDKit Global Features. If we do, load them.
+                if self.params.additional is not None: # Check if there are added features. If we do, load them.
+                    if self.params.graph == 'molecular': # Check if we only need molecular features. If we do, only load R features. 
+                        self.collator = MolecularCollator.allprops
+                    elif self.params.graph == 'reaction':
+                        self.collator = ReactionCollator.allprops
+                else:
+                    if self.params.graph == 'molecular': # Check if we only need molecular features. If we do, only load R features. 
+                        self.collator = MolecularCollator().addons
+                    elif self.params.graph == 'reaction':
+                        self.collator = ReactionCollator.addons
             else:
-                if self.params.graph == 'molecular': # Check if we only need molecular features. If we do, only load R features. 
-                    self.collator = MolecularCollator.addons
-                elif self.params.graph == 'reaction':
-                    self.collator = ReactionCollator.addons
+                if self.params.additional is not None:
+                    if self.params.graph == 'molecular':
+                        self.collator = MolecularCollator.additionals
+                    elif self.params.graph == 'reaction':
+                        self.collator = ReactionCollator.additionals
+                else:
+                    if self.params.graph == 'molecular':
+                        self.collator = MolecularCollator.targets
+                    elif self.params.graph == 'reaction':
+                        self.collator = ReactionCollator.targets
         else:
-            if self.params.additional is not None:
-                if self.params.graph == 'molecular':
-                    self.collator = MolecularCollator.additionals
-                elif self.params.graph == 'reaction':
-                    self.collator = ReactionCollator.additionals
-            else:
-                if self.params.graph == 'molecular':
-                    self.collator = MolecularCollator.targets
-                elif self.params.graph == 'reaction':
-                    self.collator = ReactionCollator.targets
+            if self.params.addons is not None:
+                if self.params.additional is not None:
+                    if self.params.graph == 'molecular':
+                        self.collator = MolecularFingerprintCollator.allprops
+                    elif self.params.graph == 'reaction':
+                        self.collator = ReactionFingerprintCollator.allprops
+                else:
+                    if self.params.graph == 'molecular':
+                        self.collator = MolecularFingerprintCollator.addons
+                    elif self.params.graph == 'reaction':
+                        self.collator = ReactionFingerprintCollator.addons
 
     def createdataloader(self):
         for split in self.splits:

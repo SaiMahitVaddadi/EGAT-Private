@@ -40,7 +40,8 @@ class ElectronInformation(BaseFeaturizer):
                 else: hybrid = [0,0,0,1,0,0,0,0,0]
 
             else:
-                hybrid = self.properties.atom_hybrid_encode[self.stereo.Hybridization[ind]]
+                if not self.params.useFullHyb: hybrid = self.properties.atom_hybrid_encode_old[self.stereo.Hybridization[ind]]
+                else: hybrid = self.properties.atom_hybrid_encode[self.stereo.Hybridization[ind]]
             return hybrid
         else:
             return []

@@ -5,8 +5,8 @@ import polars as pl
 
 
 class ParquetCommands(ExternalSaveCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
 
     def setinfointoparquet(self, index):
         file_name = f"info_{index}.parquet"
@@ -111,8 +111,8 @@ class ParquetCommands(ExternalSaveCommands):
 
         
 class GraphParquetDataset(ParquetCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadParquetDataFrame()
         self.GetAllIndices()
     
@@ -130,8 +130,8 @@ class GraphParquetDataset(ParquetCommands):
                 return None
             
 class FingerprintParquetDataset(ParquetCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadParquetDataFrame()
         self.GetAllIndices()
     
@@ -149,8 +149,8 @@ class FingerprintParquetDataset(ParquetCommands):
                 return None
 
 class ParquetSaver(ParquetCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.SaveInfoToParquet()
 
 

@@ -2,8 +2,8 @@
 from base.commands import DatasetCommands
 
 class GraphDataset(DatasetCommands):
-    def __init__(self,arguments):
-        super().__init__(arguments)
+    def __init__(self,arguments,split=None):
+        super().__init__(arguments,split)
                 
     def __getitem__(self, index):
         if index in self.cache:
@@ -17,8 +17,8 @@ class GraphDataset(DatasetCommands):
                 self.__ItemException(index)
                 
 class FingerprintDataset(DatasetCommands):
-    def __init__(self,arguments):
-        super().__init__(arguments)
+    def __init__(self,arguments,split=None):
+        super().__init__(arguments,split)
     
     def __getitem__(self, index):
         if index in self.cache:

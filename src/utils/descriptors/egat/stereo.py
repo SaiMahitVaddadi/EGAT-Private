@@ -162,6 +162,8 @@ class StereoChemistry:
         atom_map_num = atom.GetAtomMapNum()
         self.atom_aromatic[atom_map_num] = atom.GetIsAromatic()
         self.Hybridization[atom_map_num] = atom.GetHybridization()
+
+
         
     def AtomStereo(self):
         # go through heavy atoms

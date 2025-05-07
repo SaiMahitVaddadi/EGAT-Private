@@ -6,8 +6,8 @@ from commands import ExternalSaveCommands
 from ..base.commands import DatasetCommands
 
 class HDF5Commands(ExternalSaveCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.hdf5_file = self.params.hdf5_file
         os.makedirs(os.path.dirname(self.hdf5_file), exist_ok=True)
 
@@ -88,8 +88,8 @@ class HDF5Commands(ExternalSaveCommands):
 
 
 class GraphHDF5Dataset(HDF5Commands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.GetAllIndices()
     
     def __getitem__(self, index):
@@ -106,8 +106,8 @@ class GraphHDF5Dataset(HDF5Commands):
                 return None
             
 class FingerprintHDF5Dataset(HDF5Commands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.GetAllIndices()
     
     def __getitem__(self, index):
@@ -124,6 +124,6 @@ class FingerprintHDF5Dataset(HDF5Commands):
                 return None
 
 class HDF5Saver(HDF5Commands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.SaveInfoToHDF5()

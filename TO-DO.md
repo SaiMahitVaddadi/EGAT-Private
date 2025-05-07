@@ -1,28 +1,48 @@
 # TO-DO - Tomorrow:
 
-## To Test and Fix:
-- Reaction Global.
-- Dataset Setups.
-- Dataset Commands.
-- Dataset. 
+## To Test and Fix: 
 - Dataloader.
 - ML Model Setups. 
 
-
 ### Codes to Modify: 
 - Cleanup the Training and Prediction codes.
+- Write a v1 to v2 Converter. 
+- Write a pre-trained model user (Supersede GraphParams for Pre-trained model.)
 - Expand for the multi geometry and multi bond matrix case.  
 - Expand for the multi component case. 
-- Write a new Generate.py command.
+- Clean up the params class.
+- Write a new generate command. 
+- Write a new train command. 
+- Write a new predict command.
+- Write a new fingerprint command. 
 
 ## Possible Sprints:
+- More Molecular Features:
+    - Recap: what bonds are broken? What atoms are near to them? How far away are the bonds from said bond breaks? How far away are the atoms? 
+    - Conjugated Pi bonds: https://bertiewooster.github.io/2024/10/15/Color-from-Conjugation.html
+
+- More Add-ons:
+    - Chem-Chem Interaction Descriptors: https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
+    - Medchem descriptors. 
+
+- Mixing Layers for MC Runs:
+    - https://www.sciencedirect.com/science/article/pii/S138589472503058X?via%3Dihub
+    - Digital Discovery,2023,2,138
+    - https://www.sciencedirect.com/science/article/pii/S0016236124023676?via%3Dihub 
+
+
 - LLM Block:
     - Write up an adapter for molfeat and huggingface and the IBM model. 
     - Add in the past finetuning codes from ChemLLM. 
     - Write the LLM Model.
     - Write the GNN+LLM model. 
 
-- Biologic Block:
+- Biological Feature Block:
+    - Protein Features: https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
+    - DNA Features: https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
+    - Chem-Bio Interaction Descriptors: https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
+
+- Biological LLM Block:
     - Write up an adapter for huggingface.
     - Write up an adapter for ProteinMPNN. 
     - Write up and adapter from pdb ID or pdb file to Protein Sequence. 
@@ -39,6 +59,7 @@
 - Few-shot learning:
     - Write out the skeleton code that does so.
     - Use 2D and 3D molecular similarity. Clean up the REINVENT code that does so. 
+    - Use the MCS tool to see the level of similarity between the support and query. 
 
 - Symbolic Regression:
     - Write out the skeleton code. 
@@ -46,8 +67,31 @@
 - Active Learning: 
     - Write out skeleton code. 
 
+- Quadratic NN:
+    - Write out skeleton code. 
 
+- Pooling for Coarse Graining: 
+    - Write out skeleton code. 
 
+- Error Analysis:
+    - Write out Polished Analysis code on results
+    - Write out code on steps.
+    - Write out code on ensemble models. 
+    - Write out code on CV models. 
+    - Write out Outlier Detection tools.
+    - Write out Euclidian Distance Tools. 
+
+- Cluster Analysis:
+    - Write out UMAP and other algorithms. 
+    - Write out Graph Outlier Detection Algorithms. 
+
+- Explainability:
+    - FP Model --> use SHAP scores. 
+    - GNN --> write adapter for existing codes. 
+    - LLM --> see what tools are out there. 
+    - Write a new analyze command. 
+
+- Point Cloud Similarities:
 
 ### Testing the Graphs:
 https://github.com/AntixK/PyTorch-VAE
@@ -70,9 +114,4 @@ https://github.com/zarekxu/QuadraLib
 
 
 
-
-
-
-AdaBoost Regression: While AdaBoost is widely known for its application in classification problems, it can be adapted for regression by modifying the algorithm’s loss function and the way weak models are combined. It can capture non-linear relationships between the input features and the target variable by leveraging the capabilities of the weak regression models. It has been used in various regression tasks, such as predicting housing prices, stock market prices, and demand forecasting.
-Extra Trees Regression: short for Extremely Randomized Trees Regression, is an ensemble learning method used for regression tasks. It is a variation of the Random Forest algorithm that introduces additional randomness during the construction of individual decision trees. In Extra Trees Regression, multiple decision trees are trained on different random subsets of the training data and random subsets of features. During the tree construction process, instead of finding the best-split point based on a criterion like Gini impurity or information gain, Extra Trees randomly selects split points without considering the optimal threshold. This randomization helps to reduce overfitting and increase the diversity among the trees.
 

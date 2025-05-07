@@ -90,7 +90,10 @@ class ReactionFeaturizer(ReactiveAtomInformation,ReactiveBondInformation,Reactiv
         for ind in range(self.edges):
             try:
                 self.BondFeatureVector(ind)
-            except:
+            except Exception as e:
+                print(f"Error processing bond feature vector for index {ind}: {e}")
+                import traceback
+                traceback.print_exc()
                 continue
 
             

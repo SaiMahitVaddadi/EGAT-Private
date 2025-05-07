@@ -5,8 +5,8 @@ import pandas as pd
 
 
 class PandasCommands(ExternalSaveCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
 
     def setinfointoparquet(self, index):
         file_name = f"info_{index}.parquet"
@@ -111,8 +111,8 @@ class PandasCommands(ExternalSaveCommands):
 
         
 class GraphPandasDataset(PandasCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadPandasDataFrame()
         self.GetAllIndices()
     
@@ -130,8 +130,8 @@ class GraphPandasDataset(PandasCommands):
                 return None
             
 class FingerprintPandasDataset(PandasCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadPandasDataFrame()
         self.GetAllIndices()
     
@@ -149,6 +149,6 @@ class FingerprintPandasDataset(PandasCommands):
                 return None
 
 class PandasSaver(PandasCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.SaveInfoToPandas()

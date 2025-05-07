@@ -6,8 +6,8 @@ from ..base.commands import DatasetCommands
 import pandas as pd
 
 class MongoCommands(ExternalSaveCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
 
     def setup_mongo_client(self):
         client = MongoClient(self.params.dbhost, self.params.dbport)
@@ -134,8 +134,8 @@ class MongoCommands(ExternalSaveCommands):
 
 
 class GraphMongoDataset(MongoCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadMongoDataFrame()
         self.GetAllIndices()
 
@@ -154,8 +154,8 @@ class GraphMongoDataset(MongoCommands):
 
 
 class FingerprintMongoDataset(MongoCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadMongoDataFrame()
         self.GetAllIndices()
 
@@ -174,6 +174,6 @@ class FingerprintMongoDataset(MongoCommands):
 
 
 class MongoSaver(MongoCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.SaveInfoToMongo()

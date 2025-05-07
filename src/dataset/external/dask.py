@@ -5,8 +5,8 @@ import dask.dataframe as dd
 
 
 class DaskCommands(ExternalSaveCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
 
     def setinfointoparquet(self, index):
         file_name = f"info_{index}.parquet"
@@ -111,8 +111,8 @@ class DaskCommands(ExternalSaveCommands):
 
         
 class GraphDaskDataset(DaskCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadDaskDataFrame()
         self.GetAllIndices()
     
@@ -130,8 +130,8 @@ class GraphDaskDataset(DaskCommands):
                 return None
             
 class FingerprintDaskDataset(DaskCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.LoadDaskDataFrame()
         self.GetAllIndices()
     
@@ -149,6 +149,6 @@ class FingerprintDaskDataset(DaskCommands):
                 return None
 
 class DaskSaver(DaskCommands):
-    def __init__(self, arguments):
-        super().__init__(arguments)
+    def __init__(self, arguments,split=None):
+        super().__init__(arguments,split)
         self.SaveInfoToDask()

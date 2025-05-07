@@ -1,7 +1,7 @@
 from rdkit import Chem
 from mordred import Calculator, descriptors
 from descriptastorus.descriptors import rdNormalizedDescriptors,rdDescriptors
-from molskill.scorer import MolSkillScorer
+#from molskill.scorer import MolSkillScorer
 from RAscore import RAscore_NN #For tensorflow and keras based models
 from RAscore import RAscore_XGB #For XGB based models
 import QEPPI as ppi
@@ -17,8 +17,6 @@ class Descriptors:
             self.model = rdNormalizedDescriptors.RDKit2DNormalized()
         elif self.calc == 'descriptasourus':
             self.model = rdDescriptors.RDKit2D()
-        elif self.calc == 'molskill':
-            self.model = MolSkillScorer()
         elif self.calc == 'rascore-nn':
             self.model = RAscore_NN.RAScorerNN() 
         elif self.calc == 'rascore-xgb':
@@ -29,11 +27,15 @@ class Descriptors:
         elif self.calc == 'syba':
             self.model = SybaClassifier()
             self.model.fitDefaultScore()
+        '''
+        elif self.calc == 'molskill':
+            self.model = MolSkillScorer()
+        '''
         
-
+    '''
     def MolSkill(self, smis):
         return self.model.score(smis) 
-
+    '''
     def QEP(self, smis):
         q = ppi.QEPPI_Calculator()
         q.read()

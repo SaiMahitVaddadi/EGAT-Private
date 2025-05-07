@@ -58,12 +58,28 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
         else:
             return func(ind)
         
+
+    def _debuglengthswithdicts(self, func, ind, atom_map_number, yarpid):
+        func_name = func.__name__.lower()  # Convert function name to lowercase
+        vector = self._runfunc(func, ind, atom_map_number, yarpid)
+        func_attr_name = f"self.{func_name}"  # Create the attribute name as a string
+        if not hasattr(self, func_attr_name):  # Check if the attribute does not exist
+            setattr(self, func_attr_name, {})  # Initialize it as an empty dictionary
+        else:
+            current_dict = getattr(self, func_attr_name)  # Retrieve the existing dictionary
+            if isinstance(current_dict, dict):  # Ensure it's a dictionary
+                current_dict.update(len(vector))  # Update the dictionary with the new values
+            else:
+                raise TypeError(f"Attribute {func_attr_name} exists but is not a dictionary.")
+        
     def _iterateatomfeatures(self, features, vec, ind, atom_map_number, yarpid):
         for func in tqdm(features, desc="Processing atom features"):
             try:
                 vec += self._runfunc(func, ind, atom_map_number, yarpid)
                 debug = False
-                if debug: print(f"Function {func.__name__} executed successfully for atom index {ind}, with result: {self._runfunc(func, ind, atom_map_number, yarpid)}")
+                if debug: 
+                    self._debuglengthswithdicts(func, ind, atom_map_number, yarpid)
+                    print(f"Function {func.__name__} executed successfully for atom index {ind}, with result: {self._runfunc(func, ind, atom_map_number, yarpid)} and vector length {len(self._runfunc(func, ind, atom_map_number, yarpid))}")
             except Exception as e:
                 print('==========================ERROR ALERT==========================')
                 print(f"Error in function {func.__name__} for atom index {ind}: {e}")
