@@ -152,55 +152,47 @@ class DataLoaderCommands:
             
     def addimbalanceddataset(self):
         if self.params.imblearn is not None:
-            self.egatdataset['augtrain'] = self.egatdataset['train']
-            self.splits.append('augtrain')
+            self.egatdataset[f'aug{self.splits[0]}'] = self.egatdataset[self.splits[0]]
+            self.splits.append(f'aug{self.splits[0]}')
         
     def grabcollatefunction(self):
-        if self.params.fingerprint == False: # Check if we need to use the graph dataset or the fingerprint dataset.
-            if self.params.addons is not None: #Check if we need RDKit Global Features. If we do, load them.
-                if self.params.additional is not None: # Check if there are added features. If we do, load them.
-                    if self.params.graph == 'molecular': # Check if we only need molecular features. If we do, only load R features. 
-                        self.collator = MolecularCollator.allprops
-                    elif self.params.graph == 'reaction':
-                        self.collator = ReactionCollator.allprops
-                else:
-                    if self.params.graph == 'molecular': # Check if we only need molecular features. If we do, only load R features. 
-                        self.collator = MolecularCollator().addons
-                    elif self.params.graph == 'reaction':
-                        self.collator = ReactionCollator.addons
-            else:
-                if self.params.additional is not None:
-                    if self.params.graph == 'molecular':
-                        self.collator = MolecularCollator.additionals
-                    elif self.params.graph == 'reaction':
-                        self.collator = ReactionCollator.additionals
-                else:
-                    if self.params.graph == 'molecular':
-                        self.collator = MolecularCollator.targets
-                    elif self.params.graph == 'reaction':
-                        self.collator = ReactionCollator.targets
+        if self.params.graph == 'molecular': # Check if we only need molecular features. If we do, only load R features. 
+            collatorclass = 'Molecular'
+        elif self.params.graph == 'reaction':
+            collatorclass = 'Reaction'
         else:
-            if self.params.addons is not None:
-                if self.params.additional is not None:
-                    if self.params.graph == 'molecular':
-                        self.collator = MolecularFingerprintCollator.allprops
-                    elif self.params.graph == 'reaction':
-                        self.collator = ReactionFingerprintCollator.allprops
-                else:
-                    if self.params.graph == 'molecular':
-                        self.collator = MolecularFingerprintCollator.addons
-                    elif self.params.graph == 'reaction':
-                        self.collator = ReactionFingerprintCollator.addons
+            raise ValueError(f'Unknown graph type: {self.params.graph}')
+        
+        if self.params.fingerprint == True:
+            collatorclass += 'Fingerprint'
+
+        if self.params.addons is not None: #Check if we need RDKit Global Features. If we do, load them.
+            if self.params.additional is not None:
+                mode = 'allprops'
+            else:
+                mode = 'addons'
+        else:
+            if self.params.additional is not None:
+                mode = 'additionals'
+            else:
+                mode = 'targets'
+
+        self.collator = globals()[f'{collatorclass}Collator'](mode=mode,multicomp=True if isinstance(self.params.smiles,list) else False)
 
     def createdataloader(self):
         for split in self.splits:
-            self.egatloader[split] = torch.utils.data.DataLoader(self.egatdataset[split], batch_size=self.params.batch_size, shuffle=True, collate_fn=self.collator)
+            self.egatdataloader[split] = torch.utils.data.DataLoader(self.egatdataset[split], batch_size=self.params.batch_size, shuffle=self.params.shuffle_loader, collate_fn=self.collator,drop_last=self.params.drop_last)
+
+    def createdataloaderdebug(self):
+        for split in self.splits:
+            self.egatdataloader[split] = torch.utils.data.DataLoader(self.egatdataset[split], batch_size=self.params.batch_size, shuffle=self.params.shuffle_loader,drop_last=self.params.drop_last)
     
+
 class EGATDataLoader(DataLoaderCommands):
     def __init__(self,arguments):
         super().__init__(arguments)
         self.setuploader()
-        self.excluded = self.excludedata()
+        #self.excluded = self.excludedata()
         self.grabcollatefunction()
 
     def __call__(self):
@@ -208,7 +200,7 @@ class EGATDataLoader(DataLoaderCommands):
         self.createdatsets()
         self.addimbalanceddataset()
         self.createdataloader()
-
+        #self.createdataloaderdebug()
 
 if __name__ == "__main__":
     # Example usage of the EGATDataLoader
@@ -242,5 +234,5 @@ if __name__ == "__main__":
     for split, loader in data_loader.egatloader.items():
         print(f"DataLoader for {split}:")
         for batch in loader:
-            print(batch)
+            print('Batch: ',batch)
             break  # Print only the first batch for demonstration

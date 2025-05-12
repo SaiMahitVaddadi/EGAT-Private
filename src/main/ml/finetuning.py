@@ -1,7 +1,14 @@
 import torch,logging,os,hydra
 from torch import nn
+from dataclasses import dataclass
 
-
+@dataclass
+class FinetuningParams:
+    block: str = 'FreezeEGAT'
+    learning_rate: float = 0.001
+    weight_decay: float = 0.0001
+    batch_size: int = 32
+    num_epochs: int = 10
 class FinetuningEGAT:
     def __init__(self,arguments):
         self.params = arguments
@@ -37,44 +44,44 @@ class FinetuningEGAT:
             self.freeze(layer)
 
 
-    def freezeblocks(self,predictor,block='FreezeEGAT'):
+    def freezeblocks(self,predictor):
         self.egatfreezing(predictor)
         self.aggfreezing(predictor)
         self.fpfreezing(predictor)
 
         total_params = sum(p.numel() for p in predictor.parameters())
 
-        if block == 'FreezeEGAT' or block == 'FinetuneNN':
+        if self.params.finetuner =='FreezeEGAT' or self.params.finetuner =='FinetuneNN':
             self.freeze_layers(self.egatfreeze)
             self.freeze_layers(self.aggfreeze)
-        elif block == 'FreezeNN' or block == 'FinetuneEGAT':
+        elif self.params.finetuner =='FreezeNN' or self.params.finetuner =='FinetuneEGAT':
             self.freeze_layers(self.fpfreeze)
-        elif block == 'FreezeEGATOnly':
+        elif self.params.finetuner =='FreezeEGATOnly':
             self.freeze_layers(self.egatfreeze)
-        elif block == 'FreezeAggOnly':
+        elif self.params.finetuner =='FreezeAggOnly':
             self.freeze_layers(self.aggfreeze)
-        elif block == 'FreezeNNOnly':
+        elif self.params.finetuner =='FreezeNNOnly':
             self.freeze_layers(self.fpfreeze)
-        elif block == 'FinetuneAgg':
+        elif self.params.finetuner =='FinetuneAgg':
             self.freeze_layers(self.egatfreeze)
             self.freeze_layers(self.fpfreeze)
-        elif block == 'FreezeLastEGATLayer':
+        elif self.params.finetuner =='FreezeLastEGATLayer':
             self.freeze(predictor.egatblock.egat2)
             self.freeze_layers(self.aggfreeze)
             self.freeze_layers(self.fpfreeze)
-        elif block == 'FreezeLastEGATLayerOnly':
+        elif self.params.finetuner =='FreezeLastEGATLayerOnly':
             self.freeze(predictor.egatblock.egat2)
-        elif block == 'FreezeLastEGATLayerwithAgg':
+        elif self.params.finetuner =='FreezeLastEGATLayerwithAgg':
             self.freeze(predictor.egatblock.egat2)
             self.freeze_layers(self.aggfreeze)
-        elif block == 'FreezeFirstEGATLayerwithAgg':
+        elif self.params.finetuner =='FreezeFirstEGATLayerwithAgg':
             self.freeze(predictor.egatblock.egat1)
             self.freeze_layers(self.aggfreeze)
-        elif block == 'FreezeFirstEGATLayer':
+        elif self.params.finetuner =='FreezeFirstEGATLayer':
             self.freeze(predictor.egatblock.egat1)
             self.freeze_layers(self.aggfreeze)
             self.freeze_layers(self.fpfreeze)
-        elif block == 'FreezeFirstEGATLayerOnly':
+        elif self.params.finetuner =='FreezeFirstEGATLayerOnly':
             self.freeze(predictor.egatblock.egat1)
         
         trainable_params = sum(p.numel() for p in predictor.parameters() if p.requires_grad)

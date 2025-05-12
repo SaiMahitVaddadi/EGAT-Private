@@ -1,11 +1,22 @@
 import sys
 sys.path.append("/Users/svaddadi/Documents/GitHub/")
+import atexit
+
+trace_file = open("trace_log.txt", "w")
+def trace(frame, event, arg):
+    trace_file.write("%s, %s:%d\n" % (event, frame.f_code.co_filename, frame.f_lineno))
+    trace_file.flush()  # ensures it's written immediately in case of crash
+    return trace
+
+#sys.settrace(trace)
+#atexit.register(trace_file.close)
 import EGAT
 from EGAT import src
-from EGAT.src.dataset.base.dataset_setups import DatasetSetups,DatasetParams
-from EGAT.src.dataset.base.commands import DatasetCommands
+from EGAT.src.dataset.base.dataset_setups import DatasetParams
 from EGAT.src.params.graph import GraphParams
 import torch
+import gc
+gc.disable()
 torch.set_num_threads(1)
 params = GraphParams()
 # This is the way to set the parameters if you want explicit Acid-Base Information
@@ -215,18 +226,37 @@ dataset_params.dimension = '2d'
 dataset_params.mode = "dgl"
 dataset_params.jepa = False
 dataset_params.globalmode = False
+dataset_params.class_choice = None
+dataset_params.test_class_choice = None
+dataset_params.notcase = False
+dataset_params.test_notcase = False
+dataset_params.test_only = False
+dataset_params.dataset = 'onthefly'
+dataset_params.fingerprint = False
+dataset_params.llm = False
+dataset_params.imblearn = False 
+dataset_params.shuffle_loader = False
+dataset_params.randomize= True
+dataset_params.batch_size = 1
+dataset_params.shuffle = False
+dataset_params.num_workers = 0
+dataset_params.drop_last = False
+dataset_params.combine_loader = None
 # Merge DatasetParams and GraphParams
 for attr, value in vars(dataset_params).items():
     setattr(params, attr, value)
-dataset = DatasetSetups(params)
-dataset.InitialSetup()
+
 
 from rich import inspect
 
 #inspect(dataset, methods=True, all=True)
 
 
+from EGAT.src.dataset.base.dataset_setups import DatasetSetups
+dataset = DatasetSetups(params)
+dataset.InitialSetup()
 # Initialize DatasetCommands with parameters
+from EGAT.src.dataset.base.commands import DatasetCommands
 dataset_commands = DatasetCommands(params)
 
 # Example: Convert a specific row index
@@ -240,3 +270,5 @@ print("Graph created:", graph)
 # Example: Sample data for a specific index
 sample = dataset_commands.Sample(row_index)
 print("Sampled data:", sample)
+
+gc.enable()

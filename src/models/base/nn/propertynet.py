@@ -1,11 +1,7 @@
 
-import torch.nn.functional as F
 import torch
-from torch.nn import Linear, Dropout
 import torch.nn as nn
-import dgl
-import json
-from egat import EGATConv,EGATConvResid,EGATConvSA,EGATConvResidSA
+
 
 class PropertyNet(nn.Module):
     def __init__(self, input_dim=2048, hidden_dim=256, output_dim=1,activation='GELU',bias=True,smax=None):

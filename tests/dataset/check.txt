@@ -1,0 +1,2613 @@
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--smiles
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']
+/Users/svaddadi/Documents/GitHub/EGAT/tests/dataset/data/--['smiles', 'solvant']

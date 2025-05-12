@@ -14,6 +14,8 @@ from .helpers.estate import match_all_smarts
 from .helpers.morse import get_morse_descriptors,get_morse_sinc_descriptors
 from itertools import groupby
 from .helpers.mordredtable import PeriodicTable
+import periodictable
+from mendeleev.fetch import fetch_table
 
 @dataclass
 class MordredParams:
@@ -373,6 +375,15 @@ class BaseMordredFunctions(BaseFeaturizer):
         except: 
             self.D_inv_square = np.linalg.pinv(D**2)
             self.M = np.matmul(self.A, self.D_inv_square)
+
+    def _hararymats(self):
+        D = np.array(self.D)
+        try:
+            self.D_inv = np.linalg.inv(D)
+        except: 
+            self.D_inv = np.linalg.pinv(D)
+
+
     
     def _chiterm(self,atom,valence=False):
         if valence:
@@ -390,6 +401,55 @@ class BaseMordredFunctions(BaseFeaturizer):
         locations = np.argwhere(self.D[ind, :] == dist)[0]
         return locations
     
+    def _edgeadjmat(self):
+        mol = self.matrixdescriptors.new_mol
+        num_bonds = mol.GetNumBonds()
+        edge_adj_matrix = np.zeros((num_bonds, num_bonds), dtype=int)
+
+        for bond1 in mol.GetBonds():
+            bond1_idx = bond1.GetIdx()
+            for bond2 in mol.GetBonds():
+                bond2_idx = bond2.GetIdx()
+                if bond1_idx != bond2_idx:
+                    if bond1.GetBeginAtomIdx() in [bond2.GetBeginAtomIdx(), bond2.GetEndAtomIdx()] or \
+                    bond1.GetEndAtomIdx() in [bond2.GetBeginAtomIdx(), bond2.GetEndAtomIdx()]:
+                        edge_adj_matrix[bond1_idx, bond2_idx] = 1
+
+        return edge_adj_matrix
+    
+    def get_principal_quantum_number(self,atomic_number):
+        self.subset = self.table[self.table['atomic_number'] == atomic_number]['n']
+        try:
+            principal_quantum_number = self.subset.values[-1]
+        except:
+            try:
+                principal_quantum_number = self.subset.values[0]
+            except:
+                principal_quantum_number = self.subset
+        return principal_quantum_number
+
+
+
+    def pogliani_vector(self):
+        pogliani_vector = []
+        for atom in self.matrixdescriptors.new_mol.GetAtoms():
+            atomic_number = atom.GetAtomicNum()
+            self.table = fetch_table('screeningconstants')
+            principal_quantum_number = self.get_principal_quantum_number(atomic_number)
+            valence = _atomic_property.get_valence_electrons(atom)
+            pogliani_vector.append(valence/principal_quantum_number)
+        return np.array(pogliani_vector)
+
+    def schiultz_vector(self):
+        v = self._degreevector()
+        v = np.array(v)
+        M = self.A + self.D
+        M = np.array(M)
+        schiultz_vector = M @ v
+        return schiultz_vector
+
+
+
 class MordredInformation(BaseMordredFunctions):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)
@@ -428,6 +488,7 @@ class MordredInformation(BaseMordredFunctions):
         self.atom_vector = match_all_smarts(self.matrixdescriptors.new_mol)
         self._topochargemats()
         self.Li,self.Ri,self.logP,self.SMR = get_slogp_smr_contributions(self.matrixdescriptors.new_mol)
+        self.edgeadjmat = self._edgeadjmat()
         
         self.Bmat = Chem.GetAdjacencyMatrix(self.matrixdescriptors.new_mol, useBO=True, force=True)
         self.V = self.Bmat.sum(axis=0)
@@ -436,6 +497,9 @@ class MordredInformation(BaseMordredFunctions):
         self.chivalences = self._chivector(valence=False)
         self.vewi_edges = vertex_edge_distance_histogram_for_edges(self.G)
         self.vewi_nodes = vertex_edge_distance_histogram_for_vertices(self.G)
+        self._hararymats()
+        self.pogliani = self.pogliani_vector()
+        self.schiultz = self.schiultz_vector()
         
     def RunMordred3D(self,id=0):
         if self.params.getMoRSE == 'cos': 
@@ -1212,5 +1276,29 @@ class MordredInformation(BaseMordredFunctions):
                 deltaj = 1/np.sqrt(self.chivalences[atom])
                 chipath = chipath * deltaj
             return [chiij,chipath]
+        else:
+            return []
+        
+    def Harary(self,edge):
+        if self.params.getharary:
+            return [self.D_inv[edge[0], edge[1]]]
+        else:
+            return []
+    
+    def Schiultz(self,node):
+        if self.params.getschultz:
+            return [self.schiultz[node]]
+        else:
+            return []
+
+    def Pogliani(self,node):
+        if self.params.getpogliani:
+            return [self.pogliani[node]]
+        else:
+            return []
+    
+    def Platt(self,edge):
+        if self.params.getplatt:
+            return [self.edgeadjmat[edge[0], edge[1]]/2]
         else:
             return []

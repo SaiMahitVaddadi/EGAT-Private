@@ -30,7 +30,6 @@ from rdkit.Chem.Pharm3D import EmbedLib, Pharmacophore
 from skfp.fingerprints import *
 from rdkit.Chem.rdMolDescriptors import BCUT2D
 import numpy as np
-from PyFingerprint.fingerprint import get_fingerprint, get_fingerprints
 from mapchiral.mapchiral import encode, jaccard_similarity
 from mxfp.mxfp import MXFPCalculator
 from molfeat.trans.pretrained.hf_transformers import PretrainedHFTransformer
@@ -274,44 +273,6 @@ class Fingerprint:
             smiles = Chem.MolToSmiles(mol)
             return fp.transform([smiles])
     
-        elif fpname == 'cdkstandard':
-            smiles = Chem.MolToSmiles(mol)
-            return self.PyFingerprintUserFunction(smiles, "standard")
-        elif fpname == 'cdkextended':
-            smiles = Chem.MolToSmiles(mol)
-            return self.PyFingerprintUserFunction(smiles, "extended")
-        elif fpname == 'cdkgraph':
-            smiles = Chem.MolToSmiles(mol)
-            return self.PyFingerprintUserFunction(smiles, "graph")
-        elif fpname == 'hybridization':
-            smiles = Chem.MolToSmiles(mol)
-            return self.PyFingerprintUserFunction(smiles, "hybridization")
-        elif fpname == 'cdkshortestpath':
-            smiles = Chem.MolToSmiles(mol)
-            return self.PyFingerprintUserFunction(smiles, "shortestpath")
-        elif fpname == 'cdksubstructures':
-            smiles = Chem.MolToSmiles(mol)
-            return self.PyFingerprintUserFunction(smiles, "cdk-substructure")
-        elif fpname == 'circular':
-            smiles = Chem.MolToSmiles(mol)
-            return self.PyFingerprintUserFunction(smiles, "circular")
-        elif fpname == 'cdkatompairs':
-            smiles = Chem.MolToSmiles(mol)
-            return self.PyFingerprintUserFunction(smiles, "cdk-atompairs")
-        elif fpname == 'babelfp':
-            smiles = Chem.MolToSmiles(mol)
-            if radius == 2:
-                return self.PyFingerprintUserFunction(smiles, "fp2")
-            elif radius == 3:
-                return self.PyFingerprintUserFunction(smiles, "fp3")
-            elif radius == 4:
-                return self.PyFingerprintUserFunction(smiles, "fp4")
-        elif fpname == 'spectrophore':
-            smiles = Chem.MolToSmiles(mol)
-            return self.PyFingerprintUserFunction(smiles, "spectrophore")
-        elif fpname == 'mol2vec':
-            smiles = Chem.MolToSmiles(mol)
-            return self.PyFingerprintUserFunction(smiles, "mol2vec")
         elif fpname == 'chemgpt12b':
             transformer = PretrainedHFTransformer(kind='ChemGPT-1.2B', notation='selfies', dtype=float)
             smiles = selfies_encoder(Chem.MolToSmiles(mol))

@@ -1,4 +1,21 @@
 import torch,logging
+from dataclasses import dataclass
+
+@dataclass
+class SchedulerParams:
+    scheduler: str
+    learning_rate_min: float = 0.0
+    momentum_orig: float = 0.1
+    lr_decay: float = 0.1
+    step_size: int = 10
+    epochs: int = 100
+    gamma: float = 0.1
+    base_lr: float = 0.001
+    max_lr: float = 0.01
+    step_size_up: int = 2000
+    steps_per_epoch: int = 100
+    lr_lambda: callable = None
+    warmup_steps: int = 0
 
 class ScheduleSetup:
     def __init__(self,arguments):

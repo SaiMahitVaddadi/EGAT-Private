@@ -91,7 +91,7 @@ class DenoteInputData:
         """
         Filter the data based on the denotation type.
         """
-        if class_choice is None:
+        if class_choice == None:
             self.data = self.data
         if isinstance(class_choice, str):
             self._obtaindenotationstrcase(class_choice, notcase)
@@ -100,7 +100,7 @@ class DenoteInputData:
         elif isinstance(class_choice, dict):
             self._obtaindenotationdict(class_choice, notcase)
         else:
-            raise ValueError("Invalid denotation type provided.")
+            self.data = self.data
     
     @staticmethod
     def getctype(smi: str, molecular: bool = False) -> str:
@@ -120,8 +120,8 @@ class DenoteInputData:
             smi = smi.split('>>')
             return f"R{len(smi[0].split('.'))}P{len(smi[1].split('.'))}"
 
-    def GrabData(self,split=None,class_choice=None):
-        self.GetDenotation(class_choice)
+    def GrabData(self,split=None,class_choice=None,notcase=False):
+        self.GetDenotation(class_choice,notcase)
         self.GetSplit(split)
 
 

@@ -1,4 +1,10 @@
 import torch,logging
+from dataclasses import dataclass
+
+@dataclass
+class GPUParams:
+    setup: str  # Options: 'cuda', 'mps', 'rocm', 'cpu'
+    parallel: bool  # Whether to use multiple devices if available
 
 class GPUSetup:
     def __init__(self,arguments):
@@ -39,10 +45,14 @@ class GPUSetup:
         if torch.cuda.is_available() and self.params.setup == 'cuda':
             device = self.cudaloader()
         else:
-            if torch.backends.mps.is_available() and self.params.setup == 'mps':
-                device = self.metalloader()
-            elif torch.backends.hip.is_available() and self.params.setup == 'rocm':
-                device = self.rocmloader()
-            else:
+            try:
+                if torch.backends.mps.is_available() and self.params.setup == 'mps':
+                    device = self.metalloader()
+                elif torch.backends.hip.is_available() and self.params.setup == 'rocm':
+                    device = self.rocmloader()
+                else:
+                    device = torch.device("cpu")
+            except:
                 device = torch.device("cpu")
+                self.logger.warning('No GPU available. Using CPU.')
         self.device = device

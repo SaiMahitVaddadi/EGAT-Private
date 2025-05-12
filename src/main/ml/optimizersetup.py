@@ -1,4 +1,13 @@
 import torch,logging
+from dataclasses import dataclass
+
+@dataclass
+class OptimizerParams:
+    optimizer: str
+    lr: float
+    weight_decay: float = 0.0
+    momentum: float = 0.0
+
 
 class OptimizerSetup:
     def __init__(self,arguments):
@@ -24,4 +33,4 @@ class OptimizerSetup:
                 optimizer = torch.optim.Adamax(model.parameters(), lr=lr, weight_decay=self.params.weight_decay)
             else:
                 raise ValueError(f"Optimizer '{self.params.optimizer}' not supported")
-            self.optimizer = optimizer
+            return optimizer

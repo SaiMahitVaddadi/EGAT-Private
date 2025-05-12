@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from models.base.nn.propertynet import PropertyNet,PropertyNetNMLP,PropertyNetNMLPAddons
+from .propertynet import PropertyNet,PropertyNetNMLP,PropertyNetNMLPAddons
 
 
 class BaseNNCommands(nn.Module):
@@ -33,7 +33,10 @@ class BaseNNCommands(nn.Module):
         return output
     
     def getactivation(self,activation='GELU'):
-        activation = getattr(nn, activation)()
+        try:
+            activation = getattr(nn, activation)()
+        except:
+            activation = getattr(nn, 'GELU')()
 
     def _defaultdims(self,indim=None,hidden_dim=None,outdim=None):
         if indim is None:
@@ -54,7 +57,7 @@ class BaseNNCommands(nn.Module):
 
 class DeepNeuralNetStack(BaseNNCommands):
     def __init__(self, cfg):
-        super().__init__()
+        super().__init__(cfg)
         self.params = cfg
         
     
@@ -89,9 +92,10 @@ class DeepNeuralNetStack(BaseNNCommands):
     
     
 
-    def createcustomMLP(self,activation='GELU',indim=None,outdim=None,dropout=None,bias=None):
+    def createcustomMLP(self,activation='GELU',indim=None,outdim=None,dropout=None,bias=None,addons=0):
         indim,_,outdim = self._defaultdims(indim=indim,outdim=outdim)
-        layers = [nn.Linear(indim, outdim, bias=bias)]
+        addons = self.addons(addons)
+        layers = [nn.Linear(indim+addons, outdim, bias=bias)]
         if activation is not None: 
             activation = self.getactivation(activation)
             layers.append(activation)

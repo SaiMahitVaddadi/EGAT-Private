@@ -6,14 +6,18 @@ from .blocks.egatblock import EGATBlock
 from .blocks.predictionblock import PredictionBlock
 
 
-class EGATModel(EGATBlock, AggregationBlock, PredictionBlock):
-    def __init__(self, cfg, num_node_feats=17, num_edge_feats=14):
+class EGATModel(nn.Module):
+    def __init__(self, cfg, num_node_feats=17, num_edge_feats=14,addonlen=0):
         super().__init__()
         self.params = cfg
-
         self.egatblock = EGATBlock(cfg, num_node_feats, num_edge_feats)
-        self.aggblock = AggregationBlock(cfg)
-        self.predblock = PredictionBlock(cfg)
+        if self.params.MixingLayer != False: 
+            self.aggblock = AggregationBlock(cfg, addonlen=addonlen)
+            self.predblock = PredictionBlock(cfg)
+        else:
+            self.aggblock = AggregationBlock(cfg)
+            self.predblock = PredictionBlock(cfg, addonlen)
+        
     
     def forward(self, graphR, graphP=None,Hr=None):
         Rnode_feats, Redge_feats, Pnode_feats, Pedge_feats, R_attn_scores, P_attn_scores = self.egatblock.RunEGATBlock(graphR, graphP)
@@ -21,13 +25,14 @@ class EGATModel(EGATBlock, AggregationBlock, PredictionBlock):
         prediction = self.predblock.RunPrediction(G_features, Hr=Hr)
         return prediction
     
-class MultiCompEGATModel(EGATBlock, AggregationBlock, PredictionBlock):
+class MultiCompEGATModel(nn.Module):
     def __init__(self, cfg, num_node_feats=17, num_edge_feats=14):
         super().__init__()
         self.params = cfg
 
         self.egatblocks = [EGATBlock(cfg, num_node_feats, num_edge_feats) for _ in range(len(self.params.smiles) if self.params.smiles > 1 else 1) ]
         self.aggblock = [AggregationBlock(cfg) for _ in range(len(self.params.smiles) if self.params.smiles > 1 else 1)]
+        self.componentaggblock = None
         self.predblock = PredictionBlock(cfg)
 
     def forward(self, graphR, graphP=None,Hr=None):

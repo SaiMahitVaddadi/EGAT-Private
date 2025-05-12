@@ -4,8 +4,21 @@ from torch.nn import Linear, Dropout
 import torch.nn as nn
 import dgl
 import json
-from ...layers.egat.dgl import EGATConvDGL,EGATConvResidDGL, EGATConvResidSADGL, EGATConvSADGL
+from ....layers.egat.dgl import EGATConvDGL,EGATConvResidDGL, EGATConvResidSADGL, EGATConvSADGL
+from dataclasses import dataclass
 
+@dataclass
+class EGATBlockParams:
+    mode: str = 'dgl'
+    graph: str = 'reaction'
+    hidden_dim: int = 64
+    num_heads: int = 8
+    Resid: bool = False
+    ResidBias: bool = False
+    SA: bool = False
+    MessagePassing: bool = True
+    egatlayers: int = 2
+    getattentionmaps: str = None  # Options: 'norm', 'mean', 'median', or None
 
 class EGATBlock(nn.Module):
     def __init__(self, cfg, num_node_feats = 17, num_edge_feats=14):
@@ -30,7 +43,7 @@ class EGATBlock(nn.Module):
         self.layer = func
     
     def SelectLayer(self):
-        if self.params.graph == 'dgl':
+        if self.params.mode == 'dgl':
             self.selectlayerDGL()
         else:
             raise ValueError(f'Unknown graph type: {self.params.graph}')

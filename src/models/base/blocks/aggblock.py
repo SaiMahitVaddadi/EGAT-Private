@@ -4,16 +4,32 @@ from torch.nn import Linear, Dropout
 import torch.nn as nn
 import dgl
 import json
-from ...models.aggregators.dgl.attentive import AttentiveAggregator,CalcAttentiveAggregator,CalcAttentiveAggregatorMLP
-from ...models.aggregators.dgl.bondagg import BondAggregator,BondEnvironmentAggregator,BondEnvironmentAggregatorSimplified
-from ...models.aggregators.dgl.weighted import WeightedSumAggregator,LearnedPooledAggregatorwithWeightedFeatures,WeightedMeanAggregator,LearnedPooledAggregator,BasicPooledAggregator
-from ...models.aggregators.dgl.cluster import ClusterPooling
-from ...models.aggregators.dgl.diffpool import DiffPool
-from ...models.aggregators.dgl.edgepool import EdgePool,EdgePoolwAttention
-from ...models.aggregators.dgl.environment import EnvironmentAggregator,EnvironmentAggregatorwithGAT
-from ...models.aggregators.dgl.pathintegral import PIPooling
-from ...models.aggregators.dgl.sag import SAGPool,SAGPoolwAttention
+from ....models.aggregators.dgl.attentive import AttentiveAggregator,CalcAttentiveAggregator,CalcAttentiveAggregatorMLP
+from ....models.aggregators.dgl.bondagg import BondAggregator,BondEnvironmentAggregator,BondEnvironmentAggregatorSimplified
+from ....models.aggregators.dgl.weighted import WeightedSumAggregator,LearnedPooledAggregatorwithWeightedFeatures,WeightedMeanAggregator,LearnedPooledAggregator,BasicPooledAggregator
+from ....models.aggregators.dgl.cluster import ClusterPooling
+from ....models.aggregators.dgl.diffpool import DiffPool
+from ....models.aggregators.dgl.edgepool import EdgePool,EdgePoolwAttention
+from ....models.aggregators.dgl.environment import EnvironmentAggregator,EnvironmentAggregatorwithGAT
+from ....models.aggregators.dgl.pathintegral import PIPooling
+from ....models.aggregators.dgl.sag import SAGPool,SAGPoolwAttention
+from dataclasses import dataclass
+from typing import Optional, Union
 #You can add more aggregators here as needed
+
+@dataclass
+class AggregationBlockParams:
+    hidden_dim: int
+    num_heads: int
+    AggregateReaction: str = 'Concat'  # Options: 'Concat', 'Mixing', etc.
+    Aggregate: str = 'Concat'  # Options: 'Concat', etc.
+    MixingLayer: Union[str, bool] = 'Bilinear'  # Options: 'Bilinear', 'Linear', True, False
+    pooling: str = 'Sum'  # Options: 'WtSum', 'LearnedAttn', 'CalcedAttn', etc.
+    graph: str = 'reaction'  # Options: 'reaction', 'molecule'
+    addons: Optional[list] = None  # Additional features, if any
+    addonlen: Optional[int] = None  # Length of additional features
+    norm: float = 1.0  # Normalization factor
+
 
 class BasicAggregator(nn.Module):
     def __init__(self, cfg, ):
@@ -89,10 +105,75 @@ class BasicAggregator(nn.Module):
         G_features = torch.stack(G_features)
         return G_features
 
-class AggregationBlock(BasicAggregator):
+
+
+class MixingLayer(nn.Module):
     def __init__(self, cfg):
-        super(cfg).__init__()
+        super().__init__()
         self.params = cfg
+        self.hidden_dim = cfg.hidden_dim
+        self.num_heads = cfg.num_heads
+        self.setupfunction()
+
+    def setupfunction(self):  
+        if self.params.MixingLayer == 'Bilinear' or self.params.MixingLayer == True:
+            self.bilinearsetup()
+        elif self.params.MixingLayer == 'Linear':
+            self.linearsetup()
+
+    def bilinearsetup(self):
+        if self.params.Aggregate == 'Concat':
+            self.Mixing_Layer = nn.Sequential(nn.Bilinear(self.params.hidden_dim*self.params.num_heads*2,self.params.hidden_dim*self.params.num_heads*2,self.params.hidden_dim*self.params.num_heads*4,bias=True),nn.GELU())
+        else:
+            self.Mixing_Layer = nn.Sequential(nn.Bilinear(self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads*2,bias=True),nn.GELU())
+     
+    def linearsetup(self):
+        if self.params.Aggregate == 'Concat':
+            self.Mixing_Layer = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads*2,self.params.hidden_dim*self.params.num_heads*4,bias=True),nn.GELU())
+        else:
+            self.Mixing_Layer = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads*2,bias=True),nn.GELU())
+   
+    def forward(self, G_node_feats, G_edge_feats):
+        if self.params.MixingLayer != False:
+            G_features = self.mixinglayer(G_node_feats, G_edge_feats)
+        else:
+            G_features = torch.cat((G_node_feats, G_edge_feats), axis=1)
+        return G_features
+
+
+class AddonMixingLayer(nn.Module):
+    def __init__(self, cfg, addonlen):
+        super().__init__()
+        self.params = cfg
+        self.hidden_dim = cfg.hidden_dim
+        self.num_heads = cfg.num_heads
+        self.addonlen = addonlen
+        self.setupfunc()
+
+    def setupfunc(self):
+        if self.params.addons is not None and self.params.addonmixing != False:
+            if self.params.addonmixing == 'bilinear':
+                self.Mixing_Layer_RDkit = nn.Sequential(nn.Bilinear(self.hidden_dim*self.num_heads*2,self.addonlen,self.hidden_dim*self.num_heads*2,bias=True),nn.GELU())
+            else:
+                self.Mixing_Layer_RDkit = nn.Sequential(nn.Linear(self.hidden_dim*self.num_heads*2+self.addonlen,self.hidden_dim*self.num_heads*2,bias=True),nn.GELU())
+
+    def forward(self, G_node_feats, addonvector=None):
+        if self.params.addons is not None and self.params.addonmixing != False:
+            if self.params.addonmixing == 'bilinear':
+                G_features = self.Mixing_Layer_RDkit(G_node_feats, addonvector)
+            else:
+                G_node_feats = torch.cat((G_node_feats, addonvector), axis=1)
+                G_features = self.Mixing_Layer_RDkit(G_node_feats)
+        else:
+            G_features = G_node_feats
+        return G_features
+
+
+class AggregationBlock(BasicAggregator):
+    def __init__(self, cfg,addonlen=None):
+        super().__init__(cfg)
+        self.params = cfg
+        self.addonlen = addonlen
         self.SetupAggregationBlock()
     
     def NodeEdgeAggregationLayers(self):
@@ -114,26 +195,9 @@ class AggregationBlock(BasicAggregator):
         else:
             self.Mixing_Layer = nn.Sequential(nn.Bilinear(self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads*2,bias=True),nn.GELU())
         
-    def addonmixinglayer(self,bilinear=True):
-        if self.params.addons is not None:
-            if bilinear:
-                self.Mixing_Layer_RDkit = nn.Sequential(nn.Bilinear(self.hidden_dim*self.num_heads*2,self.addonlen,self.hidden_dim*self.num_heads*2,bias=True),nn.GELU())
-            else:
-                self.Mixing_Layer_RDkit = nn.Sequential(nn.Linear(self.hidden_dim*self.num_heads*2,self.addonlen,bias=True),nn.GELU())
-    
-    def linearmixinglayer(self):
-        if self.params.Aggregate == 'Concat':
-            self.Mixing_Layer = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads*2,self.params.hidden_dim*self.params.num_heads*4,bias=True),nn.GELU())
-        else:
-            self.Mixing_Layer = nn.Sequential(nn.Linear(self.params.hidden_dim*self.params.num_heads,self.params.hidden_dim*self.params.num_heads*2,bias=True),nn.GELU())
-    
     def MixingLayer(self):  
-        if self.params.MixingLayer == 'Bilinear' or self.params.MixingLayer == True:
-            self.bilinearmixinglayer()
-            self.addonmixinglayer(True)
-        elif self.params.MixingLayer == 'Linear':
-            self.linearmixinglayer()
-            self.addonmixinglayer(False)
+        self.mixinglayer = MixingLayer(self.params)
+        self.addonmixinglayer = AddonMixingLayer(self.params, self.addonlen)
 
     def setinputnodesandedges(self):
         if self.params.AggregateReaction == 'Concat':
@@ -163,6 +227,8 @@ class AggregationBlock(BasicAggregator):
             self.agg_func = WeightedMeanAggregator(self.inputnodes, self.inputedges)
         elif self.params.pooling == 'LearnedPooled':
             self.agg_func = LearnedPooledAggregator(self.inputnodes, self.inputedges)
+        elif self.params.pooling == 'LearnedPooledWeighted':
+            self.agg_func = LearnedPooledAggregatorwithWeightedFeatures(self.inputnodes, self.inputedges)
         elif self.params.pooling == 'BasicPooled':
             self.agg_func = BasicPooledAggregator(self.inputnodes, self.inputedges)
         elif self.params.pooling == 'Cluster':
@@ -232,11 +298,12 @@ class AggregationBlock(BasicAggregator):
             individual_graphs = self.createmoleculegraph(Rnode_feats,Redge_feats,graphR)
         return individual_graphs
     
-    def usemixinglayer(self,G_node_feats,G_edge_feats):
-        if self.MixingLayer:
-            G_features = self.Mixing_Layer(G_node_feats,G_edge_feats)
+    def usemixinglayer(self,G_node_feats,G_edge_feats,addonvector=None):
+        G_features = self.mixinglayer(G_node_feats,G_edge_feats)
+        if self.params.addons is not None:
+            G_features = self.addonmixinglayer(G_features,addonvector)
         else:
-            G_features = torch.cat((G_node_feats,G_edge_feats), axis=1)
+            G_features = G_features
         return G_features
     
     def usepoolingfcn(self,individual_graphs):
@@ -264,3 +331,4 @@ class AggregationBlock(BasicAggregator):
     def RunAggregationBlock(self,Pnode_feats,Rnode_feats,Pedge_feats,Redge_feats,graphR):
         G_features = self.Aggregation(Pnode_feats,Rnode_feats,Pedge_feats,Redge_feats,graphR)
         return G_features
+    

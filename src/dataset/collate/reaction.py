@@ -1,7 +1,7 @@
 import dgl
 from .utils import filter_none
 
-
+import traceback
 
 class ReactionCollator:
 
@@ -43,6 +43,7 @@ class ReactionCollator:
             Pbatched_graph = dgl.batch(Pgraphs)
             return names,types,Rbatched_graph, Pbatched_graph, smiles,targets
         except ValueError:
+            
             return None
     
     def additionals(self,samples):

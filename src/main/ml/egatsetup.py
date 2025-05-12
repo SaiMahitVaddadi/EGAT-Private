@@ -7,15 +7,38 @@ from ...models.ablation.ablationmodels import MolecularAblationModel,ReactionAbl
 from .finetuning import FinetuningEGAT
 import random
 import numpy as np
+from dataclasses import dataclass
+from typing import Optional, List
+from ...loader.Loader import EGATDataLoader
+from copy import deepcopy
 
-
-
+@dataclass
+class Params:
+    seed: Optional[int] = None
+    gpu: int = 0
+    save_path: str = "./"
+    data_path: str = "./data"
+    smiles: Optional[List[str]] = None
+    trainer: str = "EGAT"
+    model: str = "EGATModel"
+    startpoint: str = "Retrain"
+    base_model: Optional[str] = None
+    ablation_EGAT_model: Optional[str] = None
+    ablation_NN_model: Optional[str] = None
+    graph: str = "molecule"
+    hasaddons: bool = False
+    parallel: bool = False
+    finetuner: Optional[str] = None
+    defaults: Optional[dict] = None
 
 
 class EGATModelSetup:
     def __init__(self,arguments):
         self.params = arguments
         self.logger = logging.getLogger(__name__)
+
+    def LoadData(self):
+        self.dataloader = EGATDataLoader(self.params)
 
     def SetSeed(self):
         if self.params.seed is not None:
@@ -116,22 +139,24 @@ class EGATModelSetup:
     def LoadPredictor(self,num_node_feats,num_edge_feats):
         if 'EGAT' in self.params.trainer:
             if isinstance(self.params.smiles, list):
-                predictor = MultiCompEGATModel(self.params,num_node_feats,num_edge_feats).to(self.device)
+                predictor = MultiCompEGATModel(self.params,num_node_feats,num_edge_feats)
             else:
-                predictor = EGATModel(self.params,num_node_feats,num_edge_feats).to(self.device)
-        elif 'NN' in self.params.model:
+                predictor = EGATModel(self.params,num_node_feats,num_edge_feats)
+            
+        elif 'NN' in self.params.trainer:
             if isinstance(self.params.smiles, list):
-                predictor = MultiComponentFPModel(self.params).to(self.device)
+                predictor = MultiComponentFPModel(self.params)
             else:
-                predictor = FPModel(self.params).to(self.device)
+                predictor = FPModel(self.params)
         elif 'LLM' in self.params.trainer:
             raise NotImplementedError("LLM model is not implemented yet.")
-        elif 'GNN+LLM' in self.params.trainer:
+        elif 'EGAT+LLM' in self.params.trainer:
             raise NotImplementedError("GNN+LLM model is not implemented yet.")
+        predictor = predictor.to(self.device)
         return predictor 
 
     def LoadAblationModel(self,predictorA,predictorB):
-        if self.params.hasaddons:
+        if self.params.addons is not None:
             if self.params.graph == 'molecule':
                 predictor = MolecularAblationModelwAddOns(self.params,predictorA,predictorB)
             elif self.params.graph == 'reaction':
@@ -153,12 +178,27 @@ class EGATModelSetup:
         return predictor
 
     def GetParams(self,predictor):
-        predictor,total_params,trainable_params = FinetuningEGAT(self.params).GetParams(predictor,block=self.params.finetuner)
+        predictor,total_params,trainable_params = FinetuningEGAT(self.params).freezeblocks(predictor)
         return predictor,total_params,trainable_params
     
+
+    def grabnumfeats(self):
+        firstsplit = self.dataloader.splits[0]
+        datafunc = deepcopy(self.dataloader)
+        datafunc()
+        for split, loader in datafunc.egatdataloader.items():
+            i = 0
+            for stuff in loader:
+                _ = stuff
+                i += 1
+                if i > 1: break
+        self.node_feats = datafunc.egatdataset[firstsplit].node_feats_length
+        self.edge_feats = datafunc.egatdataset[firstsplit].edge_feats_length
+
+    
     def ablatorfunction(self,predictorA,predictorB):
-        predictorA = self.LoadPredictor(self.params.ablation_EGAT_model)
-        predictorB = self.LoadPredictor(self.params.ablation_NN_model)
+        predictorA = self.LoadPredictor(self.node_feats,self.edge_feats)
+        predictorB = self.LoadPredictor(self.node_feats,self.edge_feats)
         predictor = self.LoadAblationModel(predictorA,predictorB)
         return predictor
 
@@ -166,7 +206,7 @@ class EGATModelSetup:
         if self.params.startpoint in ['EGAT_Ablation','NN_Ablation']:
             predictor = self.ablatorfunction(self.params.ablation_EGAT_model,self.params.ablation_NN_model)
         else:
-            predictor = self.LoadPredictor(self.params.defaults.model)
+            predictor = self.LoadPredictor(self.node_feats,self.edge_feats)
         
         predictor = self.ParallelizePredictor(predictor)
         predictor,total_params,trainable_params = self.GetParams(predictor)

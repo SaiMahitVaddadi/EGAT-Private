@@ -172,6 +172,7 @@ class BaseFeaturizer(object):
         if id == 1: 
             self.conformer = self.matrixdescriptors.new_mol
         else:
+            conf_ids = [conf.GetId() for conf in self.matrixdescriptors.new_mol.GetConformers()]
             self.conformer = self.matrixdescriptors.new_mol.GetConformer(conf_id=id)
         
             

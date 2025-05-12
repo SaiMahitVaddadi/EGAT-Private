@@ -9,11 +9,22 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
 
-class TensorCommands:
-    def __init__(self, arguments):
-        super().__init__(arguments)
-        self.params = arguments
-    
+class NumericTensorLoader:
+    def __init__(self, params, device):
+        self.params = params
+        self.device = device
+        self.mask = None
+
+    def GrabTargets(self, targets):
+        if self.params.model_type in ['direct', 'BEP', 'Hr']:
+            target = torch.Tensor([float(i[2]) for i in targets]).view(self.params.batch_size, 1).to(self.device)
+        elif self.params.model_type in ['multi', 'Hr_multi']:
+            target = targets.float().view(self.params.batch_size, len(self.params.target)).to(self.device)
+        self.mask = ~torch.isnan(target)
+        return target
+
+
+
 
 
 
@@ -22,9 +33,6 @@ class InputSetups(MLSetup):
     def __init__(self, arguments):
         super().__init__(arguments)
         self.params = arguments
-    
-    def LoadData(self):
-        self.loader = EGATDataLoader(self.params)
     
     def LoadScalers(self):
         try:
@@ -63,7 +71,6 @@ class InputSetups(MLSetup):
             target    = torch.Tensor([float(i[2]) for i in targets]).view(self.params.batch_size,1).to(self.device)
         elif self.params.model_type in ['multi','Hr_multi']:
             target = targets.float().view(self.params.batch_size,len(self.params.target)).to(self.device)
-        
         self.mask = ~torch.isnan(target)
         return target 
     

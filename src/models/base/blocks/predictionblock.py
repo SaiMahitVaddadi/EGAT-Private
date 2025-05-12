@@ -1,16 +1,29 @@
 from ..nn.dnnstack import DeepNeuralNetStack
 import torch
+from dataclasses import dataclass
 
 '''
 - Predictor Stack.
     - Add all the new surrogate models and prediction stacks.
 '''
 
+@dataclass
+class PredictionParams:
+    architecture: str  # '1MLP', '3MLP', 'custom', 'subnet'
+    model_type: str  # 'Hr', 'Hr2', or other types
+    activation: str = None  # Activation function for MLPs
+    dropout: float = 0.0  # Dropout rate for custom MLP
+    cascading: bool = False  # Whether cascading is enabled
+    smax: bool = False  # Whether softmax is applied
+    endconvolution: bool = False  # Whether end convolution is applied
+    Bias: bool = True  # Whether bias is used in layers
+
+
 class PredictionBlock(DeepNeuralNetStack):
-    def __init__(self, cfg):
-        super().__init__()
+    def __init__(self, cfg,addonlength=0):
+        super().__init__(cfg)
         self.params = cfg
-        self.SetupPredictor()
+        self.SetupPredictor(addons=addonlength)
     
     def Initialize1MLP(self,addons=0):
         self.create1mlp(addons=addons)

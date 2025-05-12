@@ -73,7 +73,7 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
                 raise TypeError(f"Attribute {func_attr_name} exists but is not a dictionary.")
         
     def _iterateatomfeatures(self, features, vec, ind, atom_map_number, yarpid):
-        for func in tqdm(features, desc="Processing atom features"):
+        for func in features:
             try:
                 vec += self._runfunc(func, ind, atom_map_number, yarpid)
                 debug = False
@@ -215,7 +215,7 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
             return func(edge)
             
     def _iteratebondfeatures(self,features,vec,edge,bo):
-        for func in tqdm(features, desc="Processing bond features"):
+        for func in features:
             try:
                 vec += self._runbondfunc(func, edge, bo)
             except Exception as e:
@@ -334,7 +334,7 @@ class MoleculeFeaturizer(NeighborInformation,BondInformation,ElectronInformation
                 self.atom_features_dict[i] = self.atom_features
                 self.bond_features_dict[i] = self.bond_features
             self.bond_mats = len(self.electroninfo.yarpecule.bond_mats)
-
+        
     def run(self):
         if self.params.getradical == 'YARP':
             self._runusingyarp()

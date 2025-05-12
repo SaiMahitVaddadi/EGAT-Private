@@ -8,8 +8,6 @@ from .losssetups import LossSetup
 from .egatsetup import EGATModelSetup
 from .optimizersetup import OptimizerSetup
 from .schedulersetup import ScheduleSetup
-from .utils import bn_momentum_adjust
-
 
 class MLSetup(GPUSetup,LossSetup,EGATModelSetup,OptimizerSetup,ScheduleSetup):
     def __init__(self,arguments):
@@ -18,6 +16,8 @@ class MLSetup(GPUSetup,LossSetup,EGATModelSetup,OptimizerSetup,ScheduleSetup):
         self.Load()
 
     def Load(self):
+        self.LoadData()
+        self.grabnumfeats()
         self.LoadWandB()
         self.LoadTorchSetup()
         self.LoadLoss()

@@ -305,4 +305,7 @@ class MoleculeFeaturizerwithPadding(MoleculePaddingCommands):
         self.GenerateAtomFeatureVector()
         self.GenerateBondFeatureVector()
         self.GenerateAtomGeometryVector()
-
+        try:
+            self.bond_mats = len(self.electroninfo.yarpecule.bond_mats)
+        except:
+            self.bond_mats = 1

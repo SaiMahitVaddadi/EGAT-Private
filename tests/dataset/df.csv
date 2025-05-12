@@ -1,0 +1,29 @@
+,names,types,smiles,targets,Rgraphs
+0,0,all,"[['C1CCCCC1', 'XDTMQSROBMDMFD-UHFFFAOYSA-N']]","[[tensor([  0.4900, 123.0000])]]","Graph(num_nodes=18, num_edges=36,
+      ndata_schemes={'x': Scheme(shape=(169,), dtype=torch.float32)}
+      edata_schemes={'x': Scheme(shape=(84,), dtype=torch.float32)})"
+1,1,all,"[['CN(C)C=O', 'ZMXDDKWLCZADIW-UHFFFAOYSA-N']]","[[tensor([  0.5800, 123.0000])]]","Graph(num_nodes=12, num_edges=22,
+      ndata_schemes={'x': Scheme(shape=(169,), dtype=torch.float32)}
+      edata_schemes={'x': Scheme(shape=(84,), dtype=torch.float32)})"
+2,2,all,"[['CC(C)O', 'KFZMGEQAYNKOFK-UHFFFAOYSA-N']]","[[tensor([  0.6700, 123.0000])]]","Graph(num_nodes=12, num_edges=22,
+      ndata_schemes={'x': Scheme(shape=(169,), dtype=torch.float32)}
+      edata_schemes={'x': Scheme(shape=(84,), dtype=torch.float32)})"
+3,3,all,"[['CCN(CC)CC', 'ZMANZCXQSJIPKH-UHFFFAOYSA-N']]","[[tensor([  0.9100, 123.0000])]]","Graph(num_nodes=22, num_edges=42,
+      ndata_schemes={'x': Scheme(shape=(169,), dtype=torch.float32)}
+      edata_schemes={'x': Scheme(shape=(84,), dtype=torch.float32)})"
+4,4,all,"[['NCC(=O)O', 'DHMQDGOQFOQNFH-UHFFFAOYSA-N']]","[[tensor([  0.3200, 123.0000])]]","Graph(num_nodes=10, num_edges=18,
+      ndata_schemes={'x': Scheme(shape=(169,), dtype=torch.float32)}
+      edata_schemes={'x': Scheme(shape=(84,), dtype=torch.float32)})"
+5,5,all,"[['CCO', 'LFQSCWFLJHTTHZ-UHFFFAOYSA-N']]","[[tensor([  0.8500, 123.0000])]]","Graph(num_nodes=9, num_edges=16,
+      ndata_schemes={'x': Scheme(shape=(169,), dtype=torch.float32)}
+      edata_schemes={'x': Scheme(shape=(84,), dtype=torch.float32)})"
+6,"[6, 6]",all,"[['c1ccccc1', 'UHOVQNZJYSORNB-UHFFFAOYSA-N']]","[[tensor([  0.7600, 123.0000])], [tensor([  0.7600, 123.0000])]]","[Graph(num_nodes=12, num_edges=24,
+      ndata_schemes={'x': Scheme(shape=(169,), dtype=torch.float32)}
+      edata_schemes={'x': Scheme(shape=(84,), dtype=torch.float32)}), Graph(num_nodes=12, num_edges=24,
+      ndata_schemes={'x': Scheme(shape=(169,), dtype=torch.float32)}
+      edata_schemes={'x': Scheme(shape=(84,), dtype=torch.float32)})]"
+7,"[7, 7]",all,"[['Oc1ccccc1', 'ISWSIDIOOBJBQZ-UHFFFAOYSA-N']]","[[tensor([  0.7300, 123.0000])], [tensor([  0.7300, 123.0000])]]","[Graph(num_nodes=13, num_edges=26,
+      ndata_schemes={'x': Scheme(shape=(169,), dtype=torch.float32)}
+      edata_schemes={'x': Scheme(shape=(84,), dtype=torch.float32)}), Graph(num_nodes=13, num_edges=26,
+      ndata_schemes={'x': Scheme(shape=(169,), dtype=torch.float32)}
+      edata_schemes={'x': Scheme(shape=(84,), dtype=torch.float32)})]"
