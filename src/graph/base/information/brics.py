@@ -1,6 +1,11 @@
 from ..base import BaseFeaturizer
 from rdkit.Chem import BRICS
+from dataclasses import dataclass
 
+
+@dataclass
+class BRICSParams:
+    checkbricsbond: bool = False
 
 
 class BRICSInformation(BaseFeaturizer):

@@ -9,6 +9,31 @@ from scipy.stats import entropy as shannon_entropy
 from collections import defaultdict
 from mordred import _atomic_property
 from ....utils.misc.taffi_functions import graph_seps
+from dataclasses import dataclass
+
+
+@dataclass
+class ReactiveAtomParams:
+    removereactiveinfo: bool = False
+    addneighboringreactives: bool = False
+    gethybridizationchange: bool = False
+    getdegreecentralitydiff: bool = False
+    getclosenesscentralitydiff: bool = False
+    getbetweennesscentralitydiff: bool = False
+    geteigenvectorcentralitydiff: bool = False
+    getkatzcentralitydiff: bool = False
+    getpagerankcentralitydiff: bool = False
+    getkcorenumberdiff: bool = False
+    getharmoniccentralitydiff: bool = False
+    getlocalbridgingdiff: bool = False
+    gettrianglecountdiff: bool = False
+    getlocalatomfeaturesdiff: bool = False
+    getvalencychangediff: bool = False
+    getoxidationreductiondiff: bool = False
+    getbondordersumchangediff: bool = False
+    getneighborhoodchangeratio: bool = False
+    getconnectivitypathdifference: bool = False
+    k_iter: int = 2
 
 class ReactiveAtomInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
@@ -49,6 +74,8 @@ class ReactiveAtomInformation(BaseFeaturizer):
             return [reactive_neighbors]
         else:
             return []
+        
+    
 
     
 class ReactiveAtomChangeInformation(BaseReactionFeaturizer):
@@ -197,34 +224,34 @@ class ReactiveAtomChangeInformation(BaseReactionFeaturizer):
             return []
 
     def DegreeCentralityOfChangingAtoms(self, atom,prod=False):
-        return self.basenetworkxchangingatomsfcn(atom,key='degree',getparams='getdegreecentrality',prod=prod)
+        return self.basenetworkxchangingatomsfcn(atom,key='degree',getparams='getdegreecentralitydiff',prod=prod)
     
     def ClosenessCentralityOfChangingAtoms(self, atom,prod=False):
-        return self.basenetworkxchangingatomsfcn(atom,key='closeness',getparams='getclosenesscentrality',prod=prod)
+        return self.basenetworkxchangingatomsfcn(atom,key='closeness',getparams='getclosenesscentralitydiff',prod=prod)
     
     def BetweennessCentralityOfChangingAtoms(self, atom,prod=False):
-        return self.basenetworkxchangingatomsfcn(atom,key='betweenness',getparams='getbetweennesscentrality',prod=prod)
+        return self.basenetworkxchangingatomsfcn(atom,key='betweenness',getparams='getbetweennesscentralitydiff',prod=prod)
     
     def EigenvectorCentralityOfChangingAtoms(self, atom,prod=False):
-        return self.basenetworkxchangingatomsfcn(atom,key='eigenvector',getparams='geteigenvectorcentrality',prod=prod)
+        return self.basenetworkxchangingatomsfcn(atom,key='eigenvector',getparams='geteigenvectorcentralitydiff',prod=prod)
     
     def KatzCentralityOfChangingAtoms(self, atom,prod=False):
-        return self.basenetworkxchangingatomsfcn(atom,key='katz',getparams='getkatzcentrality',prod=prod)
+        return self.basenetworkxchangingatomsfcn(atom,key='katz',getparams='getkatzcentralitydiff',prod=prod)
     
     def PageRankCentralityOfChangingAtoms(self, atom,prod=False):
-        return self.basenetworkxchangingatomsfcn(atom,key='pagerank',getparams='getpagerankcentrality',prod=prod)
+        return self.basenetworkxchangingatomsfcn(atom,key='pagerank',getparams='getpagerankcentralitydiff',prod=prod)
     
     def KCoreNumberOfChangingAtoms(self, atom,prod=False):
-        return self.basenetworkxchangingatomsfcn(atom,key='k_core_number',getparams='getkcorenumber',prod=prod)
+        return self.basenetworkxchangingatomsfcn(atom,key='k_core_number',getparams='getkcorenumberdiff',prod=prod)
     
     def HarmonicCentralityOfChangingAtoms(self, atom,prod=False):
-        return self.basenetworkxchangingatomsfcn(atom,key='harmonic_centrality',getparams='getharmoniccentrality',prod=prod)
+        return self.basenetworkxchangingatomsfcn(atom,key='harmonic_centrality',getparams='getharmoniccentralitydiff',prod=prod)
     
     def LocalBridgingOfChangingAtoms(self, atom,prod=False):
-        return self.basenetworkxchangingatomsfcn(atom,key='local_bridge',getparams='getlocalbridging',prod=prod)
+        return self.basenetworkxchangingatomsfcn(atom,key='local_bridge',getparams='getlocalbridgingdiff',prod=prod)
     
     def TriangleCountOfChangingAtoms(self, atom,prod=False):
-        return self.basenetworkxchangingatomsfcn(atom,key='triangle_count',getparams='gettrianglecount',prod=prod)
+        return self.basenetworkxchangingatomsfcn(atom,key='triangle_count',getparams='gettrianglecountdiff',prod=prod)
     
     def LocalAtomFeaturesOfChangingAtoms(self, atom, prod=False):
         results = []
@@ -304,4 +331,22 @@ class ReactiveAtomChangeInformation(BaseReactionFeaturizer):
         else:
             return []
     
+    def ConnectivityPathDifference(self, node):
+        if self.params.getconnectivitypathdifference:
+            reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
+            product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
+            connectivity_R = nx.single_source_shortest_path_length(reactant_graph, source=node)
+            connectivity_P = nx.single_source_shortest_path_length(product_graph, source=node)
+            diff = 0
+            for target, length in connectivity_R.items():
+                if target in connectivity_P:
+                    diff += abs(length - connectivity_P[target])
+                else:
+                    diff += length
+            for target, length in connectivity_P.items():
+                if target not in connectivity_R:
+                    diff += length
+            return [diff]
+        else:
+            return []
     

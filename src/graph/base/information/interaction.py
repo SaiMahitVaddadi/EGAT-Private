@@ -5,6 +5,20 @@ from rdkit import Chem
 
 from math import floor
 from dataclasses import dataclass
+@dataclass
+class InteractionParams:
+    get_delta_interaction: bool = False
+    get_free_energies: bool = False
+    exp_d: float = 0.1
+    exp_a: float = 0.1
+    g_d: float = 0.1
+    g_a: float = 0.1
+    g_i: float = 0.1
+    k: float = 1.0
+    t: float = 0.274
+    donor_constant: float = 63.7
+    acceptor_constant: float = 6.1475
+
 
 class JazzyCommands(BaseFeaturizer):
     def __init__(self, smiles, arguments):

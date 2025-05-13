@@ -3,7 +3,13 @@ from .csvsaver import CSVCommands
 from .metrics import Metrics
 import numpy as np
 import torch
+from dataclasses import dataclass, field
+from typing import Optional, List
 
+@dataclass
+class PredsParams:
+    Embed: bool = False
+    AttnMaps: bool = False
 
 #TO-ADD: BEP-Hr 
 

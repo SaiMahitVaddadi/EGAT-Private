@@ -13,26 +13,16 @@ class ExternalSaveCommands(DatasetCommands):
         else:
             self.info['split'] = 'all'
     
-    def savesplittoinfolist(self,rxn):
-        if 'split' in self.data.columns:
-            for info in self.infolist:
-                if 'split' in info:
-                    info['split'] = rxn['split']
-                else:
-                    info['split'] = 'all'
+    def deleteanygraphs(self):
+        keys_to_remove = [key for key in self.info.keys() if 'Graph' in key]
+        for key in keys_to_remove:
+            del self.info[key]
+    
+    def ConvertforExternalSaving(self,rxn,index):
+        self.Convert(index)
+        self.savesplittoinfo(rxn)
+        self.deleteanygraphs()
 
-    def AddSplit(self, rxn,infolistusage=False):
-        if infolistusage: 
-            self.savesplittoinfolist(rxn)
-        else:
-            self.savesplittoinfo(rxn)
-    
-    def OrganizeData(self,index):
-        infolistusage = self.__useinfolist()
-        self.InfoorInfoList(index)
-        self.AddSplit(self.data.iloc[index],infolistusage)
-        return infolistusage
-    
     def __ExternalException(self,index):
         print(self.root + '--'+ str(index) + ' failed')
         print(traceback.print_exc())

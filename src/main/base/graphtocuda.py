@@ -1,6 +1,11 @@
 from ..ml.setup import MLSetup
+from dataclasses import dataclass
 
-
+@dataclass
+class DGLtoCUDAParams:
+    graph: str
+    addons: bool
+    device: str
 
 class DGLtoCUDA(MLSetup):
     def __init__(self, arguments):

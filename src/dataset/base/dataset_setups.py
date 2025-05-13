@@ -8,11 +8,11 @@ from dataclasses import dataclass, field
 from typing import List, Union, Optional, Dict
 
 @dataclass
-class DatasetParams:
-    data_path: str
-    rootfile: Union[str, List[str], Dict] 
-    smiles: Union[str, List[str]] 
-    target: Union[str, List[str]] 
+class BaseDatasetParams:
+    data_path: str = ""
+    rootfile: Union[str, List[str], Dict] = ""
+    smiles: Union[str, List[str]] = ""
+    target: Union[str, List[str]] = ""
     additional: Optional[Union[str, List[str]]] = None
     target_normalizer: Optional[str] = None
     target_normalizer_params: Optional[Dict] = field(default_factory=dict)

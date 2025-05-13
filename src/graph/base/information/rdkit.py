@@ -1,5 +1,12 @@
 from ..base import BaseFeaturizer
+from dataclasses import dataclass
 
+
+@dataclass
+class RDKitParams:
+    getspiro: bool = False
+    getbridgehead: bool = False
+    getrotatablebonds: bool = False
 class RDInformation(BaseFeaturizer):    
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)

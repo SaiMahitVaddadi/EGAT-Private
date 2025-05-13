@@ -1,6 +1,19 @@
 from ..reaction import BaseReactionFeaturizer
 from ....utils.descriptors.egat.functional import FunctionalGroups
 
+import networkx as nx
+from dataclasses import dataclass
+
+@dataclass
+class ReactionParams:
+    getshortestpathchange: bool = False
+    getcommonneighborcountchange: bool = False
+    getrandomwalkchange: bool = False
+    getbondpathorderchange: bool = False
+    getsharedfunctionalgroupchange: bool = False
+    getconnectivitypathdifference: bool = False
+    getreactivitydistance: bool = False
+    getelectronflowcorrelation: bool = False
 
 
 class GlobalReactionBondInformation(BaseReactionFeaturizer):
@@ -54,22 +67,6 @@ class GlobalReactionBondInformation(BaseReactionFeaturizer):
         else:
             return []
 
-    def ConnectivityPathDifference(self, edge):
-        if self.params.getconnectivitypathdifference:
-            reactant_graph = nx.Graph(self.reactant.matrixdescriptors.adj_mat)
-            product_graph = nx.Graph(self.product.matrixdescriptors.adj_mat)
-            connectivity_R = nx.all_pairs_shortest_path_length(reactant_graph)
-            connectivity_P = nx.all_pairs_shortest_path_length(product_graph)
-            diff = 0
-            for node in connectivity_R:
-                for target, length in connectivity_R[node].items():
-                    if target in connectivity_P[node]:
-                        diff += abs(length - connectivity_P[node][target])
-                    else:
-                        diff += length
-            return [diff]
-        else:
-            return []
 
     def ReactivityDistance(self, edge):
         if self.params.getreactivitydistance:

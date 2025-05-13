@@ -3,12 +3,17 @@ from ...utils.descriptors.egat.encodings import Encodings
 from ...utils.descriptors.egat.properties import Properties
 from ...utils.descriptors.egat.radicals import YARPElectronInfo
 from dataclasses import dataclass
+from typing import Literal
 from tqdm import tqdm
 import numpy as np
 from icecream import ic
 @dataclass
 class MoleculeFeaturizerParams:
     removeelementinfo: bool = False
+    getresonance: bool = False
+    getdipole : bool = False
+    getpolarity : bool = False
+    getradical: Literal['YARP', 'RDKit'] | bool = 'RDKit'
 
 # Example usage:
 # params = FeaturizerParams(removeelementinfo=True, element_encode=[1, 2, 3])

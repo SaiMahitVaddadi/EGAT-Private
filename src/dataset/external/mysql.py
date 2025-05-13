@@ -4,100 +4,68 @@ from tqdm import tqdm
 from .commands import ExternalSaveCommands
 from ..base.commands import DatasetCommands
 import pandas as pd
+from dataclasses import dataclass
 
+@dataclass
+class SQLParams:
+    dbhost: str = "localhost"
+    dbuser: str = "root"
+    dbpassword: str = ""
+    dbname: str = "test"
+
+    
 class SQLCommands(ExternalSaveCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
+        self.dbhost = self.params.dbhost
+        self.dbuser = self.params.dbuser
+        self.dbpassword = self.params.dbpassword
+        self.dbname = self.params.dbname
 
-    def setupsqlserver(self):
+    def setup_connection(self):
         conn = mysql.connector.connect(
-            host=self.params.dbhost,
-            user=self.params.dbuser,
-            password=self.params.dbpassword,
-            database=self.params.dbname
+            host=self.dbhost,
+            user=self.dbuser,
+            password=self.dbpassword,
+            database=self.dbname
         )
+        return conn
+
+    def save_info_to_sql(self, index):
+        conn = self.setup_connection()
         cursor = conn.cursor()
-        return conn, cursor
-
-    def setinfointosql(self, index, conn, cursor):
         table_name = f"info_{index}"
-        columns = self.info.keys()
-        values = [self.info[col] for col in columns]
-        create_table_query = f"CREATE TABLE IF NOT EXISTS {table_name} (" + ", ".join([f"{col} TEXT" for col in columns]) + ")"
-        cursor.execute(create_table_query)
-        insert_query = f"INSERT INTO {table_name} (" + ", ".join(columns) + ") VALUES (" + ", ".join(["%s"] * len(values)) + ")"
-        cursor.execute(insert_query, values)
-        conn.commit()
-        cursor.close()
-        conn.close()
-
-    def setinfolistintosql(self, index, conn, cursor):
-        table_name = f"info_{index}"
-        columns = ['all_result']
-        values = [(item,) for item in self.infolist]
+        df = pd.DataFrame([self.info])
+        columns = df.columns.tolist()
         create_table_query = f"CREATE TABLE IF NOT EXISTS {table_name} (" + ", ".join([f"{col} TEXT" for col in columns]) + ")"
         cursor.execute(create_table_query)
         insert_query = f"INSERT INTO {table_name} (" + ", ".join(columns) + ") VALUES (" + ", ".join(["%s"] * len(columns)) + ")"
-        cursor.executemany(insert_query, values)
+        cursor.execute(insert_query, df.iloc[0].tolist())
         conn.commit()
         cursor.close()
         conn.close()
 
-    def setinfointosqlasseries(self, index, conn, cursor):
-        for i in range(len(self.infolist)):
-            table_name = f"info_{index}_{i}"
-            columns = self.infolist[i].keys()
-            values = [self.infolist[i][col] for col in columns]
-            create_table_query = f"CREATE TABLE IF NOT EXISTS {table_name} (" + ", ".join([f"{col} TEXT" for col in columns]) + ")"
-            cursor.execute(create_table_query)
-            insert_query = f"INSERT INTO {table_name} (" + ", ".join(columns) + ") VALUES (" + ", ".join(["%s"] * len(values)) + ")"
-            cursor.execute(insert_query, values)
-            conn.commit()
-        cursor.close()
-        conn.close()
+    def SaveRowToSQL(self, index):
+        self.ConvertforExternalSaving(self.data.loc[index], index)
+        self.save_info_to_sql(index)
 
-    def SaveRowToSQLite(self, index):
-        try:
-            infolistusage = self.OrganizeData(index)
-            conn, cursor = self.setupsqlserver()
-
-            if infolistusage:
-                if self.params.saveconfsseparately:
-                    self.setinfointosqlasseries(index, conn, cursor)
-                else:
-                    self.setinfolistintosql(index, conn, cursor)
-            else:
-                self.setinfointosql(index, conn, cursor)
-        except Exception as e:
-            self.__ExternalException(index)
-
-    def SaveInfoToSQLite(self):
+    def SaveAllToSQL(self):
         for index in tqdm(self.data.index.tolist(), total=len(self.data.index.tolist()), desc="Saving to MySQL"):
-            self.SaveRowToSQLite(index)
+            self.SaveRowToSQL(index)
 
     def LoadSQLDataFrame(self):
         try:
-            conn = mysql.connector.connect(
-                host=self.params.dbhost,
-                user=self.params.dbuser,
-                password=self.params.dbpassword,
-                database=self.params.dbname
-            )
+            conn = self.setup_connection()
             query = "SELECT * FROM data"
             self.data = pd.read_sql_query(query, conn)
             conn.close()
         except Exception as e:
-            print(f"Failed to load SQL DataFrame from {self.params.dbname}")
+            print(f"Failed to load DataFrame from MySQL database {self.dbname}")
             print(traceback.print_exc())
 
     def GetAllIndices(self):
         try:
-            conn = mysql.connector.connect(
-                host=self.params.dbhost,
-                user=self.params.dbuser,
-                password=self.params.dbpassword,
-                database=self.params.dbname
-            )
+            conn = self.setup_connection()
             cursor = conn.cursor()
             query = "SELECT DISTINCT Indices FROM data"
             cursor.execute(query)
@@ -105,88 +73,41 @@ class SQLCommands(ExternalSaveCommands):
             conn.close()
             return indices
         except Exception as e:
-            print(f"Failed to retrieve indices from {self.params.dbname}")
+            print(f"Failed to retrieve indices from MySQL database {self.dbname}")
             print(traceback.print_exc())
             return []
 
-    def loadsqlasinfodict(self, index, i=None):
+    def load_sql_as_info_dict(self, index):
         try:
-            conn = mysql.connector.connect(
-                host=self.params.dbhost,
-                user=self.params.dbuser,
-                password=self.params.dbpassword,
-                database=self.params.dbname
-            )
+            conn = self.setup_connection()
             cursor = conn.cursor(dictionary=True)
-            if i is None:
-                table_name = f"info_{index}"
-            else:
-                table_name = f"info_{index}_{i}"
+            table_name = f"info_{index}"
             query = f"SELECT * FROM {table_name}"
             cursor.execute(query)
             rows = cursor.fetchall()
             self.info = {col: row[col] for row in rows for col in row}
             conn.close()
         except Exception as e:
-            print(f"Failed to load info from {self.params.dbname}")
-            print(traceback.print_exc())
-
-    def loadsqlasinfolist(self, index):
-        try:
-            conn = mysql.connector.connect(
-                host=self.params.dbhost,
-                user=self.params.dbuser,
-                password=self.params.dbpassword,
-                database=self.params.dbname
-            )
-            cursor = conn.cursor()
-            table_name = f"info_{index}"
-            query = f"SELECT * FROM {table_name}"
-            cursor.execute(query)
-            rows = cursor.fetchall()
-            self.infolist = [row[0] for row in rows]
-            conn.close()
-        except Exception as e:
-            print(f"Failed to load info list from {self.params.dbname}")
+            print(f"Failed to load info from MySQL database {self.dbname} for index {index}")
             print(traceback.print_exc())
 
     def GetInfo(self, index):
-        infolistusage = self.__useinfolist()
-        if infolistusage:
-            if self.params.saveconfsseparately:
-                self.loadsqlasinfodict(index)
-            else:
-                self.loadsqlasinfolist(index)
-        else:
-            self.loadsqlasinfodict(index)
+        self.load_sql_as_info_dict(index)
 
     def SampleSQL(self, index):
-        infolistusage = self.__useinfolist()
         self.GetInfo(index)
-        self.samples = []
-        self.samples += self._sampleindices(infolistusage)
-        self.samples += self._samplereactiontype(infolistusage)
-        self.samples = self.AddGraphsToSample(self.samples)
-        samples += self._sampletargets(infolistusage)
-        samples += self._sampleadditionals(infolistusage)
-        samples += self.Addons()
-        return samples
+        self.creategraphsample()
+        return self.sample
 
     def FingerprintModelSamplerSQL(self, index):
-        infolistusage = self.__useinfolist()
         self.GetInfo(index)
-        self.samples = []
-        self.samples += self._sampleindices(infolistusage)
-        self.samples += self._samplereactiontype(infolistusage)
-        samples += self._sampletargets(infolistusage)
-        samples += self._sampleadditionals(infolistusage)
-        samples += self.Addons()
-        return samples
+        self.creategraphsample()
+        return self.sample
 
 
 class GraphSQLDataset(SQLCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
         self.LoadSQLDataFrame()
         self.GetAllIndices()
 
@@ -205,8 +126,8 @@ class GraphSQLDataset(SQLCommands):
 
 
 class FingerprintSQLDataset(SQLCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
         self.LoadSQLDataFrame()
         self.GetAllIndices()
 
@@ -225,6 +146,6 @@ class FingerprintSQLDataset(SQLCommands):
 
 
 class SQLSaver(SQLCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
-        self.SaveInfoToSQLite()
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
+        self.SaveAllToSQL()

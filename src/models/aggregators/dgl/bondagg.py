@@ -61,7 +61,7 @@ class BondEnvironmentAggregator:
         self.node_agg = node_agg
         self.edge_agg = edge_agg
         if use_nn : self.nnlayer = nn.Linear(2*node_feat_size+edge_feat_size, edge_feat_size)
-        pass
+        
 
     def reset_parameters(self):
         """
@@ -132,7 +132,7 @@ class BondEnvironmentAggregatorSimplified:
         self.edge_agg = edge_agg
 
         if use_nn : self.nnlayer = nn.Linear(2*node_feat_size+edge_feat_size, edge_feat_size)
-        pass
+        
 
     def reset_parameters(self):
         """

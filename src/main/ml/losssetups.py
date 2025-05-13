@@ -9,7 +9,7 @@ from typing import Union, List
 # Add the written loss functions to the dictionary
 
 @dataclass
-class Params:
+class LossParams:
     loss: Union[str, List[str]]
     metric: Union[str, List[str]]
 

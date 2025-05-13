@@ -13,7 +13,7 @@ from ...loader.Loader import EGATDataLoader
 from copy import deepcopy
 
 @dataclass
-class Params:
+class EGATSetupParams:
     seed: Optional[int] = None
     gpu: int = 0
     save_path: str = "./"

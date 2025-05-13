@@ -5,40 +5,15 @@ from typing import List, Optional, Union
 import numpy as np
 
 @dataclass
-class Params:
+class TrainParams:
     epoch: int
-    epoch_const: int
-    learning_rate: float
-    lr_decay: float
-    step_size: int
-    expdecay: float
-    warmup: int
-    scheduler: str
-    batch_size: int
-    num_workers: int
-    randomize: bool
-    norm: Optional[str] = None
-    scale_region: Optional[str] = None
-    test_only: bool = False
-    molecular: bool = False
-    target: Union[str, List[str]] = 'target'
-    tweights: List[float] = field(default_factory=list)
-    model_type: str = 'direct'
-    additionals: Optional[Union[str, List[str]]] = None
-    hasaddons: bool = False
-    Embed: bool = False
-    AttnMaps: bool = False
-    normtarget: bool = False
-    trainedonnorm: bool = False
-    metric: Optional[str] = None
-    loss: Union[str, List[str]] = 'MAE'
-    loss_agg: str = 'Arith'
-    loss_weights: Optional[List[float]] = None
-    patience: int = 10
-    loss_threshold: float = 1e-4
-    weightsandbiases: bool = False
-    save_style: str = 'best'
-
+    epoch_const: int = 0
+    loss_threshold: Optional[float] = None
+    patience: int = 5
+    ensemble: int = 1
+    crossval: bool = False
+    fold: int = 1
+    
 class Train(MLTrainandPredictBase):
     def __init__(self, arguments):
         self.params = arguments

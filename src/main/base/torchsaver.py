@@ -2,7 +2,12 @@ from ..ml.setup import MLSetup
 from .csvsaver import CSVCommands
 import numpy as np
 import torch
+from dataclasses import dataclass
 
+@dataclass
+class TorchSaverParams:
+    save_style: str
+    
 class TorchSaver(CSVCommands):
     def __init__(self, arguments):
         super().__init__(arguments)

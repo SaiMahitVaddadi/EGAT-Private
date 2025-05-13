@@ -4,6 +4,9 @@ from .torchsaver import TorchSaver
 import numpy as np
 import torch
 from ..ml.utils import bn_momentum_adjust
+from dataclasses import dataclass, field
+from typing import Any, Dict, Optional
+
 
 class Loops(BatchIteration,LearningRateFunctions):
     def __init__(self, arguments):

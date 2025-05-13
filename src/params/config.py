@@ -4,70 +4,53 @@ from .model import *
 import argparse
 import json
 import toml
-
-
-
-class Params(EGATParams,EGATModelParams,GraphParams):
+import os,yaml
+from dataclasses import dataclass, asdict, fields
+from typing import Any, Dict
+from ..dataset.external.graphgen import GraphGenParams
+@dataclass
+class EGATParams(GraphGenerationParams,TorchDatasetParams,EGATMLParams,GraphGenParams):
     pass
 
-
-
 class Config:
-    def __init__(self):
-        self.parser = self.parse_args()
+    def __init__(self, config_path: str):
+        self.params = EGATParams()
+        self.config_path = config_path
+        self.override_params()
 
-    def parse_args(self):
-        parser = argparse.ArgumentParser(description="Parse parameters for the EGAT model")
-
-        for field in Params.__annotations__:
-            field_type = type(getattr(Params, field, str))
-            if field_type is bool:
-                parser.add_argument(f'--{field}', type=lambda x: (str(x).lower() == 'true'), default=getattr(Params, field, None))
+    def load_config(self) -> Dict[str, Any]:
+        ext = os.path.splitext(self.config_path)[1]
+        with open(self.config_path, 'r') as f:
+            if ext == '.json':
+                return json.load(f)
+            elif ext in ('.yaml', '.yml'):
+                return yaml.safe_load(f)
+            elif ext == '.toml':
+                return toml.load(f)
             else:
-                parser.add_argument(f'--{field}', type=field_type, default=getattr(Params, field, None))
+                raise ValueError(f"Unsupported config file format: {ext}")
 
-        return parser.parse_args()
-    
-    def run_cli(self):
-        args = self.parser
-        # You can add the logic to use the parsed arguments here
-        print("Parsed arguments:", args)
-    
-    def save_params_to_file(self,output_file):
-        if output_file.endswith('.json'):
-            with open(output_file, 'w') as f:
-                json.dump(self.parser.__dict__, f, indent=4)
-        elif output_file.endswith('.toml'):
-            with open(output_file, 'w') as f:
-                toml.dump(self.parser.__dict__, f)
-        else:
-            raise ValueError("Unsupported file format. Please use .json or .toml")
-
-    def read_file_to_params(self,input_file):
-        if input_file.endswith('.json'):
-            with open(input_file, 'r') as f:
-                params_dict = json.load(f)
-        elif input_file.endswith('.toml'):
-            with open(input_file, 'r') as f:
-                params_dict = toml.load(f)
-        else:
-            raise ValueError("Unsupported file format. Please use .json or .toml")
-
-        for key, value in params_dict.items():
-            if hasattr(self.parser, key):
-                setattr(self.parser, key, value)
-
-        return self.parser
-
-    def read_files_to_params(self, input_files):
-        params_dict = {}
-        for input_file in input_files: 
-            if input_file.endswith('.json'):
-                with open(input_file, 'r') as f:
-                    params_dict.update(json.load(f))
-            elif input_file.endswith('.toml'):
-                with open(input_file, 'r') as f:
-                    params_dict.update(toml.load(f))
+    def override_params(self):
+        config_dict = self.load_config()
+        param_fields = {f.name for f in fields(self.params)}
+        for key, value in config_dict.items():
+            if key in param_fields:
+                setattr(self.params, key, value)
             else:
-                raise ValueError("Unsupported file format. Please use .json or .toml")
+                raise KeyError(f"'{key}' is not a valid parameter in Params")
 
+    def get_params(self) -> EGATParams:
+        return self.params
+
+    def export(self, export_path: str):
+        ext = os.path.splitext(export_path)[1]
+        data = asdict(self.params)
+        with open(export_path, 'w') as f:
+            if ext == '.json':
+                json.dump(data, f, indent=4)
+            elif ext in ('.yaml', '.yml'):
+                yaml.dump(data, f)
+            elif ext == '.toml':
+                toml.dump(data, f)
+            else:
+                raise ValueError(f"Unsupported export file format: {ext}")

@@ -25,13 +25,9 @@ class Predict(MLTrainandPredictBase):
         super().__init__(arguments)
         self.params = arguments
     
-   
+    def Predict(self):
+        self.LoadMLNecessities()
+        self.PredictLoop()
     
    
-        
-    def Run(self):  
-        loss_list = self.Loop()
-        avg_loss = np.mean(loss_list)
-        self.logger.info(f'Average loss: {avg_loss:.5f}')
-
     

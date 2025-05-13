@@ -8,7 +8,7 @@ from dataclasses import dataclass
 '''
 
 @dataclass
-class PredictionParams:
+class PredictionBlockParams:
     architecture: str  # '1MLP', '3MLP', 'custom', 'subnet'
     model_type: str  # 'Hr', 'Hr2', or other types
     activation: str = None  # Activation function for MLPs

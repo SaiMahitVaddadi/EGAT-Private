@@ -2,7 +2,9 @@ from ..base import BaseFeaturizer
 from rdkit import Chem
 from dataclasses import dataclass
 
-
+@dataclass
+class FusedInformationParams:
+    getfusedinformation: bool = False
 
 class FusedInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):

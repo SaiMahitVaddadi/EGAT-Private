@@ -13,8 +13,7 @@ from .helpers.psa import get_tpsa_contributions,compute_atomwise_logs,get_slogp_
 from .helpers.estate import match_all_smarts
 from .helpers.morse import get_morse_descriptors,get_morse_sinc_descriptors
 from itertools import groupby
-from .helpers.mordredtable import PeriodicTable
-import periodictable
+
 from mendeleev.fetch import fetch_table
 
 @dataclass
@@ -77,7 +76,12 @@ class MordredParams:
     mohar: str = None
     getvewi: bool = False  # Whether to calculate vertex-edge Wiener index
     getvewibyorder: int = None  # Options: 2, 3, ..., None
-
+    getplatt: bool = False  # Whether to calculate Platt index
+    getpogliani: bool = False  # Whether to calculate Pogliani index
+    getschiultz: bool = False  # Whether to calculate Schultz vector
+    getharary: bool = False  # Whether to calculate Harary index
+    getweightedinformationcontent: int = None  # Options: 0, 1, 2, ..., None
+    IC_weight: str = None  # Weight type for weighted information content
     getMoRSEweights: str = 'mass'  # Weights for MoRSE descriptors
     getMoRSEbins: int = 10  # Number of bins for MoRSE descriptors
 
@@ -1286,7 +1290,7 @@ class MordredInformation(BaseMordredFunctions):
             return []
     
     def Schiultz(self,node):
-        if self.params.getschultz:
+        if self.params.getschiultz:
             return [self.schiultz[node]]
         else:
             return []

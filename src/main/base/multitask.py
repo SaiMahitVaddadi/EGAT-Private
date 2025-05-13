@@ -1,5 +1,15 @@
 from ..ml.setup import MLSetup
 from torch import nn
+from dataclasses import dataclass
+from typing import List, Optional
+
+@dataclass
+class MultitaskParams:
+    model_type: str
+    loss_agg: Optional[str] = None
+    tweights: Optional[List[float]] = None
+    targets: Optional[List[str]] = None
+
 class MultitaskLossAggregation(MLSetup):
     def __init__(self, arguments):
         super().__init__(arguments)

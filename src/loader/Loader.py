@@ -27,13 +27,10 @@ class DataLoaderParams:
     fold: Optional[int] = None
     foldtype: Optional[str] = None
     size: Optional[int] = None
-    target: Optional[str] = None
-    additionals: Optional[List[str]] = None
-    addons: bool = False
-    graph: Optional[str] = None  # Updated to replace 'molecular' with 'graph' for clarity
     fingerprint: bool = False  # Added to specify if fingerprint datasets are used
     imblearn: bool = False  # Added to handle imbalanced datasets
     batch_size: int = 32
+    dataset: str = 'onthefly'  # Added to specify the dataset type
 
 # - Add the not argument for class_choice like class_choice_not
 # - Add the test_class_choice and test_class_choice_not
@@ -201,38 +198,3 @@ class EGATDataLoader(DataLoaderCommands):
         self.addimbalanceddataset()
         self.createdataloader()
         #self.createdataloaderdebug()
-
-if __name__ == "__main__":
-    # Example usage of the EGATDataLoader
-    params = DataLoaderParams(
-        data_path="/path/to/data",
-        exclude="exclude_file.txt",
-        test_only=False,
-        root="/path/to/root",
-        class_choice="classA",
-        randomize=True,
-        fold=1,
-        foldtype="typeA",
-        size=1000,
-        target="target_property",
-        additionals=["feature1", "feature2"],
-        addons=True,
-        graph="molecular",
-        fingerprint=False,
-        imblearn=True,
-        batch_size=64,
-        dataset="json"
-    )
-
-    # Initialize the data loader
-    data_loader = EGATDataLoader(params)
-
-    # Call the data loader to prepare datasets and dataloaders
-    data_loader()
-
-    # Access the dataloaders
-    for split, loader in data_loader.egatloader.items():
-        print(f"DataLoader for {split}:")
-        for batch in loader:
-            print('Batch: ',batch)
-            break  # Print only the first batch for demonstration

@@ -9,7 +9,7 @@ from .helpers.subgfuncs import SubgraphFunctions
 
 
 @dataclass
-class Params:
+class RWParams:
     wt_adj_mat_by: Optional[str] = None  # Options: 'bond_order', 'atomic_mass', 'valence', 'hybridization', 'coulomb', 'all'
     rw_weight_by: Optional[str] = None  # Options: 'atomic_mass', 'bond_order', 'hyb', 'valence', 'coulomb', 'all'
     sp_box_size: Optional[float] = None  # For periodic boundary conditions

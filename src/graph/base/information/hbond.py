@@ -1,7 +1,10 @@
 from ..base import BaseFeaturizer
+from dataclasses import dataclass
 
 
-
+@dataclass
+class HydrogenBondParams:
+    check_hbond: bool
 
 class HydrogenBondInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):

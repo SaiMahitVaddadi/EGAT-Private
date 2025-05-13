@@ -6,6 +6,16 @@ from dataclasses import dataclass
 import heapq
 
 
+@dataclass
+class DijkstraParams:
+    usebofactor_dijkstra: bool = True
+    useconjfactor_dijkstra: bool = True
+    userotfactor_dijkstra: bool = True
+    usestereofactor_dijkstra: bool = True
+    usedistfactor_dijkstra: bool = True
+    combo_dijkstra: str = 'product'  # Options: 'product', 'sum', 'combo_product', 'combo_sum'
+    bias_walk: str = 'dijkstra'  # Options: 'floyd_warshall', 'bellman_ford', 'johnson', 'dijkstra', 'yen', 'astar'
+
 class DijkstraFeaturizer(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)

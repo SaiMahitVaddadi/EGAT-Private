@@ -4,139 +4,82 @@ from tqdm import tqdm
 from .commands import ExternalSaveCommands
 from ..base.commands import DatasetCommands
 import pandas as pd
+from dataclasses import dataclass
 
-class MongoCommands(ExternalSaveCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
 
-    def setup_mongo_client(self):
-        client = MongoClient(self.params.dbhost, self.params.dbport)
-        db = client[self.params.dbname]
-        return client, db
+@dataclass
+class MongoParams:
+    mongo_uri: str = "mongodb://localhost:27017"
+    database_name: str = "default_db"
+    collection_name: str = "default_collection"
 
-    def set_info_into_mongo(self, index, db):
-        collection_name = f"info_{index}"
-        collection = db[collection_name]
-        collection.insert_one(self.info)
+class MongoDBCommands(ExternalSaveCommands):
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
+        self.mongo_uri = self.params.mongo_uri
+        self.database_name = self.params.database_name
+        self.collection_name = self.params.collection_name
+        self.client = MongoClient(self.mongo_uri)
+        self.db = self.client[self.database_name]
+        self.collection = self.db[self.collection_name]
 
-    def set_info_list_into_mongo(self, index, db):
-        collection_name = f"info_{index}"
-        collection = db[collection_name]
-        documents = [{"all_result": item} for item in self.infolist]
-        collection.insert_many(documents)
-
-    def set_info_into_mongo_as_series(self, index, db):
-        for i, info in enumerate(self.infolist):
-            collection_name = f"info_{index}_{i}"
-            collection = db[collection_name]
-            collection.insert_one(info)
+    def save_info_to_mongo(self, index):
+        document = {"index": index, "info": self.info}
+        self.collection.insert_one(document)
 
     def SaveRowToMongo(self, index):
-        try:
-            infolistusage = self.OrganizeData(index)
-            client, db = self.setup_mongo_client()
+        self.ConvertforExternalSaving(self.data.loc[index], index)
+        self.save_info_to_mongo(index)
 
-            if infolistusage:
-                if self.params.saveconfsseparately:
-                    self.set_info_into_mongo_as_series(index, db)
-                else:
-                    self.set_info_list_into_mongo(index, db)
-            else:
-                self.set_info_into_mongo(index, db)
-            client.close()
-        except Exception as e:
-            self.__ExternalException(index)
-
-    def SaveInfoToMongo(self):
+    def SaveAllToMongo(self):
         for index in tqdm(self.data.index.tolist(), total=len(self.data.index.tolist()), desc="Saving to MongoDB"):
             self.SaveRowToMongo(index)
 
     def LoadMongoDataFrame(self):
         try:
-            client, db = self.setup_mongo_client()
-            collection = db["data"]
-            data = list(collection.find())
-            self.data = pd.DataFrame(data)
-            client.close()
+            cursor = self.collection.find()
+            self.data = pd.DataFrame(list(cursor))
         except Exception as e:
-            print(f"Failed to load MongoDB DataFrame from {self.params.dbname}")
+            print(f"Failed to load DataFrame from MongoDB collection {self.collection_name}")
             print(traceback.print_exc())
 
     def GetAllIndices(self):
         try:
-            client, db = self.setup_mongo_client()
-            collection = db["data"]
-            indices = collection.distinct("Indices")
-            client.close()
+            indices = self.collection.distinct("index")
             return indices
         except Exception as e:
-            print(f"Failed to retrieve indices from {self.params.dbname}")
+            print(f"Failed to retrieve indices from MongoDB collection {self.collection_name}")
             print(traceback.print_exc())
             return []
 
-    def load_mongo_as_info_dict(self, index, i=None):
+    def loadmongoasinfodict(self, index):
         try:
-            client, db = self.setup_mongo_client()
-            if i is None:
-                collection_name = f"info_{index}"
+            document = self.collection.find_one({"index": index})
+            if document:
+                self.info = document["info"]
             else:
-                collection_name = f"info_{index}_{i}"
-            collection = db[collection_name]
-            self.info = collection.find_one()
-            client.close()
+                raise ValueError(f"No document found for index {index}")
         except Exception as e:
-            print(f"Failed to load info from {self.params.dbname}")
-            print(traceback.print_exc())
-
-    def load_mongo_as_info_list(self, index):
-        try:
-            client, db = self.setup_mongo_client()
-            collection_name = f"info_{index}"
-            collection = db[collection_name]
-            self.infolist = [doc["all_result"] for doc in collection.find()]
-            client.close()
-        except Exception as e:
-            print(f"Failed to load info list from {self.params.dbname}")
+            print(f"Failed to load info from MongoDB collection {self.collection_name} for index {index}")
             print(traceback.print_exc())
 
     def GetInfo(self, index):
-        infolistusage = self.__useinfolist()
-        if infolistusage:
-            if self.params.saveconfsseparately:
-                self.load_mongo_as_info_dict(index)
-            else:
-                self.load_mongo_as_info_list(index)
-        else:
-            self.load_mongo_as_info_dict(index)
+        self.loadmongoasinfodict(index)
 
     def SampleMongo(self, index):
-        infolistusage = self.__useinfolist()
         self.GetInfo(index)
-        self.samples = []
-        self.samples += self._sampleindices(infolistusage)
-        self.samples += self._samplereactiontype(infolistusage)
-        self.samples = self.AddGraphsToSample(self.samples)
-        samples += self._sampletargets(infolistusage)
-        samples += self._sampleadditionals(infolistusage)
-        samples += self.Addons()
-        return samples
+        self.creategraphsample()
+        return self.sample
 
     def FingerprintModelSamplerMongo(self, index):
-        infolistusage = self.__useinfolist()
         self.GetInfo(index)
-        self.samples = []
-        self.samples += self._sampleindices(infolistusage)
-        self.samples += self._samplereactiontype(infolistusage)
-        samples += self._sampletargets(infolistusage)
-        samples += self._sampleadditionals(infolistusage)
-        samples += self.Addons()
-        return samples
+        self.creategraphsample()
+        return self.sample
 
 
-class GraphMongoDataset(MongoCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
-        self.LoadMongoDataFrame()
+class GraphMongoDataset(MongoDBCommands):
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
         self.GetAllIndices()
 
     def __getitem__(self, index):
@@ -153,10 +96,9 @@ class GraphMongoDataset(MongoCommands):
                 return None
 
 
-class FingerprintMongoDataset(MongoCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
-        self.LoadMongoDataFrame()
+class FingerprintMongoDataset(MongoDBCommands):
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
         self.GetAllIndices()
 
     def __getitem__(self, index):
@@ -173,7 +115,7 @@ class FingerprintMongoDataset(MongoCommands):
                 return None
 
 
-class MongoSaver(MongoCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
-        self.SaveInfoToMongo()
+class MongoSaver(MongoDBCommands):
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
+        self.SaveAllToMongo()

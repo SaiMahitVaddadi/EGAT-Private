@@ -3,6 +3,13 @@ from .graphtocuda import DGLtoCUDA
 from .obtainpreds import ObtainPreds
 from tqdm import tqdm
 import numpy as np
+from dataclasses import dataclass
+from typing import Optional, List
+
+@dataclass
+class BatchIterationParams:
+    model_type: str
+    
 
 class BatchIteration(NumericTensorFunctions,DGLtoCUDA,ObtainPreds):
     def __init__(self, arguments):

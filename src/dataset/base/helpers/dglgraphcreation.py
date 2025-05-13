@@ -2,6 +2,31 @@ from ....tools.jepa.tools import mask_uv_vectors,mask_node_features,mask_node_fe
 import torch,dgl
 import numpy as np
 from icecream import ic
+from dataclasses import dataclass
+from typing import Optional, List, Union
+
+
+@dataclass
+class DGLGraphCreationParams:
+    """
+    Dataclass to hold configuration parameters for DGL graph creation.
+    
+    Attributes:
+        smiles: A string or list of SMILES strings for molecular data.
+        graph: A string indicating the type of graph to create ('reaction' or 'molecular').
+        dimension: A string indicating the dimensionality of the graph ('2d' or '3d').
+        jepa: A boolean indicating whether JEPA masking is enabled.
+        jepa_masking: A string specifying the type of JEPA masking to apply.
+        jepa_num_nodes: Optional; an integer specifying the number of nodes to mask (used in certain JEPA masking types).
+        jepa_num_edges: Optional; an integer specifying the number of edges to mask (used in certain JEPA masking types).
+        jepa_neighbors: Optional; an integer specifying the number of neighbors to mask (used in certain JEPA masking types).
+    """
+    dimension: str
+    jepa: bool
+    jepa_masking: Optional[str] = None
+    jepa_num_nodes: Optional[int] = None
+    jepa_num_edges: Optional[int] = None
+    jepa_neighbors: Optional[int] = None
 
 class DGLGraphCreation:
     """

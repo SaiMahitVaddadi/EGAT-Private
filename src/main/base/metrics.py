@@ -1,6 +1,14 @@
 from .multitask import MultitaskLossAggregation
 from torch import nn
+from dataclasses import dataclass
+from typing import List, Optional, Union
 
+@dataclass
+class MetricParams:
+    metric: Union[str, List[str], None]
+    metric_agg: Optional[str] = None
+    tweights: Optional[List[float]] = None
+    targets: Optional[List[str]] = None
 
 
 class Metrics(MultitaskLossAggregation):

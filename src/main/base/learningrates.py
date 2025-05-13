@@ -1,6 +1,13 @@
 from ..ml.setup import MLSetup
+from dataclasses import dataclass
 
-
+@dataclass
+class LearningRateParams:
+    epoch: int
+    learning_rate_min: float
+    scheduler: str
+    learning_rate: float
+    
 class LearningRateFunctions(MLSetup):
 
     def __init__(self, arguments):

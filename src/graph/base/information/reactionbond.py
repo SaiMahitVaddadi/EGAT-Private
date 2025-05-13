@@ -2,7 +2,14 @@ from ..reaction import BaseReactionFeaturizer
 from rdkit import Chem
 import networkx as nx
 from rdkit.Chem import BRICS
+from dataclasses import dataclass
 
+@dataclass
+class ReactiveBondParams:
+    removebondchangeinfo: bool = False
+    oldbondencode: bool = False
+    adddisttoreactingbonds: bool = False
+    getbricsbondrolechange: bool = False
 
 class ReactiveBondInformation(BaseReactionFeaturizer):
     def __init__(self, smiles, arguments):

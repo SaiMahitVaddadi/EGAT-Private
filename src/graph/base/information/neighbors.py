@@ -1,8 +1,11 @@
 from ..base import BaseFeaturizer
+from dataclasses import dataclass
 
 
 
-
+@dataclass
+class NeighborParams:
+    neighbor: str  # Options: 'onlyH', 'onlyCHNO', 'onlyorganic', 'all'
 
 class NeighborInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):

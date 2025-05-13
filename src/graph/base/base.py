@@ -13,7 +13,6 @@ from rdkit.Chem import rdchem
 
 @dataclass
 class BaseReactionParams:
-    getradical: Optional[str] = None  # Options: 'RDKit', 'YARP' - Determines the method for calculating radicals
     stereo_full: Optional[bool] = False  # Options: True, False - Whether to use full stereochemistry in calculations
     acidbase: Optional[str] = None  # Options: 'Lewis', 'BL' - Specifies the method for identifying acid and base sites
     

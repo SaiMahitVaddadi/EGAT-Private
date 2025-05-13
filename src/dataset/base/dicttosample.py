@@ -1,6 +1,15 @@
 import pandas as pd
 import itertools,torch
 from icecream import ic
+from dataclasses import dataclass
+from typing import List, Union, Optional
+
+@dataclass
+class SampleParams:
+    graph: str  # 'reaction' or 'molecular'
+    addons: Optional[str,List[str]] = None
+    addonmixing: Optional[bool] = False
+    fingerprint: Optional[bool] = False
 
 class InfoToSample:
     def __init__(self, params,info):

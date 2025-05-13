@@ -6,6 +6,11 @@ from ....utils.descriptors.fingerprint.twodimensional import Fingerprint
 from ....utils.descriptors.fingerprint.reaction import ReactionFingerprint
 from ....utils.descriptors.fingerprint.rdkit import RDKitDescriptors
 from ....utils.descriptors.fingerprint.descriptors import Descriptors
+from dataclasses import dataclass, field
+from typing import List, Union, Optional
+
+
+
 
 class Addons:
     def __init__(self, arguments):

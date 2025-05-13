@@ -40,42 +40,92 @@ Here is the pseudocode for the steps:
     - Run the command `egat` to ensure it prints "egat is cool".
 '''
 
-from ..params.config import Config,Params
+from ..params.config import Config,EGATParams
 from ..main.train import Train
 from ..main.predict import Predict
 from ..main.tuning.hyperparamtertuning import Tune
-
+from ..dataset.external.graphgen import GraphGeneration
+import argparse
+from dataclasses import dataclass, asdict, fields
+from typing import Any, Dict, Type
 
 
 class EGAT:
-    def __init__(self,config=None,mode=None):
+    def __init__(self,config=None,mode=None,exportconfig=None,params=None):
         self.config = config 
-        self.setups = Config()
-        self.params = Params()
+        if self.config != None:
+            self.setups = Config(self.config)
+            self.params = self.setups.get_params()
+            if exportconfig != None: self.setups.export(exportconfig)
+        else:
+            if params == None: self.params = EGATParams()
+            else: self.params = params
         if mode == 'fingerprint':
             self.params.Embed = True 
         self.train = Train(params=self.params)
         self.predict = Predict(params=self.params)
         self.tuner = Tune(params=self.params)
-
-    def configurate(self):
-        pass
+        self.generator = GraphGeneration(params=self.params)
 
     def generate(self):
-        pass
+        self.generator.save()
 
     def train(self):
         self.train.TrainingProtocol()
 
     def predict(self):
-        self.predict.Run()
+        self.predict.Predict()
 
     def fingerprint(self):
-        self.predict.Run()
+        self.predict.Predict()
 
     def tune(self):
         self.tuner.tune()
 
+    def analyze(self):
+        pass
+
+def add_param_args(parser: argparse.ArgumentParser, param_cls: Type[EGATParams]):
+    for field in fields(param_cls):
+        arg_type = field.type
+        # Handle typing like Optional[...] or Union[...] if needed here
+        parser.add_argument(f"--{field.name}", type=arg_type, default=None, help=f"(default: {field.default})")
+
+    
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Flexible config system with file and CLI override support.")
+    parser.add_argument('command',type=str,help="Command to run (train, predict, tune, generate, fingerprint)")
+    parser.add_argument("--config", type=str, help="Path to config file (.json, .yaml, .toml)",default=None)
+    parser.add_argument("--export", type=str, help="Path to export the final parameters",default=None)
+
+    # Dynamically add Params fields
+    add_param_args(parser, EGATParams)
+
+    args = parser.parse_args()
+    command = args.command
+    config = args.config
+    export = args.export
+
+    args_dict = vars(args)
+    known_args = {"config", "export"}
+    cli_overrides = {k: v for k, v in args_dict.items() if k not in known_args and v is not None}
+
+    cfg = Config(config_path=args.config, overrides=cli_overrides)
+    params = cfg.get_params()
+
+    egatobj = EGAT(config=config,mode=command,exportconfig=export)
+    if command == 'train':
+        egatobj.train()
+    elif command == 'predict':
+        egatobj.predict()
+    elif command == 'tune':
+        egatobj.tune()
+    elif command == 'generate':
+        egatobj.generate()
+    elif command == 'fingerprint':
+        egatobj.fingerprint()
+    else:
+        raise ValueError(f"Unknown command: {command}. Please use 'train', 'predict', 'tune', 'generate', or 'fingerprint'.")
 
 
 

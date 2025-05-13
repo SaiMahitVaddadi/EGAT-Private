@@ -2,6 +2,16 @@ from .loops import Loops
 import wandb
 import numpy as np
 from .torchsaver import TorchSaver
+from dataclasses import dataclass
+
+@dataclass
+class BaseEGATTrainParams:
+    weightsandbiases: bool = False
+    test_only: bool = False
+    patience: int = 10
+    
+
+
 class MLTrainandPredictBase(Loops,TorchSaver):
 
     def __init__(self, arguments):

@@ -1,208 +1,131 @@
-import sqlite3
+import os
 import traceback
+import pandas as pd
 from tqdm import tqdm
 from .commands import ExternalSaveCommands
 from ..base.commands import DatasetCommands
-import pandas as pd
-class SQLCommands(ExternalSaveCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
+import sqlite3
+from dataclasses import dataclass
 
-    def setupsqlserver(self):
-        conn = sqlite3.connect(self.params.dbpath)
-        cursor = conn.cursor()
-        return conn,cursor
-    
-    def setinfointosql(self,index,conn,cursor):
+@dataclass
+class SQLiteParams:
+    ext_file: str = ''
+    cache_size: int = 100  # Default cache size
+    root: str = ""         # Default root directory
+
+class SQLiteCommands(ExternalSaveCommands):
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
+        self.sqlite_file = self.params.ext_file
+        os.makedirs(os.path.dirname(self.sqlite_file), exist_ok=True)
+        self.setup_sqlite()
+
+    def setup_sqlite(self):
+        self.conn = sqlite3.connect(self.sqlite_file)
+        self.cursor = self.conn.cursor()
+
+    def save_info_to_sqlite(self, index):
         table_name = f"info_{index}"
         columns = self.info.keys()
         values = [self.info[col] for col in columns]
         create_table_query = f"CREATE TABLE IF NOT EXISTS {table_name} (" + ", ".join([f"{col} TEXT" for col in columns]) + ")"
-        cursor.execute(create_table_query)
+        self.cursor.execute(create_table_query)
         insert_query = f"INSERT INTO {table_name} (" + ", ".join(columns) + ") VALUES (" + ", ".join(["?"] * len(values)) + ")"
-        cursor.execute(insert_query, values)
-        conn.commit()
-        cursor.close()
-        conn.close()
-
-    def setinfolistintosql(self,index,conn,cursor):
-        table_name = f"info_{index}"
-        columns = ['all_result']
-        values = [self.infolist]
-        create_table_query = f"CREATE TABLE IF NOT EXISTS {table_name} (" + ", ".join([f"{col} TEXT" for col in columns]) + ")"
-        cursor.execute(create_table_query)
-        insert_query = f"INSERT INTO {table_name} (" + ", ".join(columns) + ") VALUES (" + ", ".join(["?"] * len(columns)) + ")"
-        cursor.executemany(insert_query, values)
-        conn.commit()
-        cursor.close()
-        conn.close()
-
-    def setinfointosqlasseries(self,index,conn,cursor):
-        for i in range(len(self.infolist)):
-            table_name = f"info_{index}_{i}"
-            columns = self.infolist[i].keys()
-            values = [self.infolist[i][col] for col in columns]
-            create_table_query = f"CREATE TABLE IF NOT EXISTS {table_name} (" + ", ".join([f"{col} TEXT" for col in columns]) + ")"
-            cursor.execute(create_table_query)
-            insert_query = f"INSERT INTO {table_name} (" + ", ".join(columns) + ") VALUES (" + ", ".join(["?"] * len(values)) + ")"
-            cursor.execute(insert_query, values)
-            conn.commit()
-        cursor.close()
-        conn.close()
+        self.cursor.execute(insert_query, values)
+        self.conn.commit()
 
     def SaveRowToSQLite(self, index):
-        try:
-            infolistusage = self.OrganizeData(index)
-            conn, cursor = self.setupsqlserver()
+        self.ConvertforExternalSaving(self.data.loc[index], index)
+        self.save_info_to_sqlite(index)
 
-            if infolistusage:
-                if self.params.saveconfsseparately:
-                    self.setinfointosqlasseries(index,conn,cursor)
-                else:
-                    self.setinfolistintosql(index,conn,cursor)
-            else:
-                self.setinfointosql(index,conn,cursor)
-        except Exception as e:
-            self.__ExternalException(index)
-            
-
-    def SaveInfoToSQLite(self):
+    def SaveAllToSQLite(self):
         for index in tqdm(self.data.index.tolist(), total=len(self.data.index.tolist()), desc="Saving to SQLite"):
             self.SaveRowToSQLite(index)
 
-
-    def LoadSQLDataFrame(self):
+    def LoadSQLiteDataFrame(self, file_path):
         try:
-            conn = sqlite3.connect(self.params.dbpath)
+            self.conn = sqlite3.connect(file_path)
             query = "SELECT * FROM data"
-            self.data = pd.read_sql_query(query, conn)
-            conn.close()
+            self.data = pd.read_sql_query(query, self.conn)
         except Exception as e:
-            print(f"Failed to load SQL DataFrame from {self.params.dbpath}")
+            print(f"Failed to load DataFrame from SQLite file {file_path}")
             print(traceback.print_exc())
 
     def GetAllIndices(self):
         try:
-            conn = sqlite3.connect(self.params.dbpath)
-            cursor = conn.cursor()
             query = "SELECT DISTINCT Indices FROM data"
-            cursor.execute(query)
-            indices = [row[0] for row in cursor.fetchall()]
-            conn.close()
+            self.cursor.execute(query)
+            indices = [row[0] for row in self.cursor.fetchall()]
             return indices
         except Exception as e:
-            print(f"Failed to retrieve indices from {self.params.dbpath}")
+            print(f"Failed to retrieve indices from SQLite database")
             print(traceback.print_exc())
             return []
 
-    def loadsqlasinfodict(self,index,i=None):
+    def load_sqlite_as_info_dict(self, file_path, index):
         try:
-            conn = sqlite3.connect(self.params.dbpath)
-            cursor = conn.cursor()
-            if i is None: table_name = f"info_{index}"
-            else: table_name = f"info_{index}_{i}"
-            query = f"SELECT * FROM {table_name}"
-            cursor.execute(query)
-            rows = cursor.fetchall()
-            self.info = {col[0]: row for col, row in zip(cursor.description, rows)}
-            conn.close()
-        except Exception as e:
-            print(f"Failed to load info from {self.params.dbpath}")
-            print(traceback.print_exc())
-
-    def loadsqlasinfolist(self,index):
-        try:
-            conn = sqlite3.connect(self.params.dbpath)
-            cursor = conn.cursor()
             table_name = f"info_{index}"
             query = f"SELECT * FROM {table_name}"
-            cursor.execute(query)
-            rows = cursor.fetchall()
-            self.infolist = [row[0] for row in rows]
-            conn.close()
+            self.cursor.execute(query)
+            rows = self.cursor.fetchall()
+            self.info = {col[0]: row for col, row in zip(self.cursor.description, rows)}
         except Exception as e:
-            print(f"Failed to load info list from {self.params.dbpath}")
+            print(f"Failed to load info from SQLite file {file_path} for index {index}")
             print(traceback.print_exc())
 
-    def GetInfo(self,index):
-        infolistusage = self.__useinfolist()
-        if infolistusage:
-            if self.params.saveconfsseparately:
-                self.loadsqlasinfodict(index)
-            else:
-                self.loadsqlasinfolist(index)
-        else:
-            self.loadsqlasinfodict(index)
+    def GetInfo(self, index):
+        self.load_sqlite_as_info_dict(self.sqlite_file, index)
 
-    def SampleSQL(self,index):
-        infolistusage = self.__useinfolist()
+    def SampleSQLite(self, index):
         self.GetInfo(index)
-        self.samples = [] 
-        self.samples += self._sampleindices(infolistusage)
-        self.samples += self._samplereactiontype(infolistusage)
-        self.samples = self.AddGraphsToSample(self.samples)
-        samples += self._sampletargets(infolistusage)
-        samples += self._sampleadditionals(infolistusage)
-        samples += self.Addons()
-        return samples
-    
-    def FingerprintModelSamplerSQL(self,index):
-        infolistusage = self.__useinfolist()
-        self.GetInfo(index)
-        self.samples = [] 
-        self.samples += self._sampleindices(infolistusage)
-        self.samples += self._samplereactiontype(infolistusage)
-        samples += self._sampletargets(infolistusage)
-        samples += self._sampleadditionals(infolistusage)
-        samples += self.Addons()
-        return samples
+        self.creategraphsample()
+        return self.sample
 
-        
-class GraphSQLDataset(SQLCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
-        self.LoadSQLDataFrame()
+    def FingerprintModelSamplerSQLite(self, index):
+        self.GetInfo(index)
+        self.creategraphsample()
+        return self.sample
+
+
+class GraphSQLiteDataset(SQLiteCommands):
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
         self.GetAllIndices()
-    
+
     def __getitem__(self, index):
         if index in self.cache:
             samples = self.cache[index]
         else:
             try:
-                samples = self.SampleSQL(index)            
+                samples = self.SampleSQLite(index)
                 if len(self.cache) < self.cache_size:
                     self.cache[index] = samples
             except Exception as e:
-                print(self.root + '--'+ str(index) + ' failed')
+                print(self.root + '--' + str(index) + ' failed')
                 print(traceback.print_exc())
                 return None
-            
-class FingerprintSQLDataset(SQLCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
-        self.LoadSQLDataFrame()
+
+
+class FingerprintSQLiteDataset(SQLiteCommands):
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
         self.GetAllIndices()
-    
+
     def __getitem__(self, index):
         if index in self.cache:
             samples = self.cache[index]
         else:
             try:
-                samples = self.FingerprintModelSamplerSQL(index)            
+                samples = self.FingerprintModelSamplerSQLite(index)
                 if len(self.cache) < self.cache_size:
                     self.cache[index] = samples
             except Exception as e:
-                print(self.root + '--'+ str(index) + ' failed')
+                print(self.root + '--' + str(index) + ' failed')
                 print(traceback.print_exc())
                 return None
 
-class SQLSaver(SQLCommands):
-    def __init__(self, arguments,split=None):
-        super().__init__(arguments,split)
-        self.SaveInfoToSQLite()
 
-
-
-
- 
-
+class SQLiteSaver(SQLiteCommands):
+    def __init__(self, arguments, split=None):
+        super().__init__(arguments, split)
+        self.SaveAllToSQLite()

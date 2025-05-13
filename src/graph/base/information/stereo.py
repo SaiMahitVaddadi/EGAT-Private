@@ -1,5 +1,11 @@
 from ..base import BaseFeaturizer
+from dataclasses import dataclass
 
+@dataclass
+class StereoParams:
+    removechiralinfo: bool = False
+    removeconjinfo: bool = False
+    removestereoinfo: bool = False
 class StereoInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):
         super().__init__(smiles, arguments)

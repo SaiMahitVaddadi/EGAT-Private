@@ -1,8 +1,12 @@
 from ..base import BaseFeaturizer
+from dataclasses import dataclass
 
 
 
-
+@dataclass
+class RingParams:
+    removeringinfo: bool = False
+    removearomaticity: bool = False
 
 class RingInformation(BaseFeaturizer):
     def __init__(self, smiles, arguments):

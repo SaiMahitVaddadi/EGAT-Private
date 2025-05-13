@@ -17,8 +17,6 @@ class DatasetCommands(DatasetSetups,InfoCreation,InfoToSample):
     def Sample(self,Rind):
         self.Convert(Rind)
         self.creategraphsample()
-        ic(self.node_feature_length)
-        ic(self.bond_feature_length)
         return self.sample
 
     def FingerprintModelSampler(self,Rind):
