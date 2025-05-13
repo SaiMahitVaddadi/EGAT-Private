@@ -1,69 +1,112 @@
 
-## Possible Sprints:
-- Continual Learning: 
-    - setup scripts that use avalanche. 
+## Possible Sprints - Atom/Bond Featurization:
+- Recap: [1 day]
+    - what bonds are broken?
+    - What atoms are near to them? 
+    - How far away are the bonds from said bond breaks? 
+    - How far away are the atoms? 
 
-- 3D Addons
+- Conjugated Pi bonds: [1 day]
+    - https://bertiewooster.github.io/2024/10/15/Color-from-Conjugation.html 
+
+- Mendeleev Features [1 week]
+
+- Reaction Only: [1 week]
+    - Change in Atomic Fingerprint between Reactant and Product.
+    - Get the Delta of any MolecularFeaturizer Atom_feature Matrix and Load it as a DeltaVector.
+
+- RDF [1 month]:
+    - Full RDF 
+    - Element-Element RDF
+    - Index RDF (Full)
+    - Index RDF (Element by Element)
+    - NOTE: Factor in CS for better results.
+
+- QM: [2 weeks]
+    - Charges
+    - Fukui
+    - Atomic Features 
+
+- Other Featurizers: [1 year]
+    - MolGraphConvFeaturizer 
+    - Chemprop (v1 and v2)
+    - EquivariantGraphFeaturizer
+    - PagtnMolGraphFeaturizer
+    - MXMNetFeaturizer
+
+
+
+
+## Possible Sprints - Molecular Addons:
+
+- 3D Addons [1 week]
     - Volumes
     - Surface Areas
     - Ratios
     - etc. 
 
-- More Molecular Features: 
-    - Recap: [1 day]
-        - what bonds are broken?
-        - What atoms are near to them? 
-        - How far away are the bonds from said bond breaks? 
-        - How far away are the atoms? 
-    - Conjugated Pi bonds: [1 day]
-        - https://bertiewooster.github.io/2024/10/15/Color-from-Conjugation.html 
-    - RDF [1 month]:
-        - Full RDF 
-        - Element-Element RDF
-        - Index RDF (Full)
-        - Index RDF (Element by Element)
-        - NOTE: Factor in CS for better results. 
-    - Interaction Descriptors: [2 weeks]
-        - https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
-        - Chem-Protein and Chem-DNA 
-    - Medchem descriptors. [1 day]
+- Interaction Descriptors: [2 weeks]
+    - https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
+    - Chem-Protein and Chem-DNA 
+
+- Medchem descriptors. [1 day]
     - CDK Fingerprints [1 week]:
         - use scijava to load cdk files. 
         - References: https://github.com/sebotic/cdk_pywrapper/blob/master/cdk_pywrapper/cdk_pywrapper.py#L452 and https://github.com/hcji/PyFingerprint/blob/master/PyFingerprint/cdk.py
         - Guide: https://cdk.github.io/cdk/latest/docs/api/org/openscience/cdk/aromaticity/package-summary.html
-    - Quantum Mechanics: [1 week]
-        - use ASE and pySCF to run optimizations and then calculate values. 
-    - Mendeleev Features
+
+- QM:[2 weeks]
+    - Thermodynamics
 
 
-- Feature Blocks:
-    - LLM Block:[1 month]
-        - Write up an adapter for molfeat and huggingface and the IBM model. 
-        - Add in the past finetuning codes from ChemLLM. 
-        - Write the LLM Model.
-        - Write the GNN+LLM model. 
+- Point Cloud Similarities: [1 month]
+    - Write them
+    - ShapeLinker
+
+## Possible Sprints - EGAT Feature Blocks:
+- v1 to v2 adapter: 
+    - Port in all of the old egat models. 
+
+
+
+- LLM Block:[1 month]
+    - Write up an adapter for molfeat and huggingface and the IBM model. 
+    - Add in the past finetuning codes from ChemLLM. 
+    - Write the LLM Model.
+    - Write the GNN+LLM model. 
+
+
+- Biological LLM Block: [2 weeks]
+    - Write up an adapter for huggingface.
+    - Write up an adapter for ProteinMPNN. 
+    - Write up and adapter from pdb ID or pdb file to Protein Sequence. 
+
+- Biological Feature Block: [1 week]
+    - Protein Features: https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
+    - DNA Features: https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
+    - Chem-Bio Interaction Descriptors: https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
+
+- Reaction + Molecular. [2 months]
+    - Write a new dataset and dataloader. 
+
+- Molecule + Protein. [1 month]
+    - Write a new dataset and dataloader. 
+
+- Unsupervised Feature Block [2 weeks]
+    - gensim
+    - PySGL
+    - karateclub
+    - StellarGraph
+    - Ampligraph
+    - CogDL
+    - GRaKeL
     
-    - Biological LLM Block: [2 weeks]
-        - Write up an adapter for huggingface.
-        - Write up an adapter for ProteinMPNN. 
-        - Write up and adapter from pdb ID or pdb file to Protein Sequence. 
-
-    - Biological Feature Block: [1 week]
-        - Protein Features: https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
-        - DNA Features: https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
-        - Chem-Bio Interaction Descriptors: https://pybiomed.readthedocs.io/en/latest/User_guide.html#calculating-molecular-descriptors
-
-- Multicomponent: Can do via Code but you need special Datasets and DataLoaders for now. [2 months]
-    - Reaction + Molecule runs.
-    - Any runs. (Molecule + Protein) 
+## Possible Sprints - New Types of Learning:
+- Continual Learning: [1 year]
+    - setup scripts that use avalanche. 
 
 
-- Mixing Layers for MC Runs:
-    - https://www.sciencedirect.com/science/article/pii/S138589472503058X?via%3Dihub 
-    - Digital Discovery,2023,2,138
-    - https://www.sciencedirect.com/science/article/pii/S0016236124023676?via%3Dihub 
-
-- Imbalanced Learning: 
+- Imbalanced Learning: [1 year]
     - Basic Process: 
         1) Create Four Datasets: Train, Imb-Train, Test, Val.
         2) Load them into a dataloader. 
@@ -72,21 +115,28 @@
     - Write out skeleton code for oversampling 
     - Write out skeleton code for data augmentation.
 
-- Few-shot learning:
+
+- Few-shot learning: [1 year]
     - Write out the skeleton code that does so.
     - Use 2D and 3D molecular similarity. Clean up the REINVENT code that does so. 
     - Use the MCS tool to see the level of similarity between the support and query. 
 
-- Symbolic Regression:
+- Symbolic Regression: [1 year]
     - Write out the skeleton code. 
 
-- Active Learning: 
+- Active Learning: [1 year]
     - Write out skeleton code. 
 
-- Quadratic NN:
+## Possible Sprints - New Layers: 
+- Mixing Layers for Multi-Component Runs: [1 week]
+    - https://www.sciencedirect.com/science/article/pii/S138589472503058X?via%3Dihub 
+    - Digital Discovery,2023,2,138
+    - https://www.sciencedirect.com/science/article/pii/S0016236124023676?via%3Dihub 
+
+- Quadratic NN: [1 year]
     - Write out skeleton code. 
 
-- Error Analysis:
+- Error Analysis: [1 year]
     - Write out Polished Analysis code on results
     - Write out code on steps.
     - Write out code on ensemble models. 
@@ -94,29 +144,20 @@
     - Write out Outlier Detection tools.
     - Write out Euclidian Distance Tools. 
 
-- Cluster Analysis:
+- Cluster Analysis: [1 year]
     - Write out UMAP and other algorithms. 
     - Write out Graph Outlier Detection Algorithms. 
 
-- Explainability:
+- Explainability: [1 year]
     - FP Model --> use SHAP scores. 
     - GNN --> write adapter for existing codes. 
     - LLM --> see what tools are out there. 
     - Write a new analyze command. 
 
-- Other Featurizers: 
-    - MolGraphConvFeaturizer 
-    - Chemprop (v1 and v2)
-    - EquivariantGraphFeaturizer
-    - PagtnMolGraphFeaturizer
-    - MXMNetFeaturizer
 
-- Other Predictors: 
+- Other Predictors: [1 year]
     - ProgressiveMultitaskRegressor
     - RobustMultitaskRegressor
-
-- Point Cloud Similarities:
-    - Write them
 
 
 - Atom-Bond Property Prediction:
@@ -125,10 +166,6 @@
     - Guan Paper
     - GAT Deconvolution/MLP. 
     - https://pubs.acs.org/doi/10.1021/acs.jcim.9b00994
-
-
-
-
 
 
 ### Testing the Graphs:

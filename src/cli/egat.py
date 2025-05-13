@@ -43,7 +43,7 @@ Here is the pseudocode for the steps:
 from ..params.config import Config,Params
 from ..main.train import Train
 from ..main.predict import Predict
-from ..main.hyperparamtertuning import Tune
+from ..main.tuning.hyperparamtertuning import Tune
 
 
 

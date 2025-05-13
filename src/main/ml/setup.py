@@ -1,7 +1,4 @@
-import torch,logging,os,hydra
-from torch import nn
-from dataclasses import dataclass
-from typing import Optional
+
 
 from .gpusetups import GPUSetup
 from .losssetups import LossSetup
@@ -13,9 +10,8 @@ class MLSetup(GPUSetup,LossSetup,EGATModelSetup,OptimizerSetup,ScheduleSetup):
     def __init__(self,arguments):
         super().__init__(arguments)
         ### Set Logger
-        self.Load()
-
-    def Load(self):
+       
+    def LoadMLSetup(self):
         self.LoadData()
         self.grabnumfeats()
         self.LoadWandB()

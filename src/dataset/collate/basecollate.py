@@ -10,7 +10,7 @@ class BaseCollator:
         return map(list, zip(*self.samples))
 
     def useexpansion(self,Rgraphs):
-        return any(isinstance(Rgraph, list) for Rgraph in Rgraphs)
+        return any(isinstance(Rgraph, (list,tuple)) for Rgraph in Rgraphs)
     
     def callfcn(self,samples):
         if self.mode == "targets":

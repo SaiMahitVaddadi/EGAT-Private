@@ -20,20 +20,31 @@ class LossSetup:
         self.logger = logging.getLogger(__name__)
 
     def loadloss(self,lossfcn):
-        try:
+        if hasattr(nn, f"{lossfcn}Loss"):
             loss = getattr(nn,f"{lossfcn}Loss")
             loss_fn = loss()
-        except Exception as e:
-            print(f"Error loading loss function {lossfcn}: {e}")
-            try:
-                loss_fn = globals().get(lossfcn)
-                loss_fn = loss_fn()
-            except:
-                raise ValueError(f'Loss function not {lossfcn} supported')
+        elif lossfcn in globals():
+            loss = globals().get(lossfcn)
+            loss_fn = loss()
+        else:
+            raise ValueError(f'Loss function not {lossfcn} supported')
         return loss_fn
     
     def LoadLoss(self):
         self.loss = self.loadloss(self.params.loss)
+
+    def LoadSingularMetric(self):
+        self.metric = self.loadloss(self.params.metric)
+    
+    def LoadMultipleMetrics(self):
+        self.metric = []
+        for m in self.params.metric:
+            self.metric.append(self.loadloss(m))
     
     def LoadMetric(self):
-        self.metric = self.loadloss(self.params.metric)
+        if isinstance(self.params.metric, str):
+            self.LoadSingularMetric()
+        elif isinstance(self.params.metric, list):
+            self.LoadMultipleMetrics()
+        else:
+            raise ValueError(f"Metric {self.params.metric} not supported")

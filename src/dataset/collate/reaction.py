@@ -1,9 +1,9 @@
 import dgl
 from .utils import filter_none
+from .basecollate import BaseCollator
+from .expansions import Expansions,reactionexpandfcnforadditionals,reactionexpandfcnfortargets,reactionexpandfcnforaddons,reactionexpandfcnforallprops
 
-import traceback
-
-class ReactionCollator:
+class ReactionCollator(BaseCollator):
 
     """
     Function that takes the dataset and gets the batched data. 
@@ -36,45 +36,36 @@ class ReactionCollator:
     
 
     def targets(self,samples):
-        self.samples = filter_none(samples)
-        try:
-            names,types,Rgraphs, Pgraphs, smiles,targets = map(list, zip(*self.samples))
+        names,types,Rgraphs,Pgraphs, smiles,targets = self.runmapping(samples)
+        if self.useexpansion(Rgraphs): names,types,Rbatched_graph,Pbatched_graph, smiles,targets = reactionexpandfcnfortargets(names,types,Rgraphs,Pgraphs, smiles,targets,multicomp=self.multicomp)
+        else: 
             Rbatched_graph = dgl.batch(Rgraphs)
             Pbatched_graph = dgl.batch(Pgraphs)
-            return names,types,Rbatched_graph, Pbatched_graph, smiles,targets
-        except ValueError:
-            
-            return None
-    
+        return names,types,Rbatched_graph,Pbatched_graph, smiles,targets
+        
     def additionals(self,samples):
-        self.samples = filter_none(samples)
-        try:
-            names,types,Rgraphs, Pgraphs, smiles,targets,additionals = map(list, zip(*self.samples))
+        names,types,Rgraphs,Pgraphs, smiles,targets,additionals = self.runmapping(samples)
+        if self.useexpansion(Rgraphs): names,types,Rbatched_graph,Pbatched_graph, smiles,targets,additionals = reactionexpandfcnforadditionals(names,types,Rgraphs,Pgraphs, smiles,targets,additionals,multicomp=self.multicomp)
+        else: 
             Rbatched_graph = dgl.batch(Rgraphs)
             Pbatched_graph = dgl.batch(Pgraphs)
-            return names,types,Rbatched_graph, Pbatched_graph, smiles,targets,additionals
-        except ValueError:
-            return None
+        return names,types,Rbatched_graph,Pbatched_graph, smiles,targets,additionals
         
     def addons(self,samples):
-        self.samples = filter_none(samples)
-        try:
-            names,types,Rgraphs, Pgraphs, smiles,targets,Radd,Padd = map(list, zip(*self.samples))
+        names,types,Rgraphs,Pgraphs, smiles,targets,Radd = self.runmapping(samples)
+        if self.useexpansion(Rgraphs): names,types,Rbatched_graph,Pbatched_graph, smiles,targets,Radd = reactionexpandfcnforaddons(names,types,Rgraphs,Pgraphs, smiles,targets,Radd,multicomp=self.multicomp)
+        else: 
             Rbatched_graph = dgl.batch(Rgraphs)
             Pbatched_graph = dgl.batch(Pgraphs)
-            return names,types,Rbatched_graph, Pbatched_graph, smiles,targets,Radd,Padd
-        except ValueError:
-            return None
-    
+        return names,types,Rbatched_graph,Pbatched_graph, smiles,targets,Radd
+        
     def allprops(self,samples):
-        self.samples = filter_none(samples)
-        try:
-            names,types,Rgraphs, Pgraphs, smiles,targets,additionals,Radd,Padd = map(list, zip(*self.samples))
+        names,types,Rgraphs,Pgraphs, smiles,targets,additionals,Radd = self.runmapping(samples)
+        if self.useexpansion(Rgraphs): names,types,Rbatched_graph,Pbatched_graph, smiles,targets,additionals,Radd = reactionexpandfcnforallprops(names,types,Rgraphs,Pgraphs, smiles,targets,additionals,Radd,multicomp=self.multicomp)
+        else: 
             Rbatched_graph = dgl.batch(Rgraphs)
             Pbatched_graph = dgl.batch(Pgraphs)
-            return names,types,Rbatched_graph, Pbatched_graph,smiles,targets,additionals,Radd,Padd
-        except ValueError:
-            return None
+        return names,types,Rbatched_graph,Pbatched_graph, smiles,targets,additionals,Radd
 class ReactionFingerprintCollator:
 
     """

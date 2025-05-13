@@ -68,8 +68,6 @@ class GlobalAtomInformation(RandomWalk):
     
     def GetAssortativity(self,ind):
         if self.params.getassortativity:
-            from icecream import ic
-            ic(self.Assortativity(ind))
             return [self.Assortativity(ind)]
         else:
             return []
